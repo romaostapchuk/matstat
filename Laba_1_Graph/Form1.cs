@@ -65,6 +65,41 @@ namespace Laba_1_Graph
         }
         // Shows in a toolbar value of X on a grahic
 
+        public void Compare_Show(double[] arr)
+        {
+            allnum = new double[arr.Length];
+            int k = 0;
+            foreach (double element in arr)
+            {
+                allnum[k] = element;
+                k++;
+            }
+
+            this.chart2.MouseMove += Chart2_MouseMove;
+            RunClicked = true;
+            N = 0;
+            Counts.Sort(allnum);
+            undoAllnum = new double[allnum.Length];
+            for (int i = 0; i < allnum.Length; i++)
+            {
+                undoAllnum[i] = allnum[i];
+            }
+
+            N = allnum.Length;
+            MinX = allnum[0];
+            MaxX = allnum[N - 1];
+            double AverageX = Functions.Average(N, allnum); // Average X
+            double s = 0;
+            if (textBox4.TextLength > 0)
+                s = Convert.ToInt32(textBox4.Text);
+            step = Counts.Step(s, N, MinX, MaxX);// Counting step
+
+
+            dataGridView1.Rows.Clear();
+            Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, false);
+            ReadFile = false;
+        }
+
         private void Run_Click(object sender, EventArgs e)
         {
             this.chart2.MouseMove += Chart2_MouseMove;// adding after start
@@ -116,7 +151,10 @@ namespace Laba_1_Graph
             MinX = allnum[0];
             MaxX = allnum[N - 1];
             double AverageX = Functions.Average(N, allnum); // Average X
-            step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+            double s = 0;
+            if (textBox4.TextLength > 0)
+                s = Convert.ToInt32(textBox4.Text);
+            step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
 
             dataGridView1.Rows.Clear();
@@ -254,8 +292,11 @@ namespace Laba_1_Graph
                 MinX = allnum[0];
                 MaxX = allnum[N - 1];
                 double AverageX = Functions.Average(N, allnum); // Average X
-                step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
-                
+                double s = 0;
+                if (textBox4.TextLength > 0)
+                    s = Convert.ToInt32(textBox4.Text);
+                step = Counts.Step(s, N, MinX, MaxX);// Counting step
+
                 dataGridView1.Rows.Clear();
                 Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, false);
             }
@@ -284,7 +325,10 @@ namespace Laba_1_Graph
                 MinX = allnum[0];
                 MaxX = allnum[N - 1];
                 double AverageX = Functions.Average(N, allnum); // Average X
-                step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+                double s = 0;
+                if (textBox4.TextLength > 0)
+                    s = Convert.ToInt32(textBox4.Text);
+                step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
                 dataGridView1.Rows.Clear();
                 Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, false);
@@ -329,7 +373,10 @@ namespace Laba_1_Graph
                     MinX = allnum[0];
                     MaxX = allnum[N - 1];
                     AverageX = Functions.Average(N, allnum); // Average X
-                    step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+                    double s = 0;
+                    if (textBox4.TextLength > 0)
+                        s = Convert.ToInt32(textBox4.Text);
+                    step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
                     dataGridView1.Rows.Clear();
                     Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, false);
@@ -384,8 +431,12 @@ namespace Laba_1_Graph
                 MinX = allnum[0];
                 MaxX = allnum[N - 1];
                 AverageX = Functions.Average(N, allnum); // Average X
-                if (Counts.Step(textBox4, N, MinX, MaxX) > 0)// Counting step
-                    step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+
+                double s = 0;
+                if (textBox4.TextLength > 0)
+                    s = Convert.ToInt32(textBox4.Text);
+                if (Counts.Step(s, N, MinX, MaxX) > 0)// Counting step
+                    step = Counts.Step(s, N, MinX, MaxX);// Counting step
                 else step = 1;
 
 
@@ -408,7 +459,11 @@ namespace Laba_1_Graph
             MinX = allnum[0];
             MaxX = allnum[N - 1];
             double AverageX = Functions.Average(N, allnum); // Average X
-            step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+
+            double s = 0;
+            if (textBox4.TextLength > 0)
+                s = Convert.ToInt32(textBox4.Text);
+            step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
             dataGridView1.Rows.Clear();
             Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, true);
@@ -426,7 +481,10 @@ namespace Laba_1_Graph
             MinX = allnum[0];
             MaxX = allnum[N - 1];
             double AverageX = Functions.Average(N, allnum); // Average X
-            step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+            double s = 0;
+            if (textBox4.TextLength > 0)
+                s = Convert.ToInt32(textBox4.Text);
+            step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
 
             dataGridView1.Rows.Clear();
@@ -552,7 +610,10 @@ namespace Laba_1_Graph
                 MinX = allnum[0];
                 MaxX = allnum[N - 1];
                 double AverageX = Functions.Average(N, allnum); // Average X
-                step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+                double s = 0;
+                if (textBox4.TextLength > 0)
+                    s = Convert.ToInt32(textBox4.Text);
+                step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
 
                 dataGridView1.Rows.Clear();
@@ -579,7 +640,10 @@ namespace Laba_1_Graph
                 MaxX = allnum[N - 1];
                 double AverageX = Functions.Average(N, allnum); // Average X
 
-                step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+                double s = 0;
+                if (textBox4.TextLength > 0)
+                    s = Convert.ToInt32(textBox4.Text);
+                step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
                 dataGridView1.Rows.Clear();
                 Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, false);
@@ -610,13 +674,12 @@ namespace Laba_1_Graph
         private static bool T_test(double Q0, double Q, double sigm, int amount)
         {
             double T = ((Q0 - Q) / sigm);
-            if (Math.Abs(T) < Interval.Qantil(amount))
+            if (Math.Abs(T) < Quantils.Student(amount))
                 return true;
             else
                 return false;
         }
-
-
+        
         //Відновлення функції розподілу
         private double NormDisp(double S, double m, double x)
         {
@@ -690,7 +753,10 @@ namespace Laba_1_Graph
             Sum_of_X2 /= N;
             S = (N / (N - 1)) * Math.Sqrt(Sum_of_X2 - Math.Pow(m, 2));
 
-            step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+            double s = 0;
+            if (textBox4.TextLength > 0)
+                s = Convert.ToInt32(textBox4.Text);
+            step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
 
             dataGridView1.Rows.Clear();
@@ -724,8 +790,8 @@ namespace Laba_1_Graph
             for (double i = MinX - step; i < MaxX + 2 * step; i += 0.01 * (MaxX - MinX))
             {
                 D = NormDisp(S, m, i);
-                chart2.Series["+DNorm"].Points.AddXY(i, Counts.FuncNorm(i, m, S) + Interval.Qantil(N) * Math.Sqrt(D));
-                chart2.Series["-DNorm"].Points.AddXY(i, Counts.FuncNorm(i, m, S) - Interval.Qantil(N) * Math.Sqrt(D));
+                chart2.Series["+DNorm"].Points.AddXY(i, Counts.FuncNorm(i, m, S) + Quantils.Student(N) * Math.Sqrt(D));
+                chart2.Series["-DNorm"].Points.AddXY(i, Counts.FuncNorm(i, m, S) - Quantils.Student(N) * Math.Sqrt(D));
                 chart2.Series["Norm"].Points.AddXY(i, Counts.FuncNorm(i, m, S));
             }
             double
@@ -744,7 +810,10 @@ namespace Laba_1_Graph
             MaxX = allnum[N - 1];
             double AverageX = Functions.Average(N, allnum); // Average X
 
-            step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+            double s = 0;
+            if (textBox4.TextLength > 0)
+                s = Convert.ToInt32(textBox4.Text);
+            step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
 
             dataGridView1.Rows.Clear();
@@ -780,9 +849,9 @@ namespace Laba_1_Graph
             for (double i = 0; i < MaxX + 2 * step; i += 0.01*(MaxX-MinX))
             {
                 D =  Math.Pow(i, 2) * Math.Exp(-2 * lyambda * i) * (Math.Pow(lyambda, 2) / N);
-                chart2.Series["D1ExpF"].Points.AddXY(i, Counts.FuncEmperic(i, 1 / AverageX) - Interval.Qantil(N) * Math.Sqrt(D));
-                if (Counts.FuncEmperic(i, 1 / AverageX) + Interval.Qantil(N) * Math.Sqrt(D) <= 1)
-                    chart2.Series["D2ExpF"].Points.AddXY(i, Counts.FuncEmperic(i, 1 / AverageX) + Interval.Qantil(N) * Math.Sqrt(D));
+                chart2.Series["D1ExpF"].Points.AddXY(i, Counts.FuncEmperic(i, 1 / AverageX) - Quantils.Student(N) * Math.Sqrt(D));
+                if (Counts.FuncEmperic(i, 1 / AverageX) + Quantils.Student(N) * Math.Sqrt(D) <= 1)
+                    chart2.Series["D2ExpF"].Points.AddXY(i, Counts.FuncEmperic(i, 1 / AverageX) + Quantils.Student(N) * Math.Sqrt(D));
                 else
                     chart2.Series["D2ExpF"].Points.AddXY(i, 1);
                 chart2.Series["ExpF"].Points.AddXY(i, Counts.FuncEmperic(i, 1 / AverageX));
@@ -798,8 +867,11 @@ namespace Laba_1_Graph
             MaxX = allnum[N - 1];
             double AverageX = Functions.Average(N, allnum); // Average X
 
-            step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
-            
+            double s = 0;
+            if (textBox4.TextLength > 0)
+                s = Convert.ToInt32(textBox4.Text);
+            step = Counts.Step(s, N, MinX, MaxX);// Counting step
+
             dataGridView1.Rows.Clear();
             Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, false);
             ReadFile = false;
@@ -877,8 +949,8 @@ namespace Laba_1_Graph
             for(int i =0;i< N;i++)
             {
                 D = ExtremeDisp(Alpha, Bt, allnum[i],i, N, allnum);
-                chart2.Series["+DExtreme"].Points.AddXY(allnum[i], Counts.FuncExtreme(allnum[i], B, Bt) + Interval.Qantil(N) * Math.Sqrt(D));
-                chart2.Series["-DExtreme"].Points.AddXY(allnum[i], Counts.FuncExtreme(allnum[i], B, Bt) - Interval.Qantil(N) * Math.Sqrt(D));
+                chart2.Series["+DExtreme"].Points.AddXY(allnum[i], Counts.FuncExtreme(allnum[i], B, Bt) + Quantils.Student(N) * Math.Sqrt(D));
+                chart2.Series["-DExtreme"].Points.AddXY(allnum[i], Counts.FuncExtreme(allnum[i], B, Bt) - Quantils.Student(N) * Math.Sqrt(D));
                 chart2.Series["ExtF"].Points.AddXY(allnum[i], Counts.FuncExtreme(allnum[i], B, Bt));
             }
             
@@ -887,8 +959,7 @@ namespace Laba_1_Graph
             dataGridView1.Rows.Add("Параметр β", Math.Round(Bt - Math.Sqrt(DBt),4), Math.Round(Bt,4),
                 Math.Round(Bt + Math.Sqrt(DBt),4), Math.Round(Math.Sqrt(DBt),4));
         }
-
-
+        
         //Стандартизація даних
         private void стандартзаціяToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -907,7 +978,11 @@ namespace Laba_1_Graph
                 MinX = allnum[0];
                 MaxX = allnum[N - 1];
                 AverageX = Functions.Average(N, allnum); // Average X
-                step = Counts.Step(textBox4, N, MinX, MaxX);// Counting step
+
+                double s = 0;
+                if (textBox4.TextLength > 0)
+                    s = Convert.ToInt32(textBox4.Text);
+                step = Counts.Step(s, N, MinX, MaxX);// Counting step
 
                 dataGridView1.Rows.Clear();
                 Programm(chart1, chart2, N, MinX, MaxX, allnum, step, dataGridView1, AverageX, false, false);
@@ -919,7 +994,7 @@ namespace Laba_1_Graph
         //Вихід
         private void Quit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.Close();
         }
     }
 }

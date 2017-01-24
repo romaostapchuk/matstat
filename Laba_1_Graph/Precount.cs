@@ -46,7 +46,7 @@ namespace Laba_1_Graph
         
         public static void Sort(double[] numb)
         {
-            for(int i = 0; i< numb.Length; i++)
+            for(int i = 0; i < numb.Length; i++)
             {
                 for (int j = 0; j < numb.Length; j++)
                 {
@@ -115,13 +115,13 @@ namespace Laba_1_Graph
             }
         }
         
-        public static double Step(TextBox TxtB, int amount, double min, double max)
+        public static double Step(double TxtB, int amount, double min, double max)
         {
             int classes;
             double M = 0;
-            if (TxtB.TextLength> 0)
+            if (TxtB > 0)
             {
-                classes = Convert.ToInt32(TxtB.Text);
+                classes = Convert.ToInt32(TxtB);
                 return ((max - min)/(classes-0.5));
             }
             else

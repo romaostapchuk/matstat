@@ -5,60 +5,6 @@ namespace Laba_1_Graph
     public static class Interval
     {
         /// <summary>
-        /// Student's Quantil returns double value 
-        /// Used in interval evaluation
-        /// </summary>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        public static double Qantil(int amount)//0,05
-        {
-            double T = 0;
-            if (amount - 1 == 1)
-                T = 6.3138;
-            else if (amount - 1 == 2)
-                T = 2.9200;
-            else if (amount - 1 == 3)
-                T = 2.3534;
-            else if (amount - 1 == 4)
-                T = 2.1318;
-            else if (amount - 1 == 5)
-                T = 2.0150;
-            else if (amount - 1 == 6)
-                T = 1.9432;
-            else if (amount - 1 == 7)
-                T = 1.8946;
-            else if (amount - 1 == 8)
-                T = 1.8595;
-            else if (amount - 1 == 9)
-                T = 1.8331;
-            else if (amount - 1 == 10)
-                T = 1.8125;
-            else if (amount - 1 == 11)
-                T = 1.7959;
-            else if (amount - 1 == 12)
-                T = 1.7823;
-            else if (amount - 1 == 14 || amount - 1 == 13)
-                T = 1.7613;
-            else if (amount - 1 == 16 || amount - 1 == 15)
-                T = 1.7459;
-            else if (amount - 1 == 18 || amount - 1 == 17)
-                T = 1.7341;
-            else if (amount - 1 == 20 || amount - 1 == 19)
-                T = 1.7247;
-            else if (amount - 1 > 20 && amount - 1 <= 30)
-                T = 1.7081;
-            else if (amount - 1 > 30 && amount - 1 <= 40)
-                T = 1.6896;
-            else if (amount - 1 > 40 && amount - 1 <= 60)
-                T = 1.6759;
-            else if (amount - 1 > 60 && amount - 1 <= 120)
-                T = 1.6564;
-            else if (amount - 1 > 120)
-                T = 1.6449;
-            return T;
-        }
-
-        /// <summary>
         /// Interval Average X
         /// </summary>
         /// <param name="amount"></param>
@@ -68,12 +14,12 @@ namespace Laba_1_Graph
         /// <returns></returns>
         public static double AverageB(int amount, double Mean, double AverageX)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             return Math.Round(AverageX - (T * Mean) / (Math.Sqrt(amount)),4);
         }
         public static double AverageU(int amount, double Mean, double AverageX)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             return Math.Round(AverageX + (T * Mean) / (Math.Sqrt(amount)),4);
         }
 
@@ -87,12 +33,12 @@ namespace Laba_1_Graph
         /// <returns></returns>
         public static double SigmB(int amount, double Mean)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             return Math.Round(Mean - (T * Mean) / (2 * Math.Sqrt(amount)),4);
         }
         public static double SigmU(int amount, double Mean)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             return Math.Round(Mean + (T * Mean) / (2 * Math.Sqrt(amount)),4);
         }
 
@@ -132,7 +78,7 @@ namespace Laba_1_Graph
         /// <returns></returns>
         public static double ExcesB(int amount, double Excess, double[] numb)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             double
                M2 = Moments.Central(amount, numb, 2),
                M3 = Moments.Central(amount, numb, 3),
@@ -151,7 +97,7 @@ namespace Laba_1_Graph
         }
         public static double ExcesU(int amount, double Excess, double[] numb)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             double
                M2 = Moments.Central(amount, numb, 2),
                M3 = Moments.Central(amount, numb, 3),
@@ -179,12 +125,12 @@ namespace Laba_1_Graph
         /// <returns></returns>
         public static double NRV_B(int amount,double Wn)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             return Math.Round(Wn - (T * Wn * Math.Sqrt((1 + 2 * Math.Pow(Wn, 2)) / (2 * amount))),4);
         }
         public static double NRV_U(int amount,double Wn)
         {
-            double T = Interval.Qantil(amount);
+            double T = Quantils.Student(amount);
             return Math.Round(Wn + (T * Wn * Math.Sqrt((1 + 2 * Math.Pow(Wn, 2)) / (2 * amount))),4);
         }
         

@@ -32,7 +32,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>1478493766_Down.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathParserNet">
+      <HintPath>..\..\..\Vasilik\Laba_1 - Copy\Laba_1\MathParserNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -47,8 +53,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2Curs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="2Curs.Designer.cs">
+      <DependentUpon>2Curs.cs</DependentUpon>
+    </Compile>
     <Compile Include="2D.cs" />
     <Compile Include="Criteria.cs" />
+    <Compile Include="ExpNorm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExpNorm.Designer.cs">
+      <DependentUpon>ExpNorm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +82,12 @@
     <Compile Include="Functions.cs" />
     <Compile Include="Graphs.cs" />
     <Compile Include="Interval.cs" />
+    <Compile Include="K_DForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="K_DForm.Designer.cs">
+      <DependentUpon>K_DForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Moments.cs" />
     <Compile Include="Precount.cs" />
     <Compile Include="Form1.cs">
@@ -74,7 +98,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quantils.cs" />
     <Compile Include="SimpleRNG.cs" />
+    <EmbeddedResource Include="2Curs.resx">
+      <DependentUpon>2Curs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExpNorm.resx">
+      <DependentUpon>ExpNorm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -83,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Choose.resx">
       <DependentUpon>Form_Choose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="K_DForm.resx">
+      <DependentUpon>K_DForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -105,6 +139,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="1478493766_Down.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

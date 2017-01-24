@@ -23,7 +23,7 @@ namespace Laba_1_Graph
             {
                 Sum_of_X += numb[i];
             }
-            return Sum_of_X / amount;
+            return Math.Round(Sum_of_X / amount, 4);
         }
         /// <summary>
         /// Returns int values that represents medium value in array
@@ -126,7 +126,7 @@ namespace Laba_1_Graph
             {
                 qwe += Math.Pow(numb[i] - averageX, 2);
             }
-            return Math.Round(Math.Sqrt(qwe / (amount - 1)), 4);
+            return Math.Sqrt(qwe / (amount - 1));
         }
         /// <summary>
         /// Returns double value that represents the index of asymmetry of values in array
