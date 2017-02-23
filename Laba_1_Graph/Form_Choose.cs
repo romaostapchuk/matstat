@@ -1,26 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using System.IO;
 using System.Text.RegularExpressions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using System.IO;
 
 namespace Laba_1_Graph
 {
@@ -36,9 +21,83 @@ namespace Laba_1_Graph
             InitializeComponent();
             chart1.Visible = false;
             chart2.Visible = false;
+            this.dataGridView1.ContextMenuStrip = contextMenuStrip1;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewTextBoxCell cell = (DataGridViewTextBoxCell)
+               dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if (cell != null)
+            {
+                chart1.Visible = false;
+                chart2.Visible = false;
+                arr.Add(cell.RowIndex);
+                cell.Style.BackColor = Color.Red;
+                _2_Graphs = false;
+                _K_Graphs = false;
+                if (arr.Count == 2)
+                {
+                    double s = 0;
+                    chart2.Series.Clear();
+                    chart1.Series.Clear();
+                    if (Samples[arr[0]].Length == Samples[arr[1]].Length && checkBox1.Checked == true)
+                    {
+                        chart1.Visible = true;
+                        chart2.Visible = chart1.Visible = true;
+                        Graphs._2D_EmpericNorm(chart2, Samples[arr[0]], Samples[arr[1]]);
+                        Graphs._2D_Histogram(chart1, Samples[arr[0]], Samples[arr[1]],
+                        Counts.Step(s, Samples[arr[0]].Length, Samples[arr[0]].Min(), Samples[arr[0]].Max()),
+                        Counts.Step(s, Samples[arr[1]].Length, Samples[arr[1]].Min(), Samples[arr[1]].Max()));
+
+                        double Rxy = Laba_1_Graph.Correlation.Pair(Samples[arr[0]], Samples[arr[1]], Samples[arr[0]].Average(), Samples[arr[1]].Average());
+                        //      Linear regression build
+                        //{
+                        //    if (Laba_1_Graph.Correlation.Check_Correlation(Rxy, Samples[arr[0]].Length))
+                        //        if (Regression.Linear.Bartlet(Samples[arr[0]], Samples[arr[1]],
+                        //        Counts.Step(s, Samples[arr[0]].Length, Samples[arr[0]].Min(), Samples[arr[0]].Max())))
+                        //        {
+                        //            double a = 0;
+                        //            double b = 0;
+                        //            double S2 = Regression.Linear.MNK(Samples[arr[0]], Samples[arr[1]], ref a, ref b);
+                        //            Graphs._2D_RegressionLinear(chart2, Samples[arr[0]], Samples[arr[1]], a, b, Math.Sqrt(S2));
+                        //        }
+                        //}
+                        //      Parabolic regression build
+                        {
+                            double[] a1b1c1 = { 0, 0, 0 };
+                            double S2_P2 = Regression.Parabol.MNK2(Samples[arr[0]], Samples[arr[1]], Rxy, ref a1b1c1[0], ref a1b1c1[1], ref a1b1c1[2]);
+                            Graphs._2D_RegressionParabol(chart2, Samples[arr[0]], Samples[arr[1]], a1b1c1, S2_P2);
+                        }
+                    }
+                    _2_Graphs = true;
+                    _K_Graphs = false;
+                }
+                else
+                {
+                    chart2.Series.Clear();
+                    chart1.Series.Clear();
+                    _2_Graphs = false;
+                    if (arr.Count > 2)
+                        _K_Graphs = true;
+                }
+            }
+        }
+        
+        void Opened_Form_Closed(object sender, FormClosedEventArgs e)
+        {
+            this.Show();
+        }
+
+        private void згенеруватиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ExpNorm window = new ExpNorm(this);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+
+        private void вибратиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dataGridView1.ColumnCount = 1;
             dataGridView1.RowHeadersVisible = false;
@@ -104,74 +163,7 @@ namespace Laba_1_Graph
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            chart1.Visible = false;
-            chart2.Visible = false;
-            for (int i = 0; i < arr.Count; i++)
-                dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
-            dataGridView1.Rows.Clear();
-            Samples.Clear();
-            Samples = new List<double[]>();
-            arr = new List<int>();
-            _2_Graphs = false;
-            chart2.Series.Clear();
-            chart1.Series.Clear();
-            GC.Collect();
-        }
-
-        private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridViewTextBoxCell cell = (DataGridViewTextBoxCell)
-               dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            if (cell != null)
-            {
-                chart1.Visible = false;
-                chart2.Visible = false;
-                arr.Add(cell.RowIndex);
-                cell.Style.BackColor = Color.Red;
-                _2_Graphs = false;
-                _K_Graphs = false;
-                if (arr.Count == 2)
-                {
-                    double s = 0;
-                    chart2.Series.Clear();
-                    chart1.Series.Clear();
-                    if (Samples[arr[0]].Length == Samples[arr[1]].Length && checkBox1.Checked == true)
-                    {
-                        chart1.Visible = true;
-                        chart2.Visible = chart1.Visible = true;
-                        Graphs._2D_EmpericNorm(chart2, Samples[arr[0]], Samples[arr[1]]);
-                        Graphs._2D_Histogram(chart1, Samples[arr[0]], Samples[arr[1]],
-                            Counts.Step(s, Samples[arr[0]].Length, Samples[arr[0]].Min(), Samples[arr[0]].Max()),
-                            Counts.Step(s, Samples[arr[1]].Length, Samples[arr[1]].Min(), Samples[arr[1]].Max()));
-
-                        double Rxy = Laba_1_Graph.Correlation.Pair(Samples[arr[0]], Samples[arr[1]], Samples[arr[0]].Average(), Samples[arr[1]].Average());
-                        if (Laba_1_Graph.Correlation.Check_Correlation(Rxy, Samples[arr[0]].Length))
-                            if (Regression.Bartlet(Samples[arr[0]], Samples[arr[1]], 
-                            Counts.Step(s, Samples[arr[0]].Length, Samples[arr[0]].Min(), Samples[arr[0]].Max())))
-                            {
-                                double a = 0;
-                                double b = 0;
-                                double S2 = Regression.MNK(Samples[arr[0]], Samples[arr[1]], ref a, ref b);
-                                Graphs._2D_Regression(chart2, Samples[arr[0]], Samples[arr[1]], a, b, Math.Sqrt(S2));
-                            }
-                    }
-                    _2_Graphs = true;
-                    _K_Graphs = false;
-                }
-                else
-                {
-                    chart2.Series.Clear();
-                    chart1.Series.Clear();
-                    _2_Graphs = false;
-                    if (arr.Count > 2)
-                        _K_Graphs = true;
-                }
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
+        private void порівнятиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < arr.Count; i++)
                 dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
@@ -203,37 +195,7 @@ namespace Laba_1_Graph
             chart1.Series.Clear();
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            chart1.Visible = false;
-            chart2.Visible = false;
-            for (int i = 0; i < arr.Count; i++)
-                dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
-            arr = new List<int>();
-            _2_Graphs = false;
-            chart2.Series.Clear();
-            chart1.Series.Clear();
-        }
-
-        void Opened_Form_Closed(object sender, FormClosedEventArgs e)
-        {
-            this.Show();
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            ExpNorm window = new ExpNorm(this);
-            window.Show();
-            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
-        }
-
-        private void button7_Click(object sender, EventArgs e)
+        private void розглянутиОкремоToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (arr.Count == 1)
             {
@@ -246,6 +208,47 @@ namespace Laba_1_Graph
                 window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
                 arr = new List<int>();
             }
+        }
+
+        private void очиститиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            chart1.Visible = false;
+            chart2.Visible = false;
+            for (int i = 0; i < arr.Count; i++)
+                dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
+            arr = new List<int>();
+            _2_Graphs = false;
+            chart2.Series.Clear();
+            chart1.Series.Clear();
+        }
+
+        private void видалитиДаніToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            chart1.Visible = false;
+            chart2.Visible = false;
+            for (int i = 0; i < arr.Count; i++)
+                dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
+            dataGridView1.Rows.Clear();
+            Samples.Clear();
+            Samples = new List<double[]>();
+            arr = new List<int>();
+            _2_Graphs = false;
+            chart2.Series.Clear();
+            chart1.Series.Clear();
+            GC.Collect();
+        }
+
+        private void закритиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void неЛінійнаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            RegressionGenerate window = new RegressionGenerate(this);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
         }
     }
 }

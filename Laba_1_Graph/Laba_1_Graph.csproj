@@ -99,6 +99,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quantils.cs" />
+    <Compile Include="RegressionGenerate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegressionGenerate.Designer.cs">
+      <DependentUpon>RegressionGenerate.cs</DependentUpon>
+    </Compile>
     <Compile Include="SimpleRNG.cs" />
     <EmbeddedResource Include="2Curs.resx">
       <DependentUpon>2Curs.cs</DependentUpon>
@@ -127,6 +133,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RegressionGenerate.resx">
+      <DependentUpon>RegressionGenerate.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

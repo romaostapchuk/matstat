@@ -219,7 +219,6 @@ namespace Laba_1_Graph
             Qntl = Convert.ToInt32(Math.Round((numb.Length -1) * index));
             return Math.Round(numb[Qntl],4);
         }
-
         /// <summary>
         /// 
         /// </summary>

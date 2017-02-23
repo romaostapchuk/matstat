@@ -12,3 +12,4 @@ D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Debug\Laba_1
 D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Debug\Laba_1_Graph._2Curs.resources
 D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Debug\Laba_1_Graph.K_DForm.resources
 D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Debug\Laba_1_Graph.ExpNorm.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Debug\Laba_1_Graph.RegressionGenerate.resources

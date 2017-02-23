@@ -72,7 +72,7 @@ namespace Laba_1_Graph
                     form1.dataGridView1.RowHeadersVisible = false;
                     form1.dataGridView1.ColumnHeadersVisible = false;
                 }
-                form1.dataGridView1.Rows.Add(str + "_" + Arr.Length + "_" + 1);
+                form1.dataGridView1.Rows.Add(str + "_" + Arr.Length);
                 Form_Choose.Samples.Add(Arr);
 
                 this.Close();

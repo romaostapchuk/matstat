@@ -149,7 +149,7 @@ namespace Laba_1_Graph
                     chart.Series["NoClass"].Points.AddXY(numb1[i], numb2[i]);
         }
 
-        public static void _2D_Regression(Chart chart, double[] numb1, double[] numb2, double a, double b, double sigm)
+        public static void _2D_RegressionLinear(Chart chart, double[] numb1, double[] numb2, double a, double b, double sigm)
         {
             chart.ChartAreas[0].AxisX.Minimum = numb1.Min();
             chart.ChartAreas[0].AxisX.Maximum = numb1.Max();
@@ -202,7 +202,7 @@ namespace Laba_1_Graph
 
             for (int i = 0; i < arr_1.Length; i++)
                 chart.Series["Line3"].Points.Add(new DataPoint(arr_1[i],
-                    a + b * arr_1[i] - Quantils.Student(arr_1.Length - 2) * Regression.Interval(arr_1, i, sigm * sigm)));
+                    a + b * arr_1[i] - Quantils.Student(arr_1.Length - 2) * Regression.Linear.Interval(arr_1, i, sigm * sigm)));
 
             chart.Series.Add("Line4");
             chart.Series["Line4"].BorderWidth = 2;
@@ -210,10 +210,50 @@ namespace Laba_1_Graph
 
             for (int i = 0; i < arr_1.Length; i++)
                 chart.Series["Line4"].Points.Add(new DataPoint(arr_1[i],
-                    a + b * arr_1[i] + Quantils.Student(arr_1.Length - 2) * Regression.Interval(arr_1, i, sigm * sigm)));
+                    a + b * arr_1[i] + Quantils.Student(arr_1.Length - 2) * Regression.Linear.Interval(arr_1, i, sigm * sigm)));
 
 
             chart.Series["Line4"].ChartType = SeriesChartType.Spline;
+        }
+
+        public static void _2D_RegressionParabol(Chart chart, double[] arr_1, double[] arr_2, double[] a1b1c1, double S2_P2)
+        {
+            chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
+            chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
+            chart.ChartAreas[0].AxisY.Minimum = arr_2.Min();
+            chart.ChartAreas[0].AxisY.Maximum = arr_2.Max();
+
+            chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
+            chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
+
+            chart.Series.Add("Line");
+            chart.Series["Line"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line"].BorderWidth = 2;
+            chart.Series["Line"].Color = Color.Black;
+
+            int N = arr_1.Length;
+            double x_2 = 0,
+                    x_3 = 0,
+                    f1 = 0,
+                    f2 = 0;
+
+            for (int i = 0; i < N; i++)
+            {
+                x_2 += Math.Pow(arr_1[i], 2);
+                x_3 += Math.Pow(arr_1[i], 3);
+            }
+            x_2 /= N;
+            x_3 /= N;
+
+            for (int i = 0; i < N; i++)
+            {
+                f1 = arr_1[i] - arr_1.Average();
+                f2 = arr_1[i] * arr_1[i] -
+                    ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
+                    * (arr_1[i] - arr_1.Average());
+
+                chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], a1b1c1[0] + a1b1c1[1] * f1 + a1b1c1[2] * f2 ));
+            }
         }
 
         public static void _2D_Histogram(Chart chart, double[] arr_1, double[] arr_2, double step_1, double step_2)

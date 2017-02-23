@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Laba_1_Graph
 {
@@ -154,7 +152,7 @@ namespace Laba_1_Graph
         {
             double T = (Rxy * Math.Sqrt(amount - 2)) / (Math.Sqrt(1 - Rxy * Rxy));
 
-            double q = Quantils.Student(amount -2);
+            double q = Quantils.Student(amount);
             if (Math.Abs(T) <= Quantils.Student(amount - 2))
                 return false;
             else
@@ -1010,157 +1008,304 @@ namespace Laba_1_Graph
     {
         private static double   Alpha = 0.95;
 
-        public static bool      Bartlet(double[] arr_1, double[] arr_2, double step_1)
+
+        public static class Linear
         {
-            int N = arr_1.Length;
-
-            double start_1 = arr_1.Min();
-            double next_1 = start_1 + step_1;
-
-            int k = 0;
-            while (next_1 <= arr_1.Max())
+            public static bool Bartlet(double[] arr_1, double[] arr_2, double step_1)
             {
-                start_1 = next_1;
-                next_1 += step_1;
-                k++;
+                int N = arr_1.Length;
+
+                double start_1 = arr_1.Min();
+                double next_1 = start_1 + step_1;
+
+                int k = 0;
+                while (next_1 <= arr_1.Max())
+                {
+                    start_1 = next_1;
+                    next_1 += step_1;
+                    k++;
+                }
+                double step_2 = (arr_2.Max() - arr_2.Min()) / k;
+                double start_2 = arr_2.Min();
+                double next_2 = start_2 + step_2;
+
+                start_1 = arr_1.Min();
+                next_1 = start_1 + step_1;
+                start_1 -= 1;
+                start_2 -= 1;
+
+                List<List<double>> Mi = new List<List<double>>();
+                List<double> X = new List<double>();
+
+                while (next_1 <= arr_1.Max())
+                {
+                    List<double> Mij = new List<double>();
+                    for (int i = 0; i < N; i++)
+                    {
+                        if (arr_2[i] > start_2 && arr_2[i] <= next_2)
+                            Mij.Add(arr_2[i]);
+                    }
+                    Mi.Add(Mij);
+                    start_1 = next_1;
+                    next_1 += step_1;
+                    start_2 = next_2;
+                    next_2 += step_2;
+                    X.Add((start_1 - step_1 + next_1 - step_1) / 2);
+                }
+
+                double L = 0;
+                double S2 = 0;
+
+                for (int i = 0; i < Mi.Count; i++)
+                {
+                    double sum = 0;
+                    for (int j = 0; j < Mi[i].Count; j++)
+                        sum += Math.Pow(Mi[i][j] - Mi[i].Average(), 2);
+                    if (sum == 0)
+                        sum = 1;
+                    double S2xi = sum / Math.Max((Mi[i].Count - 1), 1);
+
+                    S2 += (Mi[i].Count - 1) * S2xi;
+                }
+                S2 /= (N - Mi.Count);
+
+                double C = 0;
+
+                for (int i = 0; i < Mi.Count; i++)
+                    C += 1.0 / Mi[i].Count;
+                C -= 1 / N;
+                C /= 3 * (Mi.Count - 1);
+                C += 1;
+
+                for (int i = 0; i < Mi.Count; i++)
+                {
+                    double sum = 0;
+                    for (int j = 0; j < Mi[i].Count; j++)
+                        sum += Math.Pow(Mi[i][j] - Mi[i].Average(), 2);
+                    if (sum == 0)
+                        sum = 1;
+                    double S2xi = sum / Math.Max((Mi[i].Count - 1), 1);
+
+                    L += Mi[i].Count * Math.Log(S2xi / S2);
+                }
+                L /= -C;
+
+                if (Math.Abs(L) > Quantils.XiSquare(Alpha, Mi.Count - 1))
+                    return (false);
+                return (true);
             }
-            double step_2 = (arr_2.Max() - arr_2.Min()) / k;
-            double start_2 = arr_2.Min();
-            double next_2 = start_2 + step_2;
 
-            start_1 = arr_1.Min();
-            next_1 = start_1 + step_1;
-            start_1 -= 1;
-            start_2 -= 1;
-
-            List<List<double>> Mi = new List<List<double>>();
-            List<double> X = new List<double>();
-
-            while (next_1 <= arr_1.Max())
+            public static double MNK(double[] arr_1, double[] arr_2, ref double a, ref double b)
             {
-                List<double> Mij = new List<double>();
+                int N = arr_1.Length;
+
+                double x2 = 0;
+                double xy = 0;
+
+                double x = arr_1.Average();
+                double y = arr_2.Average();
+
                 for (int i = 0; i < N; i++)
                 {
-                    if (arr_2[i] > start_2 && arr_2[i] <= next_2)
-                        Mij.Add(arr_2[i]);
+                    x2 += arr_1[i] * arr_1[i];
+                    xy += arr_1[i] * arr_2[i];
                 }
-                Mi.Add(Mij);
-                start_1 = next_1;
-                next_1 += step_1;
-                start_2 = next_2;
-                next_2 += step_2;
-                X.Add((start_1 - step_1 + next_1 - step_1) / 2);
+                x2 /= N;
+                xy /= N;
+
+                a = (y * x2 - x * xy) / (x2 - x * x);
+                b = (xy - x * y) / (x2 - x * x);
+
+
+                double S2 = 0;
+                for (int i = 0; i < N; i++)
+                    S2 += Math.Pow(arr_2[i] - a - b * arr_1[i], 2);
+                S2 /= (N - 2);
+
+                return (S2);
             }
 
-            double L = 0;
-            double S2 = 0;
-
-            for (int i = 0; i < Mi.Count; i++)
+            public static double Determination(double[] arr_1, double[] arr_2)
             {
-                double sum = 0;
-                for (int j = 0; j < Mi[i].Count; j ++)
-                    sum += Math.Pow(Mi[i][j] - Mi[i].Average(), 2);
-                if (sum == 0)
-                    sum = 1;
-                double S2xi = sum / Math.Max((Mi[i].Count - 1), 1);
+                int N = arr_1.Length;
 
-                S2 += (Mi[i].Count - 1) * S2xi;
+                double av_1 = Functions.Average(N, arr_1);
+                double av_2 = Functions.Average(N, arr_2);
+
+                double Rxy = Laba_1_Graph.Correlation.Pair(arr_1, arr_2, av_1, av_2);
+
+                double R_2 = Rxy * Rxy * 100;
+                return R_2;
             }
-            S2 /= (N - Mi.Count);
 
-            double C = 0;
-
-            for (int i = 0; i < Mi.Count; i++)
-                C += 1.0 / Mi[i].Count;
-            C -= 1 / N;
-            C /= 3 * (Mi.Count - 1);
-            C += 1;
-
-            for (int i = 0; i < Mi.Count; i++)
+            public static bool Model(double S_2, double[] arr_2)
             {
-                double sum = 0;
-                for (int j = 0; j < Mi[i].Count; j++)
-                    sum += Math.Pow(Mi[i][j] - Mi[i].Average(), 2);
-                if (sum == 0)
-                    sum = 1;
-                double S2xi = sum / Math.Max((Mi[i].Count - 1), 1);
-
-                L += Mi[i].Count * Math.Log(S2xi / S2);
-            }
-            L /= -C;
-
-            if (Math.Abs(L) > Quantils.XiSquare(Alpha, Mi.Count - 1))
+                double f = 0;
+                f = S_2 / Functions.Disp(arr_2.Length, arr_2.Average(), arr_2);
+                double F = Quantils.Fisher(Alpha, arr_2.Length - 1, arr_2.Length - 3);
+                if (f <= F)
+                    return (true);
                 return (false);
-            return (true);
-        }
-
-        public static double    MNK(double[] arr_1, double[] arr_2, ref double a, ref double b)
-        {
-            int N = arr_1.Length;
-
-            double x2 = 0;
-            double xy = 0;
-
-            double x = arr_1.Average();
-            double y = arr_2.Average();
-
-            for (int i = 0; i < N; i++)
-            {
-                x2 += arr_1[i] * arr_1[i];
-                xy += arr_1[i] * arr_2[i];
             }
-            x2 /= N;
-            xy /= N;
 
-            a = (y * x2 - x * xy) / (x2 - x * x);
-            b = (xy - x * y) / (x2 - x * x);
+            public static double Interval(double[] arr_1, int index, double S_2)
+            {
+                double S_ = Math.Sqrt(S_2);
+                int N = arr_1.Length;
+                double Sa = 0;
+                double Sb = 0;
 
+                Sa = S_ * Math.Sqrt(1.0 / (double)N + Math.Pow(arr_1.Average(), 2) / (Functions.Disp(N, arr_1.Average(), arr_1) * (N - 1)));
+                Sb = S_ / (Functions.Sigm(N, arr_1.Average(), arr_1) * Math.Sqrt(N - 1));
 
-            double S2 = 0;
-            for (int i = 0; i < N; i++)
-                S2 += Math.Pow(arr_2[i] - a - b * arr_1[i], 2);
-            S2 /= (N - 2);
-
-            return (S2);
+                double Syx = 0;
+                Syx = Math.Sqrt(S_2 * (/*1 + */1.0 / (double)N) + Sb * Sb * Math.Pow(arr_1[index] - arr_1.Average(), 2));
+                return (Syx);
+            }
         }
 
-        public static double    Determination(double[] arr_1, double[] arr_2)
+        public static class Parabol
         {
-            int N = arr_1.Length;
+            public static double MNK1(double[] arr_1, double[] arr_2, double rxy, ref double a, ref double b, ref double c)
+            {
+                int N = arr_1.Length;
+                double x_4 = 0,
+                        x_2 = 0,
+                        x_3 = 0,
+                        s_1 = 0,
+                        s_2 = 0,
+                        yy = 0;
 
-            double av_1 = Functions.Average(N, arr_1);
-            double av_2 = Functions.Average(N, arr_2);
+                for (int i = 0; i < N; i++)
+                {
+                    x_2 += Math.Pow(arr_1[i], 2);
+                    x_3 += Math.Pow(arr_1[i], 3);
+                    x_4 += Math.Pow(arr_1[i], 4);
+                }
+                x_2 /= N;
+                x_3 /= N;
+                x_4 /= N;
 
-            double Rxy = Laba_1_Graph.Correlation.Pair(arr_1, arr_2, av_1, av_2);
+                s_1 = Functions.Sigm(N, arr_1.Average(), arr_1);
+                s_2 = Functions.Sigm(N, arr_2.Average(), arr_2);
 
-            double R_2 = Rxy * Rxy * 100;
-            return R_2;
-        }
+                for (int i = 0; i < N; i++)
+                    yy += (arr_1[i] * arr_1[i] - x_2) * (arr_2[i] - arr_2.Average());
+                yy /= N;
 
-        public static bool      Model(double S_2, double[] arr_2)
-        {
-            double f = 0;
-            f = S_2 / Functions.Disp(arr_2.Length, arr_2.Average(), arr_2);
-            double F = Quantils.Fisher(Alpha, arr_2.Length - 1, arr_2.Length - 3);
-            if (f <= F)
-                return (true);
-            return (false);
-        }
+                b = ((x_4 - Math.Pow(x_2, 2)) * rxy * s_1 * s_2 - (x_3 - x_2 * arr_1.Average()) * yy) /
+                    (Math.Pow(s_1, 2) * (x_4 - Math.Pow(x_2, 2)) - Math.Pow((x_3 - x_2 * arr_1.Average()), 2));
 
-        // draw graphs
-        public static double    Interval(double[] arr_1, int index, double S_2)
-        {
-            double S_ = Math.Sqrt(S_2);
-            int N = arr_1.Length;
-            double Sa = 0;
-            double Sb = 0;
+                c = (Math.Pow(s_1, 2) * yy - (x_3 - x_2 * arr_1.Average()) * rxy * s_1 * s_2) /
+                    (Math.Pow(s_1, 2) * (x_4 - Math.Pow(x_2, 2)) - Math.Pow((x_3 - x_2 * arr_1.Average()), 2));
 
-            Sa = S_ * Math.Sqrt(1.0 / (double)N + Math.Pow(arr_1.Average(), 2) / (Functions.Disp(N, arr_1.Average(), arr_1) * (N - 1)));
-            Sb = S_ / (Functions.Sigm(N, arr_1.Average(), arr_1) * Math.Sqrt(N - 1));
+                a = arr_2.Average() - b * arr_1.Average() - c * x_2;
 
-            double Syx = 0;
-            Syx = Math.Sqrt(S_2 * (/*1 + */1.0 / (double)N) + Sb * Sb * Math.Pow(arr_1[index] - arr_1.Average(), 2));
-            return (Syx);
+                double S_2 = 0;
+                for (int i = 0; i < N; i++)
+                    S_2 += Math.Pow(arr_2[i] - a - b * arr_1[i] - c * arr_1[i] * arr_1[i], 2);
+                S_2 /= (N - 3);
+                S_2 *= Math.Min(a, Math.Min(b, c));
+
+                return (S_2);
+            }
+
+            public static double MNK2(double[] arr_1, double[] arr_2, double rxy, ref double a, ref double b, ref double c)
+            {
+                int     N = arr_1.Length;
+                double  x_2 = 0,
+                        x_3 = 0,  
+                        f1 = 0,
+                        f2 = 0;
+
+                for (int i = 0; i < N; i++)
+                {
+                    x_2 += Math.Pow(arr_1[i], 2);
+                    x_3 += Math.Pow(arr_1[i], 3);
+                }
+                x_2 /= N;
+                x_3 /= N;
+
+
+                a = arr_2.Average();
+                for (int i = 0; i < N; i++)
+                    b += (arr_1[i] - arr_1.Average()) * arr_2[i];
+
+                double bot = 0;
+                for (int i = 0; i < N; i++)
+                    bot += Math.Pow(arr_1[i] - arr_1.Average(), 2);
+                b /= bot;
+
+                bot = 0;
+                for (int i = 0; i < N; i++)
+                {
+                    f1 = arr_1[i] - arr_1.Average();
+                    f2 = arr_1[i] * arr_1[i] - 
+                        ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
+                        * (arr_1[i] - arr_1.Average());
+
+                    c += (f2 * arr_2[i]);
+                    bot += f2 * f2;
+                }
+                c /= bot;
+
+                double S_2 = 0;
+                for (int i = 0; i < N; i++)
+                {
+                    f1 = arr_1[i] - arr_1.Average();
+                    f2 = arr_1[i] * arr_1[i] - 
+                        ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
+                        * (arr_1[i] - arr_1.Average());
+
+                    S_2 += Math.Pow(arr_2[i] - a - b * f1 - c * f2, 2);
+                }
+                S_2 /= (N - 3);
+                S_2 *= Math.Min(a, Math.Min(b, c));
+                
+                return (S_2);
+            }
+
+            public static bool   Check2(double[] arr_1, double[] arr_2, double S2, double[] abc)
+            {
+                int N = arr_1.Length;
+                double x_4 = 0,
+                        x_2 = 0,
+                        x_3 = 0,
+                        f1 = 0,
+                        f2 = 0,
+                        ta = 0,
+                        tb = 0,
+                        tc = 0;
+
+                for (int i = 0; i < N; i++)
+                {
+                    x_2 += Math.Pow(arr_1[i], 2);
+                    x_3 += Math.Pow(arr_1[i], 3);
+                    x_4 += Math.Pow(arr_1[i], 4);
+                }
+                x_2 /= N;
+                x_3 /= N;
+                x_4 /= N;
+
+
+                for (int i = 0; i < N; i++)
+                {
+                    f1 = arr_1[i] - arr_1.Average();
+                    f2 = arr_1[i] * arr_1[i] -
+                        ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
+                        * (arr_1[i] - arr_1.Average());
+
+                    tb += f1 * f1;
+                    tc += f2 * f2;
+                }
+                ta = (abc[0]) / S2 * Math.Sqrt(N);
+                tb = (abc[1]) / S2 * Math.Sqrt(tb);
+                tc = (abc[2]) / S2 * Math.Sqrt(tc);
+                double t = Quantils.Student(N - 3);
+                if (Math.Abs(ta) <= t && Math.Abs(tb) <= t && Math.Abs(tc) <= t)
+                    return (true);
+                return (false);
+            }
         }
     }
 }

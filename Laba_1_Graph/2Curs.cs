@@ -22,7 +22,9 @@ namespace Laba_1_Graph
         double[] undo_2;
 
         double step_1 = 0;
-        double step_2 = 0;        
+        double step_2 = 0;
+
+        double Rxy = 0;
 
         Point? prevPosition = null;         // position on a chart
         ToolTip tooltip = new ToolTip();    // toolabar on a
@@ -181,7 +183,6 @@ namespace Laba_1_Graph
             }
         }
 
-
         private void ShowValues()
         {
             double av_1 = Functions.Average(arr_1.Length, arr_1);
@@ -293,7 +294,7 @@ namespace Laba_1_Graph
                 double av_1 = Functions.Average(N, arr_1);
                 double av_2 = Functions.Average(N, arr_2);
 
-                double Rxy = Laba_1_Graph.Correlation.Pair(arr_1, arr_2, av_1, av_2);
+                Rxy = Correlation.Pair(arr_1, arr_2, av_1, av_2);
                 if (Laba_1_Graph.Correlation.Check_Correlation(Rxy, N))
                     dataGridView2.Rows.Add("Парна кореляція:", "значуща", Math.Round(Rxy, 4), 
                         "[ " + Correlation.IntervalBot(Rxy, N) + " ; " 
@@ -355,13 +356,11 @@ namespace Laba_1_Graph
                     dataGridView3.Rows.Add("Оцінка коефіцієнта Юла:", "значуща", Math.Round(Q, 4) + ";" + Math.Round(Y, 4));
                 else
                     dataGridView3.Rows.Add("Оцінка коефіцієнта Юла:", "не значуща", Math.Round(Q, 4) + ";" + Math.Round(Y, 4));
-
-                bool a = false;
+                
                 double C = 0;
                 double X_2 = 0;
                 if (Tables.MxN_Pirson(arr_1, arr_2, step_1, step_2, ref C, ref X_2))
                 {
-                    a = true;
                     dataGridView3.Rows.Add("X2 Пірсона:", "", Math.Round(X_2, 4));
                     dataGridView3.Rows.Add("Коефіцієнт сполучень Пірсона:", "значущий", Math.Round(C, 4));
                 }
@@ -377,7 +376,6 @@ namespace Laba_1_Graph
                     dataGridView3.Rows.Add("Статистика Стюарда:", "не значуща", Math.Round(Tb, 4));
                 }
         }
-
         private void Regress()
         {
             dataGridView4.ColumnCount = 3;
@@ -387,25 +385,41 @@ namespace Laba_1_Graph
             dataGridView4.Columns[0].Width = 250;
             if (arr_1.Length == arr_2.Length)
             {
-                if (Regression.Bartlet(arr_1, arr_2, step_1))
-                {
-                    double a = 0;
-                    double b = 0;
-                    double S2 = Regression.MNK(arr_1, arr_2, ref a, ref b);
-                    dataGridView4.Rows.Add("Лінійна регресія:", "МНК S2", Math.Round(S2, 4));
-                    dataGridView4.Rows.Add("", "", "a = " + Math.Round(a, 4) + ";" + "b = " + Math.Round(b, 4));
+                double
+                    S2_L,
+                    S2_P;
+                //          Linear regression
+                { 
+                    if (Regression.Linear.Bartlet(arr_1, arr_2, step_1))
+                    {
+                        double a = 0;
+                        double b = 0;
+                        S2_L = Regression.Linear.MNK(arr_1, arr_2, ref a, ref b);
+                        dataGridView4.Rows.Add("Лінійна регресія:", "МНК S2", Math.Round(S2_L, 4));
+                        dataGridView4.Rows.Add("", "", "a = " + Math.Round(a, 4) + ";" + "b = " + Math.Round(b, 4));
 
 
-                    double R_2 = Regression.Determination(arr_1, arr_2);
-                    dataGridView4.Rows.Add("Коефіцієнт детермінації:", "", Math.Round(R_2, 4));
+                        double R_2 = Regression.Linear.Determination(arr_1, arr_2);
+                        dataGridView4.Rows.Add("Коефіцієнт детермінації:", "", Math.Round(R_2, 4));
 
-                    if (Regression.Model(S2, arr_2))
-                        dataGridView4.Rows.Add("Модель регресії:", "адекватна");
+                        if (Regression.Linear.Model(S2_L, arr_2))
+                            dataGridView4.Rows.Add("Модель регресії:", "адекватна");
+                        else
+                            dataGridView4.Rows.Add("Модель регресії:", "не адекватна");
+                    }
                     else
-                        dataGridView4.Rows.Add("Модель регресії:", "не адекватна");
+                        dataGridView4.Rows.Add("Лінійна регресія:", "умови не виконуються");
                 }
-                else
-                    dataGridView4.Rows.Add("Лінійна регресія:", "умови не виконуються");
+
+                //          Parabolic regression
+                {
+                    double[] abc = { 0, 0, 0 };
+                    double[] a1b1c1 = { 0, 0, 0 };
+
+                    S2_P = Regression.Parabol.MNK1(arr_1, arr_2, Rxy, ref abc[0], ref abc[1], ref abc[2]);
+                    double S2_P2 = Regression.Parabol.MNK2(arr_1, arr_2, Rxy, ref a1b1c1[0], ref a1b1c1[1], ref a1b1c1[2]);
+                    bool check = Regression.Parabol.Check2(arr_1, arr_2, S2_P2, a1b1c1);
+                }
             }
         }
 
