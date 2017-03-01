@@ -11,10 +11,6 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Laba_1_Graph
 {
-
-    /// <summary>
-    /// Class of graphics used to build 3 different graphics 
-    /// </summary>
     public static class Graphs
     {
         public static void Histogram(Chart chart, int amount, double min, double max, ref double[] numb, double step, List<double> Xi_Value)
@@ -163,66 +159,66 @@ namespace Laba_1_Graph
             chart.Series["Line"].ChartType = SeriesChartType.Line;
             chart.Series["Line"].BorderWidth = 2;
             chart.Series["Line"].Color = Color.Black;
-
-            chart.Series["Line"].Points.Add(new DataPoint(numb1.Min(), a + b * numb1.Min()));
-            chart.Series["Line"].Points.Add(new DataPoint(numb1.Max(), a + b * numb1.Max()));
-
-
             //      Tolerant        //
-
             chart.Series.Add("Line1");
             chart.Series["Line1"].ChartType = SeriesChartType.Line;
             chart.Series["Line1"].BorderWidth = 2;
             chart.Series["Line1"].Color = Color.Red;
 
-            chart.Series["Line1"].Points.Add(new DataPoint(numb1.Min(), a + b * numb1.Min() - Quantils.Student(numb1.Length - 2) * sigm));
-            chart.Series["Line1"].Points.Add(new DataPoint(numb1.Max(), a + b * numb1.Max() - Quantils.Student(numb1.Length - 2) * sigm));
-
-
             chart.Series.Add("Line2");
             chart.Series["Line2"].ChartType = SeriesChartType.Line;
             chart.Series["Line2"].BorderWidth = 2;
             chart.Series["Line2"].Color = Color.Red;
-
-            chart.Series["Line2"].Points.Add(new DataPoint(numb1.Min(), a + b * numb1.Min() + Quantils.Student(numb1.Length - 2) * sigm));
-            chart.Series["Line2"].Points.Add(new DataPoint(numb1.Max(), a + b * numb1.Max() + Quantils.Student(numb1.Length - 2) * sigm));
-
-
             //      Itervals for next regression        //
-
-            double[] arr_1 = new double[numb1.Length];
-            for (int i = 0; i < numb1.Length; i++)
-                arr_1[i] = numb1[i];
-            Counts.Sort(arr_1);
-
             chart.Series.Add("Line3");
             chart.Series["Line3"].ChartType = SeriesChartType.Spline;
             chart.Series["Line3"].BorderWidth = 2;
             chart.Series["Line3"].Color = Color.Green;
 
-            for (int i = 0; i < arr_1.Length; i++)
-                chart.Series["Line3"].Points.Add(new DataPoint(arr_1[i],
-                    a + b * arr_1[i] - Quantils.Student(arr_1.Length - 2) * Regression.Linear.Interval(arr_1, i, sigm * sigm)));
-
             chart.Series.Add("Line4");
+            chart.Series["Line4"].ChartType = SeriesChartType.Spline;
             chart.Series["Line4"].BorderWidth = 2;
             chart.Series["Line4"].Color = Color.Green;
 
+
+
+
+            chart.Series["Line"].Points.Add(new DataPoint(numb1.Min(), a + b * numb1.Min()));
+            chart.Series["Line"].Points.Add(new DataPoint(numb1.Max(), a + b * numb1.Max()));
+
+            chart.Series["Line1"].Points.Add(new DataPoint(numb1.Min(), a + b * numb1.Min() - Quantils.Student(numb1.Length - 2) * sigm));
+            chart.Series["Line1"].Points.Add(new DataPoint(numb1.Max(), a + b * numb1.Max() - Quantils.Student(numb1.Length - 2) * sigm));
+            
+            chart.Series["Line2"].Points.Add(new DataPoint(numb1.Min(), a + b * numb1.Min() + Quantils.Student(numb1.Length - 2) * sigm));
+            chart.Series["Line2"].Points.Add(new DataPoint(numb1.Max(), a + b * numb1.Max() + Quantils.Student(numb1.Length - 2) * sigm));
+            
+            double[] arr_1 = new double[numb1.Length];
+            for (int i = 0; i < numb1.Length; i++)
+                arr_1[i] = numb1[i];
+            Counts.Sort(arr_1);
+
             for (int i = 0; i < arr_1.Length; i++)
+            {
+                chart.Series["Line3"].Points.Add(new DataPoint(arr_1[i],
+                    a + b * arr_1[i] - Quantils.Student(arr_1.Length - 2) * Regression.Linear.Interval(arr_1, i, sigm * sigm)));
+
                 chart.Series["Line4"].Points.Add(new DataPoint(arr_1[i],
                     a + b * arr_1[i] + Quantils.Student(arr_1.Length - 2) * Regression.Linear.Interval(arr_1, i, sigm * sigm)));
-
-
-            chart.Series["Line4"].ChartType = SeriesChartType.Spline;
+            }
         }
 
-        public static void _2D_RegressionParabol(Chart chart, double[] arr_1, double[] arr_2, double[] a1b1c1, double S2_P2)
+        public static void _2D_RegressionParabol(Chart chart, double[] arr1, double[] arr2, double[] abc, double S2_P, double[] a1b1c1, double S2_P2)
         {
+            int N = arr1.Length;
+
+            double[] arr_1 = new double[N];
+            for (int i = 0; i < N; i++)
+                arr_1[i] = arr1[i];
+            Counts.Sort(arr_1);
             chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
             chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
-            chart.ChartAreas[0].AxisY.Minimum = arr_2.Min();
-            chart.ChartAreas[0].AxisY.Maximum = arr_2.Max();
-
+            chart.ChartAreas[0].AxisY.Minimum = arr2.Min();
+            chart.ChartAreas[0].AxisY.Maximum = arr2.Max();
             chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
             chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
 
@@ -230,12 +226,32 @@ namespace Laba_1_Graph
             chart.Series["Line"].ChartType = SeriesChartType.Spline;
             chart.Series["Line"].BorderWidth = 2;
             chart.Series["Line"].Color = Color.Black;
+            //      Tolerant        //
+            chart.Series.Add("Line1");
+            chart.Series["Line1"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line1"].BorderWidth = 2;
+            chart.Series["Line1"].Color = Color.Red;
 
-            int N = arr_1.Length;
+            chart.Series.Add("Line2");
+            chart.Series["Line2"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line2"].BorderWidth = 2;
+            chart.Series["Line2"].Color = Color.Red;
+            //      Itervals for next regression        //
+            chart.Series.Add("Line3");
+            chart.Series["Line3"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line3"].BorderWidth = 2;
+            chart.Series["Line3"].Color = Color.Green;
+
+            chart.Series.Add("Line4");
+            chart.Series["Line4"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line4"].BorderWidth = 2;
+            chart.Series["Line4"].Color = Color.Green;
+
             double x_2 = 0,
                     x_3 = 0,
                     f1 = 0,
                     f2 = 0;
+            double sigm_1 = 0, sigm_2 = 0;
 
             for (int i = 0; i < N; i++)
             {
@@ -245,6 +261,18 @@ namespace Laba_1_Graph
             x_2 /= N;
             x_3 /= N;
 
+            double f2_average = 0;
+            for (int i = 0; i < N; i++)
+            {
+                f2 = arr_1[i] * arr_1[i] -
+                    ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
+                    * (arr_1[i] - arr_1.Average());
+                f2_average += f2 * f2;
+            }
+
+            double Syx = 0;
+            sigm_1 = Functions.Sigm(N, arr1.Average(), arr1);
+            sigm_2 = Functions.Sigm(N, arr2.Average(), arr2);
             for (int i = 0; i < N; i++)
             {
                 f1 = arr_1[i] - arr_1.Average();
@@ -252,7 +280,14 @@ namespace Laba_1_Graph
                     ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
                     * (arr_1[i] - arr_1.Average());
 
-                chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], a1b1c1[0] + a1b1c1[1] * f1 + a1b1c1[2] * f2 ));
+                chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i]));
+
+                chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] - Quantils.Student(N - 3) * Math.Sqrt(S2_P2)));
+                chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] + Quantils.Student(N - 3) * Math.Sqrt(S2_P2)));
+
+                Syx = (S2_P2 / Math.Sqrt(N)) * Math.Sqrt(1 + (f1 * f1) / (sigm_1 * sigm_1) + (f2 * f2) / (f2_average));
+                chart.Series["Line3"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] - Quantils.Student(N - 3) * Math.Sqrt(Syx)));
+                chart.Series["Line4"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] + Quantils.Student(N - 3) * Math.Sqrt(Syx)));
             }
         }
 

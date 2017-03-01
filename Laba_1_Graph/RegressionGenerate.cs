@@ -67,7 +67,7 @@ namespace Laba_1_Graph
                 Random r = new Random();
                 for (int i = 0; i < len; i++)
                 {
-                    ArrR[i] = a + b * Arr[i] + c * Arr[i] * Arr[i] + r.Next(0, eps);
+                    ArrR[i] = a + b * Arr[i] + c * Arr[i] * Arr[i] + r.Next(-eps , eps);
                 }
 
 
