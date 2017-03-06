@@ -15,6 +15,7 @@ namespace Laba_1_Graph
     public partial class _2Curs : Form
     {
         bool Binary = true;
+        bool[] Regr = { false, false, false };
         double[] arr_1;     double Min_1; double Max_1;
         double[] arr_2;     double Min_2; double Max_2;
 
@@ -73,9 +74,11 @@ namespace Laba_1_Graph
             }
         }
 
-        public void GetValues(double[] arr1, double[] arr2, bool N_D)
+        public void GetValues(double[] arr1, double[] arr2, bool N_D, bool[] Rgr)
         {
             Binary = N_D;
+            for (int i = 0; i < 3; i++)
+                Regr[i] = Rgr[i];
             arr_1 = new double[arr1.Length];
             int k = 0;
             foreach (double element in arr1)
@@ -381,14 +384,14 @@ namespace Laba_1_Graph
             dataGridView4.ColumnCount = 3;
 
             dataGridView4.Columns[1].Width = 150;
-            dataGridView4.Columns[2].Width = 150;
+            dataGridView4.Columns[2].Width = 200;
             dataGridView4.Columns[0].Width = 250;
             if (arr_1.Length == arr_2.Length)
             {
                 double
                     S2_L,
                     S2_P;
-                //          Linear regression
+                if (Regr[0])    //      Linear regression
                 { 
                     if (Regression.Linear.Bartlet(arr_1, arr_2, step_1))
                     {
@@ -410,15 +413,29 @@ namespace Laba_1_Graph
                     else
                         dataGridView4.Rows.Add("Лінійна регресія:", "умови не виконуються");
                 }
-
-                //          Parabolic regression
+                else if (Regr[1])   //  Parabolic regression
                 {
                     double[] abc = { 0, 0, 0 };
                     double[] a1b1c1 = { 0, 0, 0 };
 
                     S2_P = Regression.Parabol.MNK1(arr_1, arr_2, Rxy, ref abc[0], ref abc[1], ref abc[2]);
                     double S2_P2 = Regression.Parabol.MNK2(arr_1, arr_2, Rxy, ref a1b1c1[0], ref a1b1c1[1], ref a1b1c1[2]);
+                    dataGridView4.Rows.Add("Параболічна регресія:", "МНК S2", Math.Round(S2_P, 4));
+                    dataGridView4.Rows.Add("", "",
+                        "a = " + Math.Round(abc[0], 4) +
+                        ";" + "b = " + Math.Round(abc[1], 4) +
+                        ";" + "c = " + Math.Round(abc[2], 4));
                     bool check = Regression.Parabol.Check2(arr_1, arr_2, S2_P2, a1b1c1);
+                    if (check)
+                        dataGridView4.Rows.Add("Модель регресії:", "адеквана");
+                    else
+                        dataGridView4.Rows.Add("Модель регресії:", "не адеквана");
+                }
+                else if (Regr[2])   //  Kaziliear regression
+                {
+                    double[] ab = new double[2];
+                    Regression.Kvazilinear.Transform(arr_1, arr_2, ref ab[0], ref ab[1],
+                        Regression.Kvazilinear.Model_11.Fx, Regression.Kvazilinear.Model_11.Qy, Regression.Kvazilinear.Model_11.W);
                 }
             }
         }

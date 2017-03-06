@@ -1,0 +1,14 @@
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\bin\Release\Laba_1_Graph.exe.config
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\bin\Release\Laba_1_Graph.exe
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\bin\Release\Laba_1_Graph.pdb
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph._2Curs.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.ExpNorm.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.Form1.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.Form2.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.Form_Choose.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.K_DForm.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.Properties.Resources.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.RegressionGenerate.resources
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.csproj.GenerateResource.Cache
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.exe
+D:\Myfiles\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Release\Laba_1_Graph.pdb

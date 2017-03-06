@@ -1306,6 +1306,62 @@ namespace Laba_1_Graph
                     return (true);
                 return (false);
             }
+        }   
+
+        public static class Kvazilinear
+        {
+            public delegate double FunctionX(double x);
+            public delegate double FunctionY(double x);
+            public delegate double FunctionW(double x, double y);
+
+            public static void Transform(double[] arr_1, double[] arr_2, ref double a, ref double b,
+                FunctionX Fx, FunctionY Qy, FunctionW W)
+            {
+                int N = arr_1.Length;
+                double
+                    B = 0,
+                    A = 0;
+                double
+                    xy_a = 0,
+                    x_2 = 0,
+                    y_a = 0,
+                    x_a = 0;
+
+                double bot = 0;
+                double[] top = new double[4];
+                for (int i = 0; i < N; i++)
+                {
+                    top[0] += Fx(arr_1[i]) * Qy(arr_2[i]) * W(arr_1[i], arr_2[i]);
+                    top[1] += Fx(arr_1[i]) * Fx(arr_1[i]) * W(arr_1[i], arr_2[i]);
+                    top[2] += Qy(arr_2[i]) * W(arr_1[i], arr_2[i]);
+                    top[3] += Fx(arr_1[i]) * W(arr_1[i], arr_2[i]);
+                    bot += W(arr_1[i], arr_2[i]);
+                }
+                xy_a = top[0] / bot;
+                x_2 = top[1] / bot;
+                y_a = top[2] / bot;
+                x_a = top[3] / bot;
+
+                B = (xy_a - x_a * y_a) / (x_2 - x_a * x_a);
+                A = y_a - B * x_a;
+                a = A;
+                b = B;
+            }
+            public static class Model_11
+            {
+                public static double Fx(double x)
+                {
+                    return (1 / x);
+                }
+                public static double Qy(double y)
+                {
+                    return (1 / y);
+                }
+                public static double W(double x, double y)
+                {
+                    return (Math.Pow(y, 4) / Math.Pow(x, 4));
+                }
+            }
         }
     }
 }

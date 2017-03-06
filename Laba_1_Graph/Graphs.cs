@@ -13,6 +13,7 @@ namespace Laba_1_Graph
 {
     public static class Graphs
     {
+        public delegate double FunctionX(double x);
         public static void Histogram(Chart chart, int amount, double min, double max, ref double[] numb, double step, List<double> Xi_Value)
         {
             chart.Series.Add("histogram");
@@ -207,7 +208,7 @@ namespace Laba_1_Graph
             }
         }
 
-        public static void _2D_RegressionParabol(Chart chart, double[] arr1, double[] arr2, double[] abc, double S2_P, double[] a1b1c1, double S2_P2)
+        public static void _2D_RegressionParabol(Chart chart, double[] arr1, double[] arr2, double[] abc, double S2_P, double S2_P2)
         {
             int N = arr1.Length;
 
@@ -288,6 +289,84 @@ namespace Laba_1_Graph
                 Syx = (S2_P2 / Math.Sqrt(N)) * Math.Sqrt(1 + (f1 * f1) / (sigm_1 * sigm_1) + (f2 * f2) / (f2_average));
                 chart.Series["Line3"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] - Quantils.Student(N - 3) * Math.Sqrt(Syx)));
                 chart.Series["Line4"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] + Quantils.Student(N - 3) * Math.Sqrt(Syx)));
+            }
+        }
+
+        public static void _2D_RegressionKvaziliear(Chart chart, double[] arr1, double[] arr2, double[] ab, double S2_K,
+                FunctionX Fx)
+        {
+            int N = arr1.Length;
+
+            double[] arr_1 = new double[N];
+            for (int i = 0; i < N; i++)
+                arr_1[i] = arr1[i];
+            Counts.Sort(arr_1);
+            chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
+            chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
+            chart.ChartAreas[0].AxisY.Minimum = arr2.Min();
+            chart.ChartAreas[0].AxisY.Maximum = arr2.Max();
+            chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
+            chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
+
+            chart.Series.Add("Line");
+            chart.Series["Line"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line"].BorderWidth = 2;
+            chart.Series["Line"].Color = Color.Black;
+            //      Tolerant        //
+            chart.Series.Add("Line1");
+            chart.Series["Line1"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line1"].BorderWidth = 2;
+            chart.Series["Line1"].Color = Color.Red;
+
+            chart.Series.Add("Line2");
+            chart.Series["Line2"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line2"].BorderWidth = 2;
+            chart.Series["Line2"].Color = Color.Red;
+            //      Itervals for next regression        //
+            chart.Series.Add("Line3");
+            chart.Series["Line3"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line3"].BorderWidth = 2;
+            chart.Series["Line3"].Color = Color.Green;
+
+            chart.Series.Add("Line4");
+            chart.Series["Line4"].ChartType = SeriesChartType.Spline;
+            chart.Series["Line4"].BorderWidth = 2;
+            chart.Series["Line4"].Color = Color.Green;
+
+            double x_2 = 0,
+                    x_3 = 0,
+                    f1 = 0,
+                    f2 = 0;
+            double sigm_1 = 0, sigm_2 = 0;
+
+            for (int i = 0; i < N; i++)
+            {
+                x_2 += Math.Pow(arr_1[i], 2);
+                x_3 += Math.Pow(arr_1[i], 3);
+            }
+            x_2 /= N;
+            x_3 /= N;
+
+            double f2_average = 0;
+            for (int i = 0; i < N; i++)
+            {
+                f2 = arr_1[i] * arr_1[i] -
+                    ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
+                    * (arr_1[i] - arr_1.Average());
+                f2_average += f2 * f2;
+            }
+
+            double Syx = 0;
+            sigm_1 = Functions.Sigm(N, arr1.Average(), arr1);
+            sigm_2 = Functions.Sigm(N, arr2.Average(), arr2);
+            for (int i = 0; i < N; i++)
+            {
+                f1 = arr_1[i] - arr_1.Average();
+                f2 = arr_1[i] * arr_1[i] -
+                    ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
+                    * (arr_1[i] - arr_1.Average());
+
+                chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], ab[0] + ab[1] * Fx(arr1[i])));
             }
         }
 

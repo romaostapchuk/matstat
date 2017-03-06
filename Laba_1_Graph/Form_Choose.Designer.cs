@@ -46,15 +46,21 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.додатиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.згенеруватиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.вибратиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.неЛінійнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.параболічнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.квазілінійнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.вибратиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.порівнятиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.розглянутиОкремоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.очиститиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.видалитиДаніToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.закритиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.побудоваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -203,19 +209,21 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.додатиToolStripMenuItem,
+            this.toolStripSeparator2,
             this.порівнятиToolStripMenuItem,
             this.розглянутиОкремоToolStripMenuItem,
+            this.toolStripSeparator1,
             this.очиститиToolStripMenuItem,
             this.видалитиДаніToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 126);
             // 
             // додатиToolStripMenuItem
             // 
             this.додатиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.згенеруватиToolStripMenuItem,
-            this.вибратиToolStripMenuItem,
-            this.неЛінійнаToolStripMenuItem});
+            this.неЛінійнаToolStripMenuItem,
+            this.вибратиToolStripMenuItem});
             this.додатиToolStripMenuItem.Name = "додатиToolStripMenuItem";
             this.додатиToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.додатиToolStripMenuItem.Text = "Додати вибірку";
@@ -227,19 +235,41 @@
             this.згенеруватиToolStripMenuItem.Text = "Згенерувати";
             this.згенеруватиToolStripMenuItem.Click += new System.EventHandler(this.згенеруватиToolStripMenuItem_Click);
             // 
-            // вибратиToolStripMenuItem
-            // 
-            this.вибратиToolStripMenuItem.Name = "вибратиToolStripMenuItem";
-            this.вибратиToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.вибратиToolStripMenuItem.Text = "Вибрати";
-            this.вибратиToolStripMenuItem.Click += new System.EventHandler(this.вибратиToolStripMenuItem_Click);
-            // 
             // неЛінійнаToolStripMenuItem
             // 
+            this.неЛінійнаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.параболічнаToolStripMenuItem,
+            this.квазілінійнаToolStripMenuItem});
             this.неЛінійнаToolStripMenuItem.Name = "неЛінійнаToolStripMenuItem";
             this.неЛінійнаToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.неЛінійнаToolStripMenuItem.Text = "Типи регресій";
             this.неЛінійнаToolStripMenuItem.Click += new System.EventHandler(this.неЛінійнаToolStripMenuItem_Click);
+            // 
+            // параболічнаToolStripMenuItem
+            // 
+            this.параболічнаToolStripMenuItem.Name = "параболічнаToolStripMenuItem";
+            this.параболічнаToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.параболічнаToolStripMenuItem.Text = "Параболічна";
+            this.параболічнаToolStripMenuItem.Click += new System.EventHandler(this.параболічнаToolStripMenuItem_Click);
+            // 
+            // квазілінійнаToolStripMenuItem
+            // 
+            this.квазілінійнаToolStripMenuItem.Name = "квазілінійнаToolStripMenuItem";
+            this.квазілінійнаToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.квазілінійнаToolStripMenuItem.Text = "Квазілінійна";
+            this.квазілінійнаToolStripMenuItem.Click += new System.EventHandler(this.квазілінійнаToolStripMenuItem_Click);
+            // 
+            // вибратиToolStripMenuItem
+            // 
+            this.вибратиToolStripMenuItem.Name = "вибратиToolStripMenuItem";
+            this.вибратиToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.вибратиToolStripMenuItem.Text = "Вибрати файл";
+            this.вибратиToolStripMenuItem.Click += new System.EventHandler(this.вибратиToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(179, 6);
             // 
             // порівнятиToolStripMenuItem
             // 
@@ -254,6 +284,11 @@
             this.розглянутиОкремоToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.розглянутиОкремоToolStripMenuItem.Text = "Розглянути окремо";
             this.розглянутиОкремоToolStripMenuItem.Click += new System.EventHandler(this.розглянутиОкремоToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
             // 
             // очиститиToolStripMenuItem
             // 
@@ -272,7 +307,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.файлToolStripMenuItem});
+            this.файлToolStripMenuItem,
+            this.побудоваToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(907, 24);
@@ -290,9 +326,27 @@
             // закритиToolStripMenuItem
             // 
             this.закритиToolStripMenuItem.Name = "закритиToolStripMenuItem";
-            this.закритиToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.закритиToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.закритиToolStripMenuItem.Text = "Закрити";
             this.закритиToolStripMenuItem.Click += new System.EventHandler(this.закритиToolStripMenuItem_Click);
+            // 
+            // побудоваToolStripMenuItem
+            // 
+            this.побудоваToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripComboBox1});
+            this.побудоваToolStripMenuItem.Name = "побудоваToolStripMenuItem";
+            this.побудоваToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
+            this.побудоваToolStripMenuItem.Text = "Побудова регресії";
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.Items.AddRange(new object[] {
+            "Лінійна",
+            "Параболічна",
+            "Квазілінійна 11"});
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
+            this.toolStripComboBox1.Text = "Лінійна";
             // 
             // Form_Choose
             // 
@@ -343,5 +397,11 @@
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem закритиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem неЛінійнаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem параболічнаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem квазілінійнаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem побудоваToolStripMenuItem;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
     }
 }

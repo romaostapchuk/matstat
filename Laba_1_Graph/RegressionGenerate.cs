@@ -13,14 +13,23 @@ namespace Laba_1_Graph
     public partial class RegressionGenerate : Form
     {
         bool regr = false;
+        bool reg_p = false;
+        bool reg_k = false;
         bool norm = false;
         public static double[] Arr;
         private Form_Choose form1;
 
-        public RegressionGenerate(Form_Choose form1)
+        public RegressionGenerate(Form_Choose form1, bool parabol, bool kvazilinear)
         {
             InitializeComponent();
             this.form1 = form1;
+            reg_p = parabol;
+            reg_k = kvazilinear;
+            if (reg_k)
+            {
+                textBox1.Visible = false;
+                label3.Visible = false;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -54,7 +63,8 @@ namespace Laba_1_Graph
                 Form_Choose.Samples.Add(Arr);
             }
 
-            if (textBox6.TextLength > 0 && textBox4.TextLength > 0 && textBox1.TextLength > 0 && textBox7.TextLength > 0 && norm)
+            if (textBox6.TextLength > 0 && textBox4.TextLength > 0 && textBox1.TextLength > 0 && textBox7.TextLength > 0 
+                && norm & reg_p)
             {
                 regr = true;
 
@@ -78,7 +88,35 @@ namespace Laba_1_Graph
                     form1.dataGridView1.ColumnHeadersVisible = false;
                 }
 
-                str = "GR_regr";
+                str = "GR_regr_p";
+                form1.dataGridView1.Rows.Add(str + "_" + ArrR.Length);
+                Form_Choose.Samples.Add(ArrR);
+            }
+            else if (textBox6.TextLength > 0 && textBox4.TextLength > 0 && textBox7.TextLength > 0
+                && norm & reg_k)
+            {
+                regr = true;
+
+                double a = Convert.ToDouble(textBox6.Text);
+                double b = Convert.ToDouble(textBox4.Text);
+                double eps = Convert.ToDouble(textBox7.Text);
+
+                double[] ArrR = new double[len];
+                Random r = new Random();
+                for (int i = 0; i < len; i++)
+                {
+                    ArrR[i] = b / (1 / Arr[i] + a) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                }
+
+
+                if (form1.dataGridView1.ColumnCount == 0)
+                {
+                    form1.dataGridView1.ColumnCount = 1;
+                    form1.dataGridView1.RowHeadersVisible = false;
+                    form1.dataGridView1.ColumnHeadersVisible = false;
+                }
+
+                str = "GR_regr_k";
                 form1.dataGridView1.Rows.Add(str + "_" + ArrR.Length);
                 Form_Choose.Samples.Add(ArrR);
             }

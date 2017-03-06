@@ -52,25 +52,36 @@ namespace Laba_1_Graph
 
                         double Rxy = Laba_1_Graph.Correlation.Pair(Samples[arr[0]], Samples[arr[1]], Samples[arr[0]].Average(), Samples[arr[1]].Average());
                         //      Linear regression build
-                        //{
-                        //    if (Laba_1_Graph.Correlation.Check_Correlation(Rxy, Samples[arr[0]].Length))
-                        //        if (Regression.Linear.Bartlet(Samples[arr[0]], Samples[arr[1]],
-                        //        Counts.Step(s, Samples[arr[0]].Length, Samples[arr[0]].Min(), Samples[arr[0]].Max())))
-                        //        {
-                        //            double a = 0;
-                        //            double b = 0;
-                        //            double S2 = Regression.Linear.MNK(Samples[arr[0]], Samples[arr[1]], ref a, ref b);
-                        //            Graphs._2D_RegressionLinear(chart2, Samples[arr[0]], Samples[arr[1]], a, b, Math.Sqrt(S2));
-                        //        }
-                        //}
-
+                        if (toolStripComboBox1.Text == "Лінійна")
+                        {
+                            if (Laba_1_Graph.Correlation.Check_Correlation(Rxy, Samples[arr[0]].Length))
+                                if (Regression.Linear.Bartlet(Samples[arr[0]], Samples[arr[1]],
+                                Counts.Step(s, Samples[arr[0]].Length, Samples[arr[0]].Min(), Samples[arr[0]].Max())))
+                                {
+                                    double a = 0;
+                                    double b = 0;
+                                    double S2 = Regression.Linear.MNK(Samples[arr[0]], Samples[arr[1]], ref a, ref b);
+                                    Graphs._2D_RegressionLinear(chart2, Samples[arr[0]], Samples[arr[1]], a, b, Math.Sqrt(S2));
+                                }
+                        }
                         //      Parabolic regression build
+                        else if (toolStripComboBox1.Text == "Параболічна")
                         {
                             double[] abc = { 0, 0, 0 };
                             double[] a1b1c1 = { 0, 0, 0 };
                             double S2_P = Regression.Parabol.MNK1(Samples[arr[0]], Samples[arr[1]], Rxy, ref abc[0], ref abc[1], ref abc[2]);
                             double S2_P2 = Regression.Parabol.MNK2(Samples[arr[0]], Samples[arr[1]], Rxy, ref a1b1c1[0], ref a1b1c1[1], ref a1b1c1[2]);
-                            Graphs._2D_RegressionParabol(chart2, Samples[arr[0]], Samples[arr[1]], abc, S2_P, a1b1c1, S2_P2);
+                            Graphs._2D_RegressionParabol(chart2, Samples[arr[0]], Samples[arr[1]], abc, S2_P, S2_P2);
+                        }
+
+                        //      Kvazilinear regression build
+                        else if (toolStripComboBox1.Text == "Квазілінійна 11")
+                        {
+                            double[] ab = new double[2];
+                            Regression.Kvazilinear.Transform(Samples[arr[0]], Samples[arr[1]], ref ab[0], ref ab[1],
+                                Regression.Kvazilinear.Model_11.Fx, Regression.Kvazilinear.Model_11.Qy, Regression.Kvazilinear.Model_11.W);
+                            Graphs._2D_RegressionKvaziliear(chart2, Samples[arr[0]], Samples[arr[1]], ab, 2, Regression.Kvazilinear.Model_11.Fx);       // change R2_K
+
                         }
                     }
                     _2_Graphs = true;
@@ -172,9 +183,16 @@ namespace Laba_1_Graph
                 dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
             if (_2_Graphs)
             {
+                bool[] Rgr = { false, false, false};
+                if (toolStripComboBox1.Text == "Лінійна")
+                    Rgr[0] = true;
+                else if (toolStripComboBox1.Text == "Параболічна")
+                    Rgr[1] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна")
+                    Rgr[2] = true;
                 this.Hide();
                 _2Curs window = new _2Curs();
-                window.GetValues(Samples[arr[0]], Samples[arr[1]], checkBox1.Checked);
+                window.GetValues(Samples[arr[0]], Samples[arr[1]], checkBox1.Checked, Rgr);
                 window.Show();
                 window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
                 arr = new List<int>();
@@ -248,8 +266,21 @@ namespace Laba_1_Graph
 
         private void неЛінійнаToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
+        }
+
+        private void параболічнаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             this.Hide();
-            RegressionGenerate window = new RegressionGenerate(this);
+            RegressionGenerate window = new RegressionGenerate(this, true, false);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+
+        private void квазілінійнаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            RegressionGenerate window = new RegressionGenerate(this, false, true);
             window.Show();
             window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
         }
