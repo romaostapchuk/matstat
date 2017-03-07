@@ -12,6 +12,7 @@ namespace Laba_1_Graph
 {
     public partial class RegressionGenerate : Form
     {
+        int model = 0;
         bool regr = false;
         bool reg_p = false;
         bool reg_k = false;
@@ -19,12 +20,13 @@ namespace Laba_1_Graph
         public static double[] Arr;
         private Form_Choose form1;
 
-        public RegressionGenerate(Form_Choose form1, bool parabol, bool kvazilinear)
+        public RegressionGenerate(Form_Choose form1, bool parabol, bool kvazilinear, int md)
         {
             InitializeComponent();
             this.form1 = form1;
             reg_p = parabol;
             reg_k = kvazilinear;
+            model = md;
             if (reg_k)
             {
                 textBox1.Visible = false;
@@ -92,8 +94,8 @@ namespace Laba_1_Graph
                 form1.dataGridView1.Rows.Add(str + "_" + ArrR.Length);
                 Form_Choose.Samples.Add(ArrR);
             }
-            else if (textBox6.TextLength > 0 && textBox4.TextLength > 0 && textBox7.TextLength > 0
-                && norm & reg_k)
+            else if (textBox6.TextLength > 0 & textBox4.TextLength > 0 & textBox7.TextLength > 0
+                & norm & reg_k & model >= 2)
             {
                 regr = true;
 
@@ -102,11 +104,52 @@ namespace Laba_1_Graph
                 double eps = Convert.ToDouble(textBox7.Text);
 
                 double[] ArrR = new double[len];
-                Random r = new Random();
-                for (int i = 0; i < len; i++)
+                if (model == 11)
                 {
-                    ArrR[i] = b / (1 / Arr[i] + a) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    for (int i = 0; i < len; i++)
+                        ArrR[i] = b / (1 / Arr[i] + a) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    str = "GR_rgr_k_11";
                 }
+                else if (model == 2)
+                {
+                    for (int i = 0; i < len; i++)
+                    {
+                        Arr[i] = Math.Abs(Arr[i] - Arr.Min());
+                        ArrR[i] = Math.Sqrt(Math.Abs(a + b * Arr[i])) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    }
+                    str = "GR_rgr_k_2";
+                }
+                else if (model == 3)
+                {
+                    for (int i = 0; i < len; i++)
+                        ArrR[i] = a + b / Arr[i] + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    str = "GR_rgr_k_3";
+                }
+                else if (model == 4)
+                {
+                    for (int i = 0; i < len; i++)
+                        ArrR[i] = 1 / (a + b * Arr[i]) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    str = "GR_rgr_k_4";
+                }
+                else if (model == 6)
+                {
+                    for (int i = 0; i < len; i++)
+                    { 
+                        Arr[i] = Math.Abs(Arr[i]);
+                        ArrR[i] = a + b * Math.Log(Arr[i]) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    }
+                    str = "GR_rgr_k_6";
+                }
+                else if (model == 7)
+                {
+                    for (int i = 0; i < len; i++)
+                    {
+                        Arr[i] = Math.Abs(Arr[i]);
+                        ArrR[i] = a * Math.Pow(Arr[i], b) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    }
+                    str = "GR_rgr_k_7";
+                }
+
 
 
                 if (form1.dataGridView1.ColumnCount == 0)
@@ -115,8 +158,6 @@ namespace Laba_1_Graph
                     form1.dataGridView1.RowHeadersVisible = false;
                     form1.dataGridView1.ColumnHeadersVisible = false;
                 }
-
-                str = "GR_regr_k";
                 form1.dataGridView1.Rows.Add(str + "_" + ArrR.Length);
                 Form_Choose.Samples.Add(ArrR);
             }

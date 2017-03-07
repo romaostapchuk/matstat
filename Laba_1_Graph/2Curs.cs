@@ -15,7 +15,7 @@ namespace Laba_1_Graph
     public partial class _2Curs : Form
     {
         bool Binary = true;
-        bool[] Regr = { false, false, false };
+        bool[] Regr;
         double[] arr_1;     double Min_1; double Max_1;
         double[] arr_2;     double Min_2; double Max_2;
 
@@ -77,7 +77,8 @@ namespace Laba_1_Graph
         public void GetValues(double[] arr1, double[] arr2, bool N_D, bool[] Rgr)
         {
             Binary = N_D;
-            for (int i = 0; i < 3; i++)
+            Regr = new bool[Rgr.Length];
+            for (int i = 0; i < Rgr.Length; i++)
                 Regr[i] = Rgr[i];
             arr_1 = new double[arr1.Length];
             int k = 0;
@@ -391,7 +392,7 @@ namespace Laba_1_Graph
                 double
                     S2_L,
                     S2_P;
-                if (Regr[0])    //      Linear regression
+                if (Regr[1])    //      Linear regression
                 { 
                     if (Regression.Linear.Bartlet(arr_1, arr_2, step_1))
                     {
@@ -413,7 +414,7 @@ namespace Laba_1_Graph
                     else
                         dataGridView4.Rows.Add("Лінійна регресія:", "умови не виконуються");
                 }
-                else if (Regr[1])   //  Parabolic regression
+                else if (Regr[0])   //  Parabolic regression
                 {
                     double[] abc = { 0, 0, 0 };
                     double[] a1b1c1 = { 0, 0, 0 };
@@ -431,11 +432,93 @@ namespace Laba_1_Graph
                     else
                         dataGridView4.Rows.Add("Модель регресії:", "не адеквана");
                 }
-                else if (Regr[2])   //  Kaziliear regression
+                else if (Regr[11])   //  Kaziliear regression   11
                 {
                     double[] ab = new double[2];
                     Regression.Kvazilinear.Transform(arr_1, arr_2, ref ab[0], ref ab[1],
                         Regression.Kvazilinear.Model_11.Fx, Regression.Kvazilinear.Model_11.Qy, Regression.Kvazilinear.Model_11.W);
+                    double S2 = 0;
+                    S2 = Regression.Kvazilinear.KvazilinearS2(arr_1, arr_2, ab, Regression.Kvazilinear.Model_11.Fx, 11);
+                    dataGridView4.Rows.Add("Квазілінійна регресія:", "МНК S2", Math.Round(S2, 4));
+                    double EMistake = 0;
+                    if (Regression.Kvazilinear.RelativeMistake(arr_1, arr_2, ab, Regression.Kvazilinear.Model_11.Fx, 11, ref EMistake))
+                        dataGridView4.Rows.Add("Відносна похибка:", "адекватна", Math.Round(EMistake, 4) + "%");
+                    else
+                        dataGridView4.Rows.Add("Відносна похибка:", "не адекватна", Math.Round(EMistake, 4) + "%");
+
+                }
+                else if (Regr[2])   //  Kaziliear regression    2
+                {
+                    double[] ab = new double[2];
+                    Regression.Kvazilinear.Transform(arr_1, arr_2, ref ab[0], ref ab[1],
+                        Regression.Kvazilinear.Model_2.Fx, Regression.Kvazilinear.Model_2.Qy, Regression.Kvazilinear.Model_2.W);
+                    double S2 = 0;
+                    S2 = Regression.Kvazilinear.KvazilinearS2(arr_1, arr_2, ab, Regression.Kvazilinear.Model_2.Fx, 2);
+                    dataGridView4.Rows.Add("Квазілінійна регресія:", "МНК S2", Math.Round(S2, 4));
+                    double EMistake = 0;
+                    if (Regression.Kvazilinear.RelativeMistake(arr_1, arr_2, ab, Regression.Kvazilinear.Model_2.Fx, 2, ref EMistake))
+                        dataGridView4.Rows.Add("Відносна похибка:", "адекватна", Math.Round(EMistake, 4) + "%");
+                    else
+                        dataGridView4.Rows.Add("Відносна похибка:", "не адекватна", Math.Round(EMistake, 4) + "%");
+                }
+                else if (Regr[3])   //  Kaziliear regression    3
+                {
+                    double[] ab = new double[2];
+                    Regression.Kvazilinear.Transform(arr_1, arr_2, ref ab[0], ref ab[1],
+                        Regression.Kvazilinear.Model_3.Fx, Regression.Kvazilinear.Model_3.Qy, Regression.Kvazilinear.Model_3.W);
+                    double S2 = 0;
+                    S2 = Regression.Kvazilinear.KvazilinearS2(arr_1, arr_2, ab, Regression.Kvazilinear.Model_3.Fx, 3);
+                    dataGridView4.Rows.Add("Квазілінійна регресія:", "МНК S2", Math.Round(S2, 4));
+                    double EMistake = 0;
+                    if (Regression.Kvazilinear.RelativeMistake(arr_1, arr_2, ab, Regression.Kvazilinear.Model_3.Fx, 3, ref EMistake))
+                        dataGridView4.Rows.Add("Відносна похибка:", "адекватна", Math.Round(EMistake, 4) + "%");
+                    else
+                        dataGridView4.Rows.Add("Відносна похибка:", "не адекватна", Math.Round(EMistake, 4) + "%");
+                }
+                else if (Regr[4])   //  Kaziliear regression    4
+                {
+                    double[] ab = new double[2];
+                    Regression.Kvazilinear.Transform(arr_1, arr_2, ref ab[0], ref ab[1],
+                        Regression.Kvazilinear.Model_4.Fx, Regression.Kvazilinear.Model_4.Qy, Regression.Kvazilinear.Model_4.W);
+                    double S2 = 0;
+                    S2 = Regression.Kvazilinear.KvazilinearS2(arr_1, arr_2, ab, Regression.Kvazilinear.Model_4.Fx, 4);
+                    dataGridView4.Rows.Add("Квазілінійна регресія:", "МНК S2", Math.Round(S2, 4));
+                    double EMistake = 0;
+                    if (Regression.Kvazilinear.RelativeMistake(arr_1, arr_2, ab, Regression.Kvazilinear.Model_4.Fx, 4, ref EMistake))
+                        dataGridView4.Rows.Add("Відносна похибка:", "адекватна", Math.Round(EMistake, 4) + "%");
+                    else
+                        dataGridView4.Rows.Add("Відносна похибка:", "не адекватна", Math.Round(EMistake, 4) + "%");
+                }
+                else if (Regr[6])   //  Kaziliear regression    6
+                {
+                    double[] ab = new double[2];
+                    Regression.Kvazilinear.Transform(arr_1, arr_2, ref ab[0], ref ab[1],
+                        Regression.Kvazilinear.Model_6.Fx, Regression.Kvazilinear.Model_6.Qy, Regression.Kvazilinear.Model_6.W);
+                    double S2 = 0;
+                    S2 = Regression.Kvazilinear.KvazilinearS2(arr_1, arr_2, ab, Regression.Kvazilinear.Model_6.Fx, 6);
+                    dataGridView4.Rows.Add("Квазілінійна регресія:", "МНК S2", Math.Round(S2, 4));
+                    double EMistake = 0;
+                    if (Regression.Kvazilinear.RelativeMistake(arr_1, arr_2, ab, Regression.Kvazilinear.Model_6.Fx, 6, ref EMistake))
+                        dataGridView4.Rows.Add("Відносна похибка:", "адекватна", Math.Round(EMistake, 4) + "%");
+                    else
+                        dataGridView4.Rows.Add("Відносна похибка:", "не адекватна", Math.Round(EMistake, 4) + "%");
+                }
+                else if (Regr[7])   //  Kaziliear regression    7
+                {
+                    double[] ab = new double[2];
+                    Regression.Kvazilinear.Transform(arr_1, arr_2, ref ab[0], ref ab[1],
+                        Regression.Kvazilinear.Model_7.Fx, Regression.Kvazilinear.Model_7.Qy, Regression.Kvazilinear.Model_7.W);
+                    double S2 = 0;
+                    S2 = Regression.Kvazilinear.KvazilinearS2(arr_1, arr_2, ab, Regression.Kvazilinear.Model_7.Fx, 7);
+                    dataGridView4.Rows.Add("Квазілінійна регресія:", "МНК S2", Math.Round(S2, 4));
+                    dataGridView4.Rows.Add("", "",
+                        "a = " + Math.Round(ab[0], 4) +
+                        ";" + "b = " + Math.Round(ab[1], 4));
+                    double EMistake = 0;
+                    if (Regression.Kvazilinear.RelativeMistake(arr_1, arr_2, ab, Regression.Kvazilinear.Model_7.Fx, 7, ref EMistake))
+                        dataGridView4.Rows.Add("Відносна похибка:", "адекватна", Math.Round(EMistake, 4) + "%");
+                    else
+                        dataGridView4.Rows.Add("Відносна похибка:", "не адекватна", Math.Round(EMistake, 4) + "%");
                 }
             }
         }

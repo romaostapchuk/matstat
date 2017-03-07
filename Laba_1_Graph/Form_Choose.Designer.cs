@@ -49,6 +49,11 @@
             this.неЛінійнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.параболічнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.квазілінійнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.модельToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.модельToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.модельToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.модельToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.модельToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.вибратиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.порівнятиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,7 +82,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.ColumnHeadersVisible = false;
             this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.Location = new System.Drawing.Point(13, 48);
+            this.dataGridView1.Location = new System.Drawing.Point(18, 48);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
@@ -99,8 +104,6 @@
             chartArea1.AxisY.InterlacedColor = System.Drawing.Color.White;
             chartArea1.AxisY.LineColor = System.Drawing.Color.DimGray;
             chartArea1.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY.Maximum = 1D;
-            chartArea1.AxisY.Minimum = 0D;
             chartArea1.AxisY.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
             chartArea1.AxisY.Title = "Y";
             chartArea1.AxisY.TitleAlignment = System.Drawing.StringAlignment.Far;
@@ -114,14 +117,14 @@
             legend1.Enabled = false;
             legend1.Name = "Legend1";
             this.chart2.Legends.Add(legend1);
-            this.chart2.Location = new System.Drawing.Point(6, 10);
+            this.chart2.Location = new System.Drawing.Point(6, 17);
             this.chart2.Name = "chart2";
             this.chart2.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart2.Series.Add(series1);
-            this.chart2.Size = new System.Drawing.Size(339, 349);
+            this.chart2.Size = new System.Drawing.Size(392, 349);
             this.chart2.TabIndex = 4;
             this.chart2.Text = "chart2";
             // 
@@ -132,7 +135,7 @@
             this.groupBox2.Controls.Add(this.chart2);
             this.groupBox2.Location = new System.Drawing.Point(189, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(706, 369);
+            this.groupBox2.Size = new System.Drawing.Size(826, 369);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             // 
@@ -158,8 +161,6 @@
             chartArea2.AxisY.InterlacedColor = System.Drawing.Color.White;
             chartArea2.AxisY.LineColor = System.Drawing.Color.DimGray;
             chartArea2.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.AxisY.Maximum = 1D;
-            chartArea2.AxisY.Minimum = 0D;
             chartArea2.AxisY.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
             chartArea2.AxisY.Title = "Y";
             chartArea2.AxisY.TitleAlignment = System.Drawing.StringAlignment.Far;
@@ -173,14 +174,14 @@
             legend2.Enabled = false;
             legend2.Name = "Legend1";
             this.chart1.Legends.Add(legend2);
-            this.chart1.Location = new System.Drawing.Point(351, 13);
+            this.chart1.Location = new System.Drawing.Point(412, 17);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
             series2.ChartArea = "ChartArea1";
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.chart1.Series.Add(series2);
-            this.chart1.Size = new System.Drawing.Size(339, 349);
+            this.chart1.Size = new System.Drawing.Size(392, 349);
             this.chart1.TabIndex = 5;
             this.chart1.Text = "chart1";
             // 
@@ -254,10 +255,50 @@
             // 
             // квазілінійнаToolStripMenuItem
             // 
+            this.квазілінійнаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.модельToolStripMenuItem,
+            this.модельToolStripMenuItem1,
+            this.модельToolStripMenuItem2,
+            this.модельToolStripMenuItem3,
+            this.модельToolStripMenuItem4});
             this.квазілінійнаToolStripMenuItem.Name = "квазілінійнаToolStripMenuItem";
             this.квазілінійнаToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.квазілінійнаToolStripMenuItem.Text = "Квазілінійна";
-            this.квазілінійнаToolStripMenuItem.Click += new System.EventHandler(this.квазілінійнаToolStripMenuItem_Click);
+            // 
+            // модельToolStripMenuItem
+            // 
+            this.модельToolStripMenuItem.Name = "модельToolStripMenuItem";
+            this.модельToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.модельToolStripMenuItem.Text = "2 модель";
+            this.модельToolStripMenuItem.Click += new System.EventHandler(this.модельToolStripMenuItem_Click);
+            // 
+            // модельToolStripMenuItem1
+            // 
+            this.модельToolStripMenuItem1.Name = "модельToolStripMenuItem1";
+            this.модельToolStripMenuItem1.Size = new System.Drawing.Size(130, 22);
+            this.модельToolStripMenuItem1.Text = "3 модель";
+            this.модельToolStripMenuItem1.Click += new System.EventHandler(this.модельToolStripMenuItem1_Click);
+            // 
+            // модельToolStripMenuItem2
+            // 
+            this.модельToolStripMenuItem2.Name = "модельToolStripMenuItem2";
+            this.модельToolStripMenuItem2.Size = new System.Drawing.Size(130, 22);
+            this.модельToolStripMenuItem2.Text = "4 модель";
+            this.модельToolStripMenuItem2.Click += new System.EventHandler(this.модельToolStripMenuItem2_Click);
+            // 
+            // модельToolStripMenuItem3
+            // 
+            this.модельToolStripMenuItem3.Name = "модельToolStripMenuItem3";
+            this.модельToolStripMenuItem3.Size = new System.Drawing.Size(130, 22);
+            this.модельToolStripMenuItem3.Text = "6 модель";
+            this.модельToolStripMenuItem3.Click += new System.EventHandler(this.модельToolStripMenuItem3_Click);
+            // 
+            // модельToolStripMenuItem4
+            // 
+            this.модельToolStripMenuItem4.Name = "модельToolStripMenuItem4";
+            this.модельToolStripMenuItem4.Size = new System.Drawing.Size(130, 22);
+            this.модельToolStripMenuItem4.Text = "11 модель";
+            this.модельToolStripMenuItem4.Click += new System.EventHandler(this.модельToolStripMenuItem4_Click);
             // 
             // вибратиToolStripMenuItem
             // 
@@ -311,7 +352,7 @@
             this.побудоваToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(907, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1015, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -326,7 +367,7 @@
             // закритиToolStripMenuItem
             // 
             this.закритиToolStripMenuItem.Name = "закритиToolStripMenuItem";
-            this.закритиToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.закритиToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.закритиToolStripMenuItem.Text = "Закрити";
             this.закритиToolStripMenuItem.Click += new System.EventHandler(this.закритиToolStripMenuItem_Click);
             // 
@@ -343,6 +384,10 @@
             this.toolStripComboBox1.Items.AddRange(new object[] {
             "Лінійна",
             "Параболічна",
+            "Квазілінійна 2",
+            "Квазілінійна 3",
+            "Квазілінійна 4",
+            "Квазілінійна 6",
             "Квазілінійна 11"});
             this.toolStripComboBox1.Name = "toolStripComboBox1";
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
@@ -353,7 +398,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(907, 375);
+            this.ClientSize = new System.Drawing.Size(1015, 375);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox2);
@@ -403,5 +448,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem побудоваToolStripMenuItem;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+        private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem4;
     }
 }

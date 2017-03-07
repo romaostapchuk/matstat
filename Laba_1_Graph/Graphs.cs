@@ -132,10 +132,10 @@ namespace Laba_1_Graph
 
         public static void _2D_EmpericNorm(Chart chart, double[] numb1, double[] numb2)
         {
-            chart.ChartAreas[0].AxisX.Minimum = numb1.Min();
-            chart.ChartAreas[0].AxisX.Maximum = numb1.Max();
-            chart.ChartAreas[0].AxisY.Minimum = numb2.Min();
-            chart.ChartAreas[0].AxisY.Maximum = numb2.Max();
+            //chart.ChartAreas[0].AxisX.Minimum = numb1.Min();
+            //chart.ChartAreas[0].AxisX.Maximum = numb1.Max();
+            //chart.ChartAreas[0].AxisY.Minimum = numb2.Min();
+            //chart.ChartAreas[0].AxisY.Maximum = numb2.Max();
             chart.Series.Add("NoClass");
             chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
             chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
@@ -148,10 +148,10 @@ namespace Laba_1_Graph
 
         public static void _2D_RegressionLinear(Chart chart, double[] numb1, double[] numb2, double a, double b, double sigm)
         {
-            chart.ChartAreas[0].AxisX.Minimum = numb1.Min();
-            chart.ChartAreas[0].AxisX.Maximum = numb1.Max();
-            chart.ChartAreas[0].AxisY.Minimum = numb2.Min();
-            chart.ChartAreas[0].AxisY.Maximum = numb2.Max();
+            //chart.ChartAreas[0].AxisX.Minimum = numb1.Min();
+            //chart.ChartAreas[0].AxisX.Maximum = numb1.Max();
+            //chart.ChartAreas[0].AxisY.Minimum = numb2.Min();
+            //chart.ChartAreas[0].AxisY.Maximum = numb2.Max();
 
             chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
             chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
@@ -216,10 +216,10 @@ namespace Laba_1_Graph
             for (int i = 0; i < N; i++)
                 arr_1[i] = arr1[i];
             Counts.Sort(arr_1);
-            chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
-            chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
-            chart.ChartAreas[0].AxisY.Minimum = arr2.Min();
-            chart.ChartAreas[0].AxisY.Maximum = arr2.Max();
+            //chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
+            //chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
+            //chart.ChartAreas[0].AxisY.Minimum = arr2.Min();
+            //chart.ChartAreas[0].AxisY.Maximum = arr2.Max();
             chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
             chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
 
@@ -292,19 +292,16 @@ namespace Laba_1_Graph
             }
         }
 
-        public static void _2D_RegressionKvaziliear(Chart chart, double[] arr1, double[] arr2, double[] ab, double S2_K,
-                FunctionX Fx)
+        public static void _2D_RegressionKvazilinear(Chart chart, double[] arr1, double[] arr2, double[] ab, double S2_K,
+                FunctionX Fx, int model)
         {
             int N = arr1.Length;
 
+            double w = arr2.Average();
             double[] arr_1 = new double[N];
             for (int i = 0; i < N; i++)
                 arr_1[i] = arr1[i];
             Counts.Sort(arr_1);
-            chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
-            chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
-            chart.ChartAreas[0].AxisY.Minimum = arr2.Min();
-            chart.ChartAreas[0].AxisY.Maximum = arr2.Max();
             chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
             chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
 
@@ -322,60 +319,56 @@ namespace Laba_1_Graph
             chart.Series["Line2"].ChartType = SeriesChartType.Spline;
             chart.Series["Line2"].BorderWidth = 2;
             chart.Series["Line2"].Color = Color.Red;
-            //      Itervals for next regression        //
-            chart.Series.Add("Line3");
-            chart.Series["Line3"].ChartType = SeriesChartType.Spline;
-            chart.Series["Line3"].BorderWidth = 2;
-            chart.Series["Line3"].Color = Color.Green;
-
-            chart.Series.Add("Line4");
-            chart.Series["Line4"].ChartType = SeriesChartType.Spline;
-            chart.Series["Line4"].BorderWidth = 2;
-            chart.Series["Line4"].Color = Color.Green;
-
-            double x_2 = 0,
-                    x_3 = 0,
-                    f1 = 0,
-                    f2 = 0;
-            double sigm_1 = 0, sigm_2 = 0;
-
-            for (int i = 0; i < N; i++)
-            {
-                x_2 += Math.Pow(arr_1[i], 2);
-                x_3 += Math.Pow(arr_1[i], 3);
-            }
-            x_2 /= N;
-            x_3 /= N;
-
-            double f2_average = 0;
-            for (int i = 0; i < N; i++)
-            {
-                f2 = arr_1[i] * arr_1[i] -
-                    ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
-                    * (arr_1[i] - arr_1.Average());
-                f2_average += f2 * f2;
-            }
-
-            double Syx = 0;
-            sigm_1 = Functions.Sigm(N, arr1.Average(), arr1);
-            sigm_2 = Functions.Sigm(N, arr2.Average(), arr2);
-            for (int i = 0; i < N; i++)
-            {
-                f1 = arr_1[i] - arr_1.Average();
-                f2 = arr_1[i] * arr_1[i] -
-                    ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
-                    * (arr_1[i] - arr_1.Average());
-
-                chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], ab[0] + ab[1] * Fx(arr1[i])));
-            }
+            if (model == 11)
+                for (int i = 0; i < N; i++)
+                {
+                    chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], 1 / (ab[0] + ab[1] * Fx(arr_1[i]))));
+                    chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], 1 / (ab[0] + ab[1] * Fx(arr_1[i])) - Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                    chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], 1 / (ab[0] + ab[1] * Fx(arr_1[i])) + Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                }
+            else if (model == 2)
+                for (int i = 0; i < N; i++)
+                {
+                    chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], Math.Sqrt(ab[0] + ab[1] * Fx(arr_1[i]))));
+                    chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], Math.Sqrt(ab[0] + ab[1] * Fx(arr_1[i]))- Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                    chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], Math.Sqrt(ab[0] + ab[1] * Fx(arr_1[i])) + Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+        }
+            else if (model == 3)
+                for (int i = 0; i < N; i++)
+                {
+                    chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], (ab[0] + ab[1] * Fx(arr_1[i]))));
+                    chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], (ab[0] + ab[1] * Fx(arr_1[i])) - Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                    chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], (ab[0] + ab[1] * Fx(arr_1[i])) + Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                }
+            else if (model == 4)
+                for (int i = 0; i < N; i++)
+                {
+                    chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], 1 / (ab[0] + ab[1] * Fx(arr_1[i]))));
+                    chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], 1 / (ab[0] + ab[1] * Fx(arr_1[i])) - Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                    chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], 1 / (ab[0] + ab[1] * Fx(arr_1[i])) + Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                }
+            else if (model == 6)
+                for (int i = 0; i < N; i++)
+                {
+                    chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], (ab[0] + ab[1] * Fx(arr_1[i]))));
+                    chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], (ab[0] + ab[1] * Fx(arr_1[i])) - Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                    chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], (ab[0] + ab[1] * Fx(arr_1[i])) + Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                }
+            else if (model == 7)
+                for (int i = 0; i < N; i++)
+                {
+                    chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], Math.Exp(ab[0] + ab[1] * Fx(arr_1[i]))));
+                    chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], Math.Exp(ab[0] + ab[1] * Fx(arr_1[i])) - Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                    chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], Math.Exp(ab[0] + ab[1] * Fx(arr_1[i])) + Quantils.Student(N - 3) * Math.Sqrt(S2_K)));
+                }
         }
 
         public static void _2D_Histogram(Chart chart, double[] arr_1, double[] arr_2, double step_1, double step_2)
         {
-            chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
-            chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
-            chart.ChartAreas[0].AxisY.Minimum = arr_2.Min();
-            chart.ChartAreas[0].AxisY.Maximum = arr_2.Max();
+            //chart.ChartAreas[0].AxisX.Minimum = arr_1.Min();
+            //chart.ChartAreas[0].AxisX.Maximum = arr_1.Max();
+            //chart.ChartAreas[0].AxisY.Minimum = arr_2.Min();
+            //chart.ChartAreas[0].AxisY.Maximum = arr_2.Max();
             chart.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
             chart.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
             chart.ChartAreas[0].AxisX.MajorGrid.LineWidth = 0;

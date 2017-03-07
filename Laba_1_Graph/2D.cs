@@ -1310,6 +1310,98 @@ namespace Laba_1_Graph
 
         public static class Kvazilinear
         {
+            public static class Model_2
+            {
+                public static double Fx(double x)
+                {
+                    return (x);
+                }
+                public static double Qy(double y)
+                {
+                    return (y * y);
+                }
+                public static double W(double x, double y)
+                {
+                    return (1 / (4 * Math.Pow(y, 2)));
+                }
+            }
+            public static class Model_3
+            {
+                public static double Fx(double x)
+                {
+                    return (1 / x);
+                }
+                public static double Qy(double y)
+                {
+                    return (y);
+                }
+                public static double W(double x, double y)
+                {
+                    return (1 / (Math.Pow(x, 4)));
+                }
+            }
+            public static class Model_4
+            {
+                public static double Fx(double x)
+                {
+                    return (x);
+                }
+                public static double Qy(double y)
+                {
+                    return (1 / y);
+                }
+                public static double W(double x, double y)
+                {
+                    return (Math.Pow(y, 4));
+                }
+            }
+            public static class Model_6
+            {
+                public static double Fx(double x)
+                {
+                    return (Math.Log(x));
+                }
+                public static double Qy(double y)
+                {
+                    return (y);
+                }
+                public static double W(double x, double y)
+                {
+                    return (1 / Math.Pow(x, 2));
+                }
+            }
+            public static class Model_7
+            {
+                public static double Fx(double x)
+                {
+                    return (Math.Log(x));
+                }
+                public static double Qy(double y)
+                {
+                    return (Math.Log(y));
+                }
+                public static double W(double x, double y)
+                {
+                    return (Math.Pow(y, 2) / Math.Pow(x, 2));
+                }
+            }
+            public static class Model_11
+            {
+                public static double Fx(double x)
+                {
+                    return (1 / x);
+                }
+                public static double Qy(double y)
+                {
+                    return (1 / y);
+                }
+                public static double W(double x, double y)
+                {
+                    return (Math.Pow(y, 4) / Math.Pow(x, 4));
+                }
+            }
+
+
             public delegate double FunctionX(double x);
             public delegate double FunctionY(double x);
             public delegate double FunctionW(double x, double y);
@@ -1347,21 +1439,134 @@ namespace Laba_1_Graph
                 a = A;
                 b = B;
             }
-            public static class Model_11
+
+            public static double KvazilinearS2(double[] arr_1, double[] arr_2, double[] ab, FunctionX Fx, int model)
             {
-                public static double Fx(double x)
-                {
-                    return (1 / x);
-                }
-                public static double Qy(double y)
-                {
-                    return (1 / y);
-                }
-                public static double W(double x, double y)
-                {
-                    return (Math.Pow(y, 4) / Math.Pow(x, 4));
-                }
+                int N = arr_1.Length;
+                double S2 = 0;
+
+                if (model == 11)
+                    for (int i = 0; i < N; i++)
+                        S2 += 1 / (ab[0] + ab[1] * Fx(arr_1[i])) - arr_2[i];
+                else if (model == 2)
+                    for (int i = 0; i < N; i++)
+                        S2 += Math.Sqrt(ab[0] + ab[1] * Fx(arr_1[i])) - arr_2[i];
+                else if (model == 3)
+                    for (int i = 0; i < N; i++)
+                        S2 += (ab[0] + ab[1] * Fx(arr_1[i])) - arr_2[i];
+                else if (model == 4)
+                    for (int i = 0; i < N; i++)
+                        S2 += 1 / (ab[0] + ab[1] * Fx(arr_1[i])) - arr_2[i];
+                else if (model == 6)
+                    for (int i = 0; i < N; i++)
+                        S2 += (ab[0] + ab[1] * Fx(arr_1[i])) - arr_2[i];
+                else if (model == 7)
+                    for (int i = 0; i < N; i++)
+                        S2 += Math.Exp(ab[0] + ab[1] * Fx(arr_1[i])) - arr_2[i];
+
+                S2 /= (N - 2);
+                return (Math.Abs(S2));
             }
+            
+            public static bool RelativeMistake(double[] arr_1, double[] arr_2, double[] ab, FunctionX Fx, int model, ref double Delt)
+            {
+                int N = arr_1.Length;
+                double[] dE = new double[N];
+
+                if (model == 11)
+                    for (int i = 0; i < N; i++)
+                    {
+                        dE[i] = 1 / (ab[0] + ab[1] * Fx(arr_1[i]));
+                        dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+                    }
+                else if (model == 2)
+                    for (int i = 0; i < N; i++)
+                    {
+                        dE[i] = Math.Sqrt(ab[0] + ab[1] * Fx(arr_1[i]));
+                        dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+                    }
+                else if (model == 3)
+                    for (int i = 0; i < N; i++)
+                    {
+                        dE[i] = (ab[0] + ab[1] * Fx(arr_1[i]));
+                        dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+                    }
+                else if (model == 4)
+                    for (int i = 0; i < N; i++)
+                    {
+                        dE[i] = 1 / (ab[0] + ab[1] * Fx(arr_1[i]));
+                        dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+                    }
+                else if (model == 6)
+                    for (int i = 0; i < N; i++)
+                    {
+                        dE[i] = (ab[0] + ab[1] * Fx(arr_1[i]));
+                        dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+                    }
+                else if (model == 7)
+                    for (int i = 0; i < N; i++)
+                    {
+                        dE[i] += Math.Exp(ab[0] + ab[1] * Fx(arr_1[i]));
+                        dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+                    }
+
+                double sigm_dE = Functions.Sigm(N, dE.Average(), dE);
+                Delt = sigm_dE;
+
+                if (Math.Abs(sigm_dE) <= Quantils.Normal(N))
+                    return (true);
+                return (false);
+            }
+
+            //public static bool AbsoluteMistake(double[] arr_1, double[] arr_2, double[] ab, FunctionX Fx, int model, double Delt)
+            //{
+            //    int N = arr_1.Length;
+            //    double[] dE = new double[N];
+
+            //    if (model == 11)
+            //        for (int i = 0; i < N; i++)
+            //        {
+            //            dE[i] = 1 / (ab[0] + ab[1] * Fx(arr_1[i]));
+            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+            //        }
+            //    else if (model == 2)
+            //        for (int i = 0; i < N; i++)
+            //        {
+            //            dE[i] = Math.Sqrt(ab[0] + ab[1] * Fx(arr_1[i]));
+            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+            //        }
+            //    else if (model == 3)
+            //        for (int i = 0; i < N; i++)
+            //        {
+            //            dE[i] = (ab[0] + ab[1] * Fx(arr_1[i]));
+            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+            //        }
+            //    else if (model == 4)
+            //        for (int i = 0; i < N; i++)
+            //        {
+            //            dE[i] = 1 / (ab[0] + ab[1] * Fx(arr_1[i]));
+            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+            //        }
+            //    else if (model == 6)
+            //        for (int i = 0; i < N; i++)
+            //        {
+            //            dE[i] = (ab[0] + ab[1] * Fx(arr_1[i]));
+            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+            //        }
+            //    else if (model == 7)
+            //        for (int i = 0; i < N; i++)
+            //        {
+            //            dE[i] += Math.Exp(ab[0] + ab[1] * Fx(arr_1[i]));
+            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
+            //        }
+
+            //    double sigm_dE = Functions.Sigm(N, dE.Average(), dE);
+            //    Delt = sigm_dE;
+
+            //    if (Math.Abs(sigm_dE) <= Quantils.Normal(N))
+            //        return (true);
+            //    return (false);
+            //}
         }
     }
 }

@@ -80,7 +80,59 @@ namespace Laba_1_Graph
                             double[] ab = new double[2];
                             Regression.Kvazilinear.Transform(Samples[arr[0]], Samples[arr[1]], ref ab[0], ref ab[1],
                                 Regression.Kvazilinear.Model_11.Fx, Regression.Kvazilinear.Model_11.Qy, Regression.Kvazilinear.Model_11.W);
-                            Graphs._2D_RegressionKvaziliear(chart2, Samples[arr[0]], Samples[arr[1]], ab, 2, Regression.Kvazilinear.Model_11.Fx);       // change R2_K
+                            double S2 = 0;
+                            S2 = Regression.Kvazilinear.KvazilinearS2(Samples[arr[0]], Samples[arr[1]], ab, Regression.Kvazilinear.Model_11.Fx, 11);
+                            Graphs._2D_RegressionKvazilinear(chart2, Samples[arr[0]], Samples[arr[1]], ab, S2, Regression.Kvazilinear.Model_11.Fx, 11);       // change R2_K
+
+                        }
+                        else if (toolStripComboBox1.Text == "Квазілінійна 2")
+                        {
+                            double[] ab = new double[2];
+                            Regression.Kvazilinear.Transform(Samples[arr[0]], Samples[arr[1]], ref ab[0], ref ab[1],
+                                Regression.Kvazilinear.Model_2.Fx, Regression.Kvazilinear.Model_2.Qy, Regression.Kvazilinear.Model_2.W);
+                            double S2 = 0;
+                            S2 = Regression.Kvazilinear.KvazilinearS2(Samples[arr[0]], Samples[arr[1]], ab, Regression.Kvazilinear.Model_2.Fx, 11);
+                            Graphs._2D_RegressionKvazilinear(chart2, Samples[arr[0]], Samples[arr[1]], ab, S2, Regression.Kvazilinear.Model_2.Fx, 2);       // change R2_K
+
+                        }
+                        else if (toolStripComboBox1.Text == "Квазілінійна 3")
+                        {
+                            double[] ab = new double[2];
+                            Regression.Kvazilinear.Transform(Samples[arr[0]], Samples[arr[1]], ref ab[0], ref ab[1],
+                                Regression.Kvazilinear.Model_3.Fx, Regression.Kvazilinear.Model_3.Qy, Regression.Kvazilinear.Model_3.W);
+                            double S2 = 0;
+                            S2 = Regression.Kvazilinear.KvazilinearS2(Samples[arr[0]], Samples[arr[1]], ab, Regression.Kvazilinear.Model_3.Fx, 11);
+                            Graphs._2D_RegressionKvazilinear(chart2, Samples[arr[0]], Samples[arr[1]], ab, S2, Regression.Kvazilinear.Model_3.Fx, 3);       // change R2_K
+
+                        }
+                        else if (toolStripComboBox1.Text == "Квазілінійна 4")
+                        {
+                            double[] ab = new double[2];
+                            Regression.Kvazilinear.Transform(Samples[arr[0]], Samples[arr[1]], ref ab[0], ref ab[1],
+                                Regression.Kvazilinear.Model_4.Fx, Regression.Kvazilinear.Model_4.Qy, Regression.Kvazilinear.Model_4.W);
+                            double S2 = 0;
+                            S2 = Regression.Kvazilinear.KvazilinearS2(Samples[arr[0]], Samples[arr[1]], ab, Regression.Kvazilinear.Model_4.Fx, 11);
+                            Graphs._2D_RegressionKvazilinear(chart2, Samples[arr[0]], Samples[arr[1]], ab, S2, Regression.Kvazilinear.Model_4.Fx, 4);       // change R2_K
+
+                        }
+                        else if (toolStripComboBox1.Text == "Квазілінійна 6")
+                        {
+                            double[] ab = new double[2];
+                            Regression.Kvazilinear.Transform(Samples[arr[0]], Samples[arr[1]], ref ab[0], ref ab[1],
+                                Regression.Kvazilinear.Model_6.Fx, Regression.Kvazilinear.Model_6.Qy, Regression.Kvazilinear.Model_6.W);
+                            double S2 = 0;
+                            S2 = Regression.Kvazilinear.KvazilinearS2(Samples[arr[0]], Samples[arr[1]], ab, Regression.Kvazilinear.Model_6.Fx, 11);
+                            Graphs._2D_RegressionKvazilinear(chart2, Samples[arr[0]], Samples[arr[1]], ab, S2, Regression.Kvazilinear.Model_6.Fx, 6);       // change R2_K
+
+                        }
+                        else if (toolStripComboBox1.Text == "Квазілінійна 7")
+                        {
+                            double[] ab = new double[2];
+                            Regression.Kvazilinear.Transform(Samples[arr[0]], Samples[arr[1]], ref ab[0], ref ab[1],
+                                Regression.Kvazilinear.Model_7.Fx, Regression.Kvazilinear.Model_7.Qy, Regression.Kvazilinear.Model_7.W);
+                            double S2 = 0;
+                            S2 = Regression.Kvazilinear.KvazilinearS2(Samples[arr[0]], Samples[arr[1]], ab, Regression.Kvazilinear.Model_7.Fx, 11);
+                            Graphs._2D_RegressionKvazilinear(chart2, Samples[arr[0]], Samples[arr[1]], ab, S2, Regression.Kvazilinear.Model_7.Fx, 7);       // change R2_K
 
                         }
                     }
@@ -183,13 +235,33 @@ namespace Laba_1_Graph
                 dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
             if (_2_Graphs)
             {
-                bool[] Rgr = { false, false, false};
-                if (toolStripComboBox1.Text == "Лінійна")
+                bool[] Rgr = new bool[13];
+                if (toolStripComboBox1.Text == "Параболічна")
                     Rgr[0] = true;
-                else if (toolStripComboBox1.Text == "Параболічна")
+                else if (toolStripComboBox1.Text == "Лінійна")
                     Rgr[1] = true;
-                else if (toolStripComboBox1.Text == "Квазілінійна")
+                else if (toolStripComboBox1.Text == "Квазілінійна 2")
                     Rgr[2] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 3")
+                    Rgr[3] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 4")
+                    Rgr[4] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 5")
+                    Rgr[5] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 6")
+                    Rgr[6] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 7")
+                    Rgr[7] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 8")
+                    Rgr[8] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 9")
+                    Rgr[9] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 10")
+                    Rgr[10] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 11")
+                    Rgr[11] = true;
+                else if (toolStripComboBox1.Text == "Квазілінійна 12")
+                    Rgr[12] = true;
                 this.Hide();
                 _2Curs window = new _2Curs();
                 window.GetValues(Samples[arr[0]], Samples[arr[1]], checkBox1.Checked, Rgr);
@@ -272,15 +344,50 @@ namespace Laba_1_Graph
         private void параболічнаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            RegressionGenerate window = new RegressionGenerate(this, true, false);
+            RegressionGenerate window = new RegressionGenerate(this, true, false, 0);
             window.Show();
             window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
         }
 
-        private void квазілінійнаToolStripMenuItem_Click(object sender, EventArgs e)
+        private void модельToolStripMenuItem_Click(object sender, EventArgs e) // 2
         {
             this.Hide();
-            RegressionGenerate window = new RegressionGenerate(this, false, true);
+            RegressionGenerate window = new RegressionGenerate(this, false, true, 2);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+        private void модельToolStripMenuItem1_Click(object sender, EventArgs e) // 3
+        {
+            this.Hide();
+            RegressionGenerate window = new RegressionGenerate(this, false, true, 3);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+        private void модельToolStripMenuItem2_Click(object sender, EventArgs e) // 4
+        {
+            this.Hide();
+            RegressionGenerate window = new RegressionGenerate(this, false, true, 4);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+        private void модельToolStripMenuItem3_Click(object sender, EventArgs e) // 6
+        {
+            this.Hide();
+            RegressionGenerate window = new RegressionGenerate(this, false, true, 6);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+        private void модельToolStripMenuItem5_Click(object sender, EventArgs e) // 7
+        {
+            this.Hide();
+            RegressionGenerate window = new RegressionGenerate(this, false, true, 7);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+        private void модельToolStripMenuItem4_Click(object sender, EventArgs e) // 11
+        {
+            this.Hide();
+            RegressionGenerate window = new RegressionGenerate(this, false, true, 11);
             window.Show();
             window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
         }
