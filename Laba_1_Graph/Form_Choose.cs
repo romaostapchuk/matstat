@@ -69,9 +69,8 @@ namespace Laba_1_Graph
                         {
                             double[] abc = { 0, 0, 0 };
                             double[] a1b1c1 = { 0, 0, 0 };
-                            double S2_P = Regression.Parabol.MNK1(Samples[arr[0]], Samples[arr[1]], Rxy, ref abc[0], ref abc[1], ref abc[2]);
                             double S2_P2 = Regression.Parabol.MNK2(Samples[arr[0]], Samples[arr[1]], Rxy, ref a1b1c1[0], ref a1b1c1[1], ref a1b1c1[2]);
-                            Graphs._2D_RegressionParabol(chart2, Samples[arr[0]], Samples[arr[1]], abc, S2_P, S2_P2);
+                            Graphs._2D_RegressionParabol(chart2, Samples[arr[0]], Samples[arr[1]], a1b1c1, S2_P2);
                         }
 
                         //      Kvazilinear regression build

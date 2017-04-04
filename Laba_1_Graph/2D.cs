@@ -1205,7 +1205,6 @@ namespace Laba_1_Graph
                 for (int i = 0; i < N; i++)
                     S_2 += Math.Pow(arr_2[i] - a - b * arr_1[i] - c * arr_1[i] * arr_1[i], 2);
                 S_2 /= (N - 3);
-                S_2 *= Math.Min(a, Math.Min(b, c));
 
                 return (S_2);
             }
@@ -1237,12 +1236,13 @@ namespace Laba_1_Graph
                 b /= bot;
 
                 bot = 0;
+                double D_x = Functions.Disp(N, arr_1.Average(), arr_1);
                 for (int i = 0; i < N; i++)
                 {
                     f1 = arr_1[i] - arr_1.Average();
-                    f2 = arr_1[i] * arr_1[i] - 
-                        ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
-                        * (arr_1[i] - arr_1.Average());
+                    f2 = arr_1[i] * arr_1[i] -
+                        ((x_3 - arr_1.Average() * x_2) / (D_x))
+                        * (arr_1[i] - arr_1.Average()) - x_2;
 
                     c += (f2 * arr_2[i]);
                     bot += f2 * f2;
@@ -1253,9 +1253,9 @@ namespace Laba_1_Graph
                 for (int i = 0; i < N; i++)
                 {
                     f1 = arr_1[i] - arr_1.Average();
-                    f2 = arr_1[i] * arr_1[i] - 
-                        ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
-                        * (arr_1[i] - arr_1.Average());
+                    f2 = arr_1[i] * arr_1[i] -
+                        ((x_3 - arr_1.Average() * x_2) / (D_x))
+                        * (arr_1[i] - arr_1.Average()) - x_2;
 
                     S_2 += Math.Pow(arr_2[i] - a - b * f1 - c * f2, 2);
                 }
@@ -1265,7 +1265,7 @@ namespace Laba_1_Graph
                 return (S_2);
             }
 
-            public static bool   Check2(double[] arr_1, double[] arr_2, double S2, double[] abc)
+            public static bool   Check2(double[] arr_1, double[] arr_2, double S2, double[] abc, ref double[] arr)
             {
                 int N = arr_1.Length;
                 double x_4 = 0,
@@ -1301,6 +1301,11 @@ namespace Laba_1_Graph
                 ta = (abc[0]) / S2 * Math.Sqrt(N);
                 tb = (abc[1]) / S2 * Math.Sqrt(tb);
                 tc = (abc[2]) / S2 * Math.Sqrt(tc);
+
+                arr[0] = ta;
+                arr[1] = tb;
+                arr[2] = tc;
+
                 double t = Quantils.Student(N - 3);
                 if (Math.Abs(ta) <= t && Math.Abs(tb) <= t && Math.Abs(tc) <= t)
                     return (true);
@@ -1402,9 +1407,9 @@ namespace Laba_1_Graph
             }
 
 
-            public delegate double FunctionX(double x);
-            public delegate double FunctionY(double x);
-            public delegate double FunctionW(double x, double y);
+            internal delegate double FunctionX(double x);
+            internal delegate double FunctionY(double x);
+            internal delegate double FunctionW(double x, double y);
 
             public static void Transform(double[] arr_1, double[] arr_2, ref double a, ref double b,
                 FunctionX Fx, FunctionY Qy, FunctionW W)
@@ -1468,7 +1473,7 @@ namespace Laba_1_Graph
                 return (Math.Abs(S2));
             }
             
-            public static bool RelativeMistake(double[] arr_1, double[] arr_2, double[] ab, FunctionX Fx, int model, ref double Delt)
+            public static bool RelativeMistake(double[] arr_1, double[] arr_2, double[] ab, FunctionX Fx, int model, ref double Delt, ref double Daver)
             {
                 int N = arr_1.Length;
                 double[] dE = new double[N];
@@ -1513,60 +1518,12 @@ namespace Laba_1_Graph
                 double sigm_dE = Functions.Sigm(N, dE.Average(), dE);
                 Delt = sigm_dE;
 
+                Daver = Math.Abs(dE.Average());
+
                 if (Math.Abs(sigm_dE) <= Quantils.Normal(N))
                     return (true);
                 return (false);
             }
-
-            //public static bool AbsoluteMistake(double[] arr_1, double[] arr_2, double[] ab, FunctionX Fx, int model, double Delt)
-            //{
-            //    int N = arr_1.Length;
-            //    double[] dE = new double[N];
-
-            //    if (model == 11)
-            //        for (int i = 0; i < N; i++)
-            //        {
-            //            dE[i] = 1 / (ab[0] + ab[1] * Fx(arr_1[i]));
-            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
-            //        }
-            //    else if (model == 2)
-            //        for (int i = 0; i < N; i++)
-            //        {
-            //            dE[i] = Math.Sqrt(ab[0] + ab[1] * Fx(arr_1[i]));
-            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
-            //        }
-            //    else if (model == 3)
-            //        for (int i = 0; i < N; i++)
-            //        {
-            //            dE[i] = (ab[0] + ab[1] * Fx(arr_1[i]));
-            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
-            //        }
-            //    else if (model == 4)
-            //        for (int i = 0; i < N; i++)
-            //        {
-            //            dE[i] = 1 / (ab[0] + ab[1] * Fx(arr_1[i]));
-            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
-            //        }
-            //    else if (model == 6)
-            //        for (int i = 0; i < N; i++)
-            //        {
-            //            dE[i] = (ab[0] + ab[1] * Fx(arr_1[i]));
-            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
-            //        }
-            //    else if (model == 7)
-            //        for (int i = 0; i < N; i++)
-            //        {
-            //            dE[i] += Math.Exp(ab[0] + ab[1] * Fx(arr_1[i]));
-            //            dE[i] = (Math.Abs(arr_2.Average() - dE[i]) / dE[i]) * 100;
-            //        }
-
-            //    double sigm_dE = Functions.Sigm(N, dE.Average(), dE);
-            //    Delt = sigm_dE;
-
-            //    if (Math.Abs(sigm_dE) <= Quantils.Normal(N))
-            //        return (true);
-            //    return (false);
-            //}
         }
     }
 }

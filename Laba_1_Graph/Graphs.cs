@@ -208,7 +208,7 @@ namespace Laba_1_Graph
             }
         }
 
-        public static void _2D_RegressionParabol(Chart chart, double[] arr1, double[] arr2, double[] abc, double S2_P, double S2_P2)
+        public static void _2D_RegressionParabol(Chart chart, double[] arr1, double[] arr2, double[] a1b1c1, double S2_P2)
         {
             int N = arr1.Length;
 
@@ -270,6 +270,7 @@ namespace Laba_1_Graph
                     * (arr_1[i] - arr_1.Average());
                 f2_average += f2 * f2;
             }
+            double D_x = Functions.Disp(N, arr1.Average(), arr1);
 
             double Syx = 0;
             sigm_1 = Functions.Sigm(N, arr1.Average(), arr1);
@@ -278,18 +279,19 @@ namespace Laba_1_Graph
             {
                 f1 = arr_1[i] - arr_1.Average();
                 f2 = arr_1[i] * arr_1[i] -
-                    ((x_3 - arr_1.Average() * x_2) / (x_2 - N * Math.Pow(arr_1.Average(), 2)))
-                    * (arr_1[i] - arr_1.Average());
+                    ((x_3 - arr_1.Average() * x_2) / (D_x))
+                    * (arr_1[i] - arr_1.Average()) - x_2;
 
-                chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i]));
+                chart.Series["Line"].Points.Add(new DataPoint(arr_1[i], a1b1c1[0] + a1b1c1[1] * f1 + a1b1c1[2] * f2));
 
-                chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] - Quantils.Student(N - 3) * Math.Sqrt(S2_P2)));
-                chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] + Quantils.Student(N - 3) * Math.Sqrt(S2_P2)));
+                chart.Series["Line1"].Points.Add(new DataPoint(arr_1[i], a1b1c1[0] + a1b1c1[1] * f1 + a1b1c1[2] * f2 - Quantils.Student(N - 3) * Math.Sqrt(Math.Abs(S2_P2))));
+                chart.Series["Line2"].Points.Add(new DataPoint(arr_1[i], a1b1c1[0] + a1b1c1[1] * f1 + a1b1c1[2] * f2 + Quantils.Student(N - 3) * Math.Sqrt(Math.Abs(S2_P2))));
 
                 Syx = (S2_P2 / Math.Sqrt(N)) * Math.Sqrt(1 + (f1 * f1) / (sigm_1 * sigm_1) + (f2 * f2) / (f2_average));
-                chart.Series["Line3"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] - Quantils.Student(N - 3) * Math.Sqrt(Syx)));
-                chart.Series["Line4"].Points.Add(new DataPoint(arr_1[i], abc[0] + abc[1] * arr_1[i] + abc[2] * arr_1[i] * arr_1[i] + Quantils.Student(N - 3) * Math.Sqrt(Syx)));
-            }
+                chart.Series["Line3"].Points.Add(new DataPoint(arr_1[i], a1b1c1[0] + a1b1c1[1] * f1 + a1b1c1[2] * f2 - Quantils.Student(N - 3) * Math.Sqrt(Math.Abs(Syx))));
+                chart.Series["Line4"].Points.Add(new DataPoint(arr_1[i], a1b1c1[0] + a1b1c1[1] * f1 + a1b1c1[2] * f2 + Quantils.Student(N - 3) * Math.Sqrt(Math.Abs(Syx))));
+
+                }
         }
 
         public static void _2D_RegressionKvazilinear(Chart chart, double[] arr1, double[] arr2, double[] ab, double S2_K,

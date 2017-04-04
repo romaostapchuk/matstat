@@ -43,14 +43,14 @@ namespace Laba_1_Graph
                 norm = true;
 
                 len = Convert.ToInt32(textBox2.Text);
-                double sig = Convert.ToInt32(textBox3.Text);
-                double aver = Convert.ToInt32(textBox5.Text);
-
+                double min = Convert.ToInt32(textBox3.Text);
+                double max = Convert.ToInt32(textBox5.Text);
+                Random r = new Random();
                 Arr = new double[len];
 
                 for (int i = 0; i < len; i++)
                 {
-                    Arr[i] = TestSimpleRNG.SimpleRNG.GetNormal(aver, sig);
+                    Arr[i] = r.Next((int)min, (int)max) * r.NextDouble();
                 }
 
                 if (form1.dataGridView1.ColumnCount == 0)
@@ -60,7 +60,7 @@ namespace Laba_1_Graph
                     form1.dataGridView1.ColumnHeadersVisible = false;
                 }
 
-                str = "GR_norm";
+                str = "GR_base";
                 form1.dataGridView1.Rows.Add(str + "_" + Arr.Length);
                 Form_Choose.Samples.Add(Arr);
             }
@@ -79,7 +79,7 @@ namespace Laba_1_Graph
                 Random r = new Random();
                 for (int i = 0; i < len; i++)
                 {
-                    ArrR[i] = a + b * Arr[i] + c * Arr[i] * Arr[i] + r.Next(-eps , eps);
+                    ArrR[i] = a + b * Arr[i] + c * Arr[i] * Arr[i] + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps, 0.001));
                 }
 
 
@@ -107,7 +107,11 @@ namespace Laba_1_Graph
                 if (model == 11)
                 {
                     for (int i = 0; i < len; i++)
-                        ArrR[i] = b / (1 / Arr[i] + a) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    {
+                        if (Arr[i] == 0)
+                            Arr[i] += 0.01;
+                        ArrR[i] = b / (1 / Arr[i] + a) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps, 0.001));
+                    }
                     str = "GR_rgr_k_11";
                 }
                 else if (model == 2)
@@ -115,20 +119,24 @@ namespace Laba_1_Graph
                     for (int i = 0; i < len; i++)
                     {
                         Arr[i] = Math.Abs(Arr[i] - Arr.Min());
-                        ArrR[i] = Math.Sqrt(Math.Abs(a + b * Arr[i])) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                        ArrR[i] = Math.Sqrt(Math.Abs(a + b * Arr[i])) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps / 10, 0.001));
                     }
                     str = "GR_rgr_k_2";
                 }
                 else if (model == 3)
                 {
                     for (int i = 0; i < len; i++)
-                        ArrR[i] = a + b / Arr[i] + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                    {
+                        if (Arr[i] == 0)
+                            Arr[i] += 0.01;
+                        ArrR[i] = a + b / Arr[i] + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps, 0.001));
+                    }
                     str = "GR_rgr_k_3";
                 }
                 else if (model == 4)
                 {
                     for (int i = 0; i < len; i++)
-                        ArrR[i] = 1 / (a + b * Arr[i]) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                        ArrR[i] = 1 / (a + b * Arr[i]) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps, 0.001));
                     str = "GR_rgr_k_4";
                 }
                 else if (model == 6)
@@ -136,7 +144,9 @@ namespace Laba_1_Graph
                     for (int i = 0; i < len; i++)
                     { 
                         Arr[i] = Math.Abs(Arr[i]);
-                        ArrR[i] = a + b * Math.Log(Arr[i]) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                        if (Arr[i] == 0)
+                            Arr[i] += 0.01;
+                        ArrR[i] = a + b * Math.Log(Arr[i]) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps, 0.001));
                     }
                     str = "GR_rgr_k_6";
                 }
@@ -145,7 +155,7 @@ namespace Laba_1_Graph
                     for (int i = 0; i < len; i++)
                     {
                         Arr[i] = Math.Abs(Arr[i]);
-                        ArrR[i] = a * Math.Pow(Arr[i], b) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps * eps, 0.001));
+                        ArrR[i] = a * Math.Pow(Arr[i], b) + TestSimpleRNG.SimpleRNG.GetNormal(0, Math.Max(eps, 0.001));
                     }
                     str = "GR_rgr_k_7";
                 }
@@ -171,6 +181,11 @@ namespace Laba_1_Graph
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

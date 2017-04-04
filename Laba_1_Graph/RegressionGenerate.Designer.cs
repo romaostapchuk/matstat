@@ -100,16 +100,16 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(75, 20);
             this.textBox5.TabIndex = 9;
-            this.textBox5.Text = "0";
+            this.textBox5.Text = "10";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 74);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 13);
+            this.label4.Size = new System.Drawing.Size(38, 13);
             this.label4.TabIndex = 8;
-            this.label4.Text = "Середнє(m):";
+            this.label4.Text = "Max x:";
             // 
             // textBox3
             // 
@@ -117,16 +117,17 @@
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(75, 20);
             this.textBox3.TabIndex = 7;
-            this.textBox3.Text = "10";
+            this.textBox3.Text = "-10";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 48);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
+            this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Відхилення(δ):";
+            this.label1.Text = "Min x:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBox2
             // 
