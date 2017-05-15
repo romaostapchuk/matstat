@@ -16,6 +16,10 @@ namespace Laba_1_Graph
         bool _2_Graphs;
         bool _K_Graphs;
 
+        bool NN;
+        List<List<double[]>> NN_arr;
+        int NN_size;
+
         public Form_Choose()
         {
             InitializeComponent();
@@ -135,15 +139,18 @@ namespace Laba_1_Graph
 
                         }
                     }
-                    _2_Graphs = true;
-                    _K_Graphs = false;
+                    if (!NN)
+                    {
+                        _2_Graphs = true;
+                        _K_Graphs = false;
+                    }
                 }
                 else
                 {
                     chart2.Series.Clear();
                     chart1.Series.Clear();
                     _2_Graphs = false;
-                    if (arr.Count > 2)
+                    if (arr.Count > 2 && !NN)
                         _K_Graphs = true;
                 }
             }
@@ -153,15 +160,7 @@ namespace Laba_1_Graph
         {
             this.Show();
         }
-
-        private void згенеруватиToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            ExpNorm window = new ExpNorm(this);
-            window.Show();
-            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
-        }
-
+        
         private void вибратиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dataGridView1.ColumnCount = 1;
@@ -282,9 +281,22 @@ namespace Laba_1_Graph
                 window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
                 arr = new List<int>();
             }
-            _2_Graphs = false;
-            chart2.Series.Clear();
-            chart1.Series.Clear();
+            else if (NN && (NN_arr.Count >= 2 || arr.Count == NN_size))
+            {
+                if (arr.Count == NN_size)
+                    обратиНаступнуВибіркуToolStripMenuItem_Click(sender, e);
+                this.Hide();
+                K_DForm window = new K_DForm();
+
+                window.Get_N_Values(NN_arr); // passing data
+
+                window.Show();
+                window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+                arr = new List<int>();
+
+                NN = false;
+            }
+            очиститиToolStripMenuItem_Click(sender, e);
         }
 
         private void розглянутиОкремоToolStripMenuItem_Click(object sender, EventArgs e)
@@ -309,6 +321,11 @@ namespace Laba_1_Graph
             for (int i = 0; i < arr.Count; i++)
                 dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
             arr = new List<int>();
+
+            NN_arr = new List<List<double[]>>();
+            NN = false;
+            NN_size = -1;
+            
             _2_Graphs = false;
             chart2.Series.Clear();
             chart1.Series.Clear();
@@ -324,6 +341,11 @@ namespace Laba_1_Graph
             Samples.Clear();
             Samples = new List<double[]>();
             arr = new List<int>();
+
+            NN_arr = new List<List<double[]>>();
+            NN = false;
+            NN_size = 0;
+
             _2_Graphs = false;
             chart2.Series.Clear();
             chart1.Series.Clear();
@@ -387,6 +409,45 @@ namespace Laba_1_Graph
         {
             this.Hide();
             RegressionGenerate window = new RegressionGenerate(this, false, true, 11);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+
+        private void обратиНаступнуВибіркуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (arr.Count >= 1)
+            {
+                if (NN_size <= 0 && (NN_arr == null || NN_arr.Count == 0))
+                    NN_size = arr.Count;
+                if (NN_size != 0 && NN_size == arr.Count)
+                {
+                    if (NN_arr == null || NN_arr.Count == 0)
+                    {
+                        NN_arr = new List<List<double[]>>();
+                    }
+                    List<double[]> Temp = new List<double[]>();
+                    for (int i = 0; i < arr.Count; i++)
+                        Temp.Add(Samples[arr[i]]);
+                    NN_arr.Add(Temp);
+                    NN = true;
+
+                    chart1.Visible = false;
+                    chart2.Visible = false;
+                    for (int i = 0; i < arr.Count; i++)
+                        dataGridView1.Rows[arr[i]].Cells[0].Style.BackColor = Color.White;
+                    arr = new List<int>();
+
+                    _2_Graphs = false;
+                    chart2.Series.Clear();
+                    chart1.Series.Clear();
+                }
+            }
+        }
+
+        private void одновимірнуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ExpNorm window = new ExpNorm(this);
             window.Show();
             window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
         }

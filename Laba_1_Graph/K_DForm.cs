@@ -7,160 +7,887 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Input;
+
 
 namespace Laba_1_Graph
 {
     public partial class K_DForm : Form
     {
-        List<double[]> arr_all;
-        List<double[]> undo = new List<double[]>();
-
         public K_DForm()
         {
             InitializeComponent();
+            this.tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
         }
 
         public void GetValues(List<double[]> arr)
         {
-            arr_all = new List<double[]>();
+            DataStorage.N_size = false;
+            DataStorage.Data = new List<double[]>(arr);
+            DataStorage.DC = new List<List<double>>();
+            DataStorage.R = new List<List<double>>();
 
-            foreach (double[] element in arr)
-            {
-                arr_all.Add(element);
-            }
+            CountAll();
+            ShowData(0);
+        }
+        public void Get_N_Values(List<List<double[]>> arr)
+        {
+            DataStorage.N_Data = new List<List<double[]>>(arr);
 
-            undo = new List<double[]>();
-            for (int i = 0; i < arr_all.Count; i++)
-            {
-                undo.Add(arr_all[i]);
-            }
-            ValuesOnTab();
+            CountN();
+            ShowDataN(0);
         }
 
-        private void ValuesOnTab()
+        private void CountN()
         {
-            dataGridView1.Rows.Clear();
-            dataGridView1.ColumnCount = 3;
-            dataGridView1.Columns[0].Name = "Назва";
-            dataGridView1.Columns[1].Name = "Ӫ";
-            dataGridView1.Columns[2].Name = "Значення";
-            dataGridView1.Columns[1].Width = 250;
-            dataGridView1.Columns[0].Width = 250;
+            DataStorage.N_size = true;
+            DataStorage.N_Compares = new List<List<double>>();
+            DataStorage.N_Names = new List<string>();
+            List<double> Temp = new List<double>();
 
-            double Val1 = 0;
-            double Val2 = 0;
-            string Bart = "";
-            if (Criteria.Bartlett(arr_all, ref Val1))
+            bool check = false;
+            if (DataStorage.N_Data.Count == 2)      //average for 2 
             {
-                string Av = "";
-                if (Criteria.AverageK(arr_all, ref Val2))
-                    Av = "збіжні";
-                else
-                    Av = "незбіжні";
-                dataGridView1.Rows.Add("Середні: ", Av, Val2);
+                double V2 = Comparing.Compare2Averages(DataStorage.N_Data[0], DataStorage.N_Data[1], ref check);
 
-                Bart = "збіжні";
+                Temp = new List<double>();
+                Temp.Add(V2);
+                Temp.Add(check == true ? 1 : -1);
+
+                DataStorage.N_Compares.Add(Temp);
+                DataStorage.N_Names.Add("Порівняння середніх 2");
             }
-            else
-                Bart = "незбіжні";
-            dataGridView1.Rows.Add("Дисперсії: ", Bart, Val1); // dispersion
-
-
-
-            dataGridView1.Rows.Add();
-            dataGridView1.Rows.Add("Kритерії: ");
-
-            if (Criteria.PreQcheck(arr_all))
+            if (DataStorage.N_Data.Count >= 2)      // average for >= 2
             {
-                string Q = "";
-                if (Criteria.Q_criteria(arr_all, ref Val2))
-                    Q = "однорідні";
-                else
-                    Q = "неоднорідні";
-                dataGridView1.Rows.Add("Q-критерій: ", Q, Val2);
+                double Vk = Comparing.CompareKAverages(DataStorage.N_Data, ref check);
+
+                Temp = new List<double>();
+                Temp.Add(Vk);
+                Temp.Add(check == true ? 1 : -1);
+
+                DataStorage.N_Compares.Add(Temp);
+                DataStorage.N_Names.Add("Порівняння середніх k");
             }
-
-            string H = "";
-            if (Criteria.H_criteria(arr_all, ref Val2))
-                H = "однорідні";
-            else
-                H = "неоднорідні";
-            dataGridView1.Rows.Add("H-критерій: ", H, Val2);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void вилученняАномальнихToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach(double[] arr in arr_all)
-                remove_abnormal(arr, arr.Min(), arr.Max());
-            GetValues(arr_all);
-        }
-
-        private double[] remove_abnormal(double[] allnum, double MinX, double MaxX)
-        {
-            int N = allnum.Length; // pre-count used in auto-remove of abnormals
-            double[] S_allnum = new double[0]; // cleared array of values
-            double AverageX = Functions.Average(N, allnum); // Average X
-
-            try
+            if (DataStorage.N_Data.Count >= 2)      // DC matrix comparing
             {
-                double
-                    t = 1.55 + 0.8 * (Math.Sqrt(Math.Abs(Functions.Exces(N, AverageX, allnum))) * Math.Log10(N / 10)),
-                    A = Math.Round(AverageX - t * Functions.Sigm(N, AverageX, allnum)),
-                    B = Math.Round(AverageX + t * Functions.Sigm(N, AverageX, allnum));
-                int k = 0;
-                double[] Buf_allnum = new double[allnum.Length]; // temporary array
+                double VDC = Comparing.CompareKDC(DataStorage.N_Data, ref check);
 
-                for (int i = 0; i < allnum.Length; i++)
+                Temp = new List<double>();
+                Temp.Add(VDC);
+                Temp.Add(check == true ? 1 : -1);
+
+                DataStorage.N_Compares.Add(Temp);
+                DataStorage.N_Names.Add("Порівняння матриць DC");
+            }
+        }
+        private void CountAll()
+        {
+            DataStorage.Params = new List<List<double>>();
+            DataStorage.ParamNames = new List<string>();
+            List<double> Temp = new List<double>();
+
+            // Dispersions [0]
+            for (int i = 0; i < DataStorage.Data.Count; i++)
+                Temp.Add(Functions.Disp(DataStorage.Data[i].Length, DataStorage.Data[i].Average(), DataStorage.Data[i]));
+            DataStorage.Params.Add(Temp);
+            DataStorage.ParamNames.Add("Дисперсія");
+            Temp = new List<double>();
+
+            for (int i = 0; i < DataStorage.Data.Count; i++)
+            {
+                Temp = new List<double>();
+                for (int j = 0; j < DataStorage.Data.Count; j++)
                 {
-                    if (allnum[i] < B && allnum[i] > A)
+                    Temp.Add(Functions.Sigm(DataStorage.Data[i].Length, DataStorage.Data[i].Average(), DataStorage.Data[i]) *
+                        Functions.Sigm(DataStorage.Data[j].Length, DataStorage.Data[j].Average(), DataStorage.Data[j]) *
+                        Correlation.Pair(DataStorage.Data[i], DataStorage.Data[j], DataStorage.Data[i].Average(), DataStorage.Data[j].Average()));
+                }
+                DataStorage.DC.Add(Temp);
+            }
+            Temp = new List<double>();
+
+            for (int i = 0; i < DataStorage.Data.Count; i++)
+            {
+                Temp = new List<double>();
+                for (int j = 0; j < DataStorage.Data.Count; j++)
+                {
+                    Temp.Add(Correlation.Pair(DataStorage.Data[i], DataStorage.Data[j], DataStorage.Data[i].Average(), DataStorage.Data[j].Average()));
+                }
+                DataStorage.R.Add(Temp);
+            }
+            Temp = new List<double>();
+        }
+        
+        
+        private void ShowData(int tab)
+        {
+            if (tab == 0)
+            {
+                dataGridView1.Rows.Clear();
+                dataGridView1.Columns.Clear();
+                dataGridView1.ColumnCount = DataStorage.Data.Count;
+
+                for (int i = 0; i < DataStorage.Data.Count; i++)
+                    dataGridView1.Columns[i].Width = (dataGridView1.Width - dataGridView1.RowHeadersWidth) /
+                        DataStorage.Data.Count - DataStorage.Data.Count;
+
+                double[] data = new double[DataStorage.Data.Count];
+                if (DataStorage.Data.Count > 0)
+                    for (int i = 0; i < DataStorage.Data[0].Length; i++)
                     {
-                        Buf_allnum[k] = allnum[i];
-                        k++;
+                        dataGridView1.Rows.Add();
+                        for (int j = 0; j < DataStorage.Data.Count; j++)
+                        {
+                            data[j] = DataStorage.Data[j][i];
+                            dataGridView1[j, i].Value = Math.Round(DataStorage.Data[j][i], 4);
+                            dataGridView1[j, i].Style.BackColor = DG_Color(DataStorage.Data[j][i], j);
+                        }
+                        dataGridView1.Rows[i].HeaderCell.Value = (i + 1);
+                    }
+            }
+            else if (tab == 1)
+            {
+                chart1.Series.Clear();
+                chart1.ChartAreas.Clear();
+
+                DataStorage.step = Convert.ToInt32(comboBox1.Text);
+                int ind = 0;
+                for (int i = 0; i < DataStorage.step; i++)
+                {
+                    chart1.ChartAreas.Add(i.ToString());
+                    chart1.Series.Add(i.ToString());
+                    chart1.Series[i.ToString()].ChartArea = i.ToString();
+                    chart1.Series[i.ToString()].ChartType = SeriesChartType.Radar;
+                    chart1.ChartAreas[i.ToString()].AxisY.MajorGrid.Enabled = false;
+                    chart1.ChartAreas[i.ToString()].AxisY.LabelStyle.Enabled = false;
+                    chart1.ChartAreas[i.ToString()].AxisY.Interval = 1;
+                    chart1.ChartAreas[i.ToString()].AxisY.Maximum = 1;
+                    chart1.ChartAreas[i.ToString()].AxisY.MajorTickMark.Enabled = false;
+                    chart1.Series[i.ToString()].Color = Color.Orange;
+                    ind = i+1;
+                }
+
+                for (int i = DataStorage.index; i < DataStorage.Data[0].Length &&
+                i < DataStorage.step + DataStorage.index; i++)
+                    for (int j = 0; j < DataStorage.Data.Count; j++)
+                    {
+                        chart1.Series[(i - DataStorage.index).ToString()].Points.AddY(
+                            (DataStorage.Data[j][i] - DataStorage.Data[j].Min()) / (DataStorage.Data[j].Max() - DataStorage.Data[j].Min()));
+                    }
+                label2.Text = ("[" + (DataStorage.index + 1) + "-" + Math.Min(DataStorage.Data[0].Length, DataStorage.index + DataStorage.step) + "]");
+            }
+            else if (tab == 2)
+            {
+                chart2.Series.Clear();
+                chart2.ChartAreas[0].AxisY.Maximum = 1;
+                chart2.ChartAreas[0].AxisX.Maximum = 1;
+                chart2.ChartAreas[0].AxisX.Minimum = 0;
+                chart2.ChartAreas[0].AxisX.LabelStyle.Format = "###,##0.000";
+                chart2.ChartAreas[0].AxisY.LabelStyle.Format = "###,##0.000";
+
+                for (int i = 0; i < DataStorage.Data[0].Length; i++)
+                {
+                    chart2.Series.Add(i.ToString());
+                    chart2.Series[i.ToString()].ChartType = SeriesChartType.Line;
+                }
+
+                for (int i = 0; i < DataStorage.Data[0].Length; i++)
+                    for (int j = 0; j < DataStorage.Data.Count; j++)
+                    {
+                        chart2.Series[i.ToString()].Points.AddXY(
+                            (double)(j) / (DataStorage.Data.Count - 1), 
+                            (DataStorage.Data[j][i] - DataStorage.Data[j].Min()) / (DataStorage.Data[j].Max() - DataStorage.Data[j].Min()));
+                    }
+            }
+            else if (tab == 3)
+            {
+                chart3.Series.Clear();
+                chart3.ChartAreas.Clear();
+
+                for (int i = 0; i < DataStorage.Data.Count; i++)
+                {
+                    for (int j = 0; j < DataStorage.Data.Count; j++)
+                    {
+                        chart3.ChartAreas.Add(i.ToString() + "_" + j.ToString());
+
+                        chart3.Series.Add(i.ToString() + "_" + j.ToString());
+                        chart3.Series.Add(i.ToString() + "_" + j.ToString() + "L");
+
+                        chart3.Series[i.ToString() + "_" + j.ToString()].ChartArea = (i.ToString() + "_" + j.ToString());
+                        chart3.Series[i.ToString() + "_" + j.ToString() + "L"].ChartArea = (i.ToString() + "_" + j.ToString());
+
+                        chart3.Series[i.ToString() + "_" + j.ToString()].ChartType = SeriesChartType.Point;
+                        chart3.Series[i.ToString() + "_" + j.ToString()].Color = Color.Blue;
+
+                        chart3.Series[i.ToString() + "_" + j.ToString() + "L"].ChartType = SeriesChartType.Line;
+                        chart3.Series[i.ToString() + "_" + j.ToString() + "L"].Color = Color.Red;
                     }
                 }
-                S_allnum = new double[k];
-                for (int i = 0; i < k; i++)
+                double a = 0;
+                double b = 0;
+                for (int i = 0; i < DataStorage.Data.Count; i++)
                 {
-                    S_allnum[i] = Buf_allnum[i];
+                    for (int j = 0; j < DataStorage.Data.Count; j++)
+                    {
+                        chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisX.LabelStyle.Enabled = false;
+                        chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisY.LabelStyle.Enabled = false;
+                        if (i != j)
+                        {
+                            chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisX.Minimum = DataStorage.Data[i].Min();
+                            chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisX.Maximum = DataStorage.Data[i].Max();
+                            chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisY.Minimum = DataStorage.Data[j].Min();
+                            chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisY.Maximum = DataStorage.Data[j].Max();
+
+                            Regression.Linear.MNK(DataStorage.Data[i], DataStorage.Data[j], ref a, ref b);
+                            chart3.Series[i.ToString() + "_" + j.ToString() + "L"].Points.Add(new DataPoint(DataStorage.Data[i].Min(), a + b * DataStorage.Data[i].Min()));
+                            chart3.Series[i.ToString() + "_" + j.ToString() + "L"].Points.Add(new DataPoint(DataStorage.Data[i].Max(), a + b * DataStorage.Data[i].Max()));
+                            for (int p = 0; p < DataStorage.Data[i].Length; p++)
+                                chart3.Series[i.ToString() + "_" + j.ToString()].Points.Add(new DataPoint(DataStorage.Data[i][p], DataStorage.Data[j][p]));
+                        }
+                        else
+                        {
+                            double min = DataStorage.Data[i].Min();
+                            double max = DataStorage.Data[i].Max();
+                            int amount = DataStorage.Data[i].Length;
+                            double step = Counts.Step(0, amount, min, max);
+
+
+                            chart3.Series[i.ToString() + "_" + j.ToString()].ChartType = SeriesChartType.Column;
+                            chart3.Series[i.ToString() + "_" + j.ToString()]["PointWidth"] = "1";
+                            chart3.ChartAreas[0].AxisX.Minimum = Math.Round(min - step, 4);
+                            chart3.ChartAreas[0].AxisX.Maximum = (max + 2 * step);
+                            chart3.ChartAreas[0].AxisX.Interval = Math.Round(step, 4);
+                            double check1 = 0;
+                            if (step == 0)
+                                step = 1;
+                            double p = min;
+                            while (p <= max)
+                            {
+                                for (int q = 0; q < amount; q++)
+                                {
+                                    if (DataStorage.Data[i][q] >= p && DataStorage.Data[i][q] < p + step)
+                                    {
+                                        check1++;
+                                    }
+                                }
+                                check1 /= amount;
+
+                                chart3.Series[i.ToString() + "_" + j.ToString()].Points.AddXY(p + step / 2, check1);
+                                check1 = 0;
+                                p += step;
+                            }
+                        }
+                    }
                 }
             }
-            catch (Exception exeption)
+            else if (tab == 4)
             {
-                MessageBox.Show(exeption.Message);
-            }
-            return (S_allnum);
-        }
+                //dataGridView3.Rows.Clear();
+                //dataGridView3.Columns.Clear();
+                //dataGridView3.ColumnCount = 4;
 
-        private void стандартзаціяToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (double[] arr in arr_all)
-            {
-                Counts.Sort(arr);
+                //for (int i = 0; i < dataGridView3.ColumnCount; i++)
+                //    dataGridView3.Columns[i].Width = (dataGridView3.Width - dataGridView3.RowHeadersWidth) /
+                //        dataGridView3.ColumnCount - dataGridView3.ColumnCount;
 
-                double av_1 = Functions.Average(arr.Length, arr);
+                dataGridView2.Rows.Clear();
+                dataGridView2.Columns.Clear();
+                dataGridView2.ColumnCount = DataStorage.Params[0].Count;
 
-                double delt = Functions.Sigm(arr.Length, av_1, arr);
-                for (int i = 0; i < arr.Length; i++)
+                for (int i = 0; i < DataStorage.Params[0].Count; i++)
+                    dataGridView2.Columns[i].Width = (dataGridView2.Width - dataGridView2.RowHeadersWidth) /
+                        DataStorage.Params[0].Count - DataStorage.Params[0].Count;
+                
+                for (int i = 0; i < DataStorage.Params[0].Count; i++)
                 {
-                    arr[i] = (arr[i] - av_1) / delt;
+                    dataGridView2.Rows.Add();
+                    for (int j = 0; j < DataStorage.Params[0].Count; j++)
+                    {
+                        if (radioButton4.Checked == true)
+                            dataGridView2[j, i].Value = Math.Round(DataStorage.DC[i][j], 4);
+                        else if (radioButton3.Checked == true)
+                            dataGridView2[j, i].Value = Math.Round(DataStorage.R[i][j], 4);
+                    }
                 }
             }
-            GetValues(arr_all);
+        }
+        private void ShowCompares(int tab)
+        {
+            if (tab == 0)
+            {
+                dataGridView1.Rows.Clear();
+                dataGridView1.Columns.Clear();
+            }
+            else if (tab == 1)
+            {
+                chart1.Series.Clear();
+                chart1.ChartAreas.Clear();
+            }
+            else if (tab == 2)
+            {
+                chart2.Series.Clear();
+                chart2.ChartAreas.Clear();
+            }
+            else if (tab == 3)
+            {
+                chart3.Series.Clear();
+                chart3.ChartAreas.Clear();
+            }
+            else if (tab == 4)
+            {
+                dataGridView2.Rows.Clear();
+                dataGridView2.Columns.Clear();
+                dataGridView2.ColumnCount = DataStorage.DC.Count;
+
+                for (int i = 0; i < DataStorage.Params[0].Count; i++)
+                    dataGridView2.Columns[i].Width = (dataGridView2.Width - dataGridView2.RowHeadersWidth) /
+                        DataStorage.Params[0].Count - DataStorage.Params[0].Count;
+
+
+                dataGridView3.Rows.Clear();
+                dataGridView3.Columns.Clear();
+                dataGridView3.ColumnCount = DataStorage.Params[0].Count + 1;
+
+                for (int i = 0; i < dataGridView3.ColumnCount; i++)
+                    dataGridView3.Columns[i].Width = (dataGridView3.Width - dataGridView3.RowHeadersWidth) /
+                        dataGridView3.ColumnCount - dataGridView3.ColumnCount;
+
+                for (int i = 0; i < DataStorage.Params.Count; i++)
+                {
+                    dataGridView3.Rows.Add();
+                    dataGridView3[0, i].Value = DataStorage.ParamNames[i];
+                    for (int j = 0; j < DataStorage.Params[i].Count; j++)
+                    {
+                        dataGridView3[j + 1, i].Value = Math.Round(DataStorage.Params[i][j], 4);
+                    }
+                }
+            }
+        }
+        private void ShowDataN(int tab)
+        {
+            if (tab == 0)
+            {
+                dataGridView1.Rows.Clear();
+                dataGridView1.Columns.Clear();
+                dataGridView1.ColumnCount = DataStorage.N_Compares[0].Count + 1;
+
+                for (int i = 0; i < DataStorage.N_Compares.Count; i++)
+                    dataGridView1.Columns[i].Width = (dataGridView1.Width - dataGridView1.RowHeadersWidth) /
+                        DataStorage.N_Compares.Count - DataStorage.N_Compares.Count;
+                dataGridView1.Columns[1].HeaderText = "значення";
+
+                for (int i = 0; i < DataStorage.N_Compares.Count; i++)
+                {
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, i].Value = DataStorage.N_Names[i];
+                    for (int j = 0; j < DataStorage.N_Compares[i].Count; j++)
+                    {
+                        dataGridView1[j + 1, i].Value = Math.Round(DataStorage.N_Compares[i][j], 4);
+                        if (j == 1)
+                            dataGridView1[j + 1, i].Value = DataStorage.N_Compares[i][j] == 0 ? "" : DataStorage.N_Compares[i][j] == 1 ? "true" : "false";
+                    }
+                }
+            }
+            else if (tab == 1)
+            {
+                chart1.Series.Clear();
+                chart1.ChartAreas.Clear();
+            }
+            else if (tab == 2)
+            {
+                chart2.Series.Clear();
+                chart2.ChartAreas.Clear();
+            }
+            else if (tab == 3)
+            {
+                chart3.Series.Clear();
+                chart3.ChartAreas.Clear();
+            }
+            else if (tab == 4)
+            {
+                dataGridView2.Rows.Clear();
+                dataGridView2.Columns.Clear();
+            }
         }
 
-        private void відновтиДаніToolStripMenuItem_Click(object sender, EventArgs e)
+        private Color DG_Color(double value, int index)
         {
-            for(int i = 0; i <  arr_all.Count; i++)
-            {
-                arr_all[i] = new double[undo[i].Length];
-                arr_all[i] = undo[i];
-            }
-            GetValues(arr_all);
+            Color ret;
+
+            double n = (value - DataStorage.Data[index].Min()) /
+                (DataStorage.Data[index].Max() - DataStorage.Data[index].Min());
+            ret = Color.FromArgb(255 - (int)(n * 255), 255 - (int)(n * 255), 255);
+            return (ret);
         }
+
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked == true && DataStorage.N_size == false)
+            {
+                ShowData(tabControl1.SelectedIndex);
+            }
+            else if (radioButton2.Checked == true && DataStorage.N_size == false)
+            {
+                ShowCompares(tabControl1.SelectedIndex);
+            }
+            else if (radioButton1.Checked == true && DataStorage.N_size == true)
+            {
+                ShowDataN(tabControl1.SelectedIndex);
+            }
+            else if (radioButton2.Checked == true && DataStorage.N_size == true)
+            {
+                MessageBox.Show("Nothing to show");
+            }
+        } 
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (DataStorage.step == 0)
+                DataStorage.step = Convert.ToInt32(comboBox1.Text);
+            if (DataStorage.index > 0)
+            {
+                DataStorage.index -= DataStorage.step;
+                if (DataStorage.index < 0)
+                    DataStorage.index = 0;
+            }
+
+            radioButton1_CheckedChanged(sender, e);
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            if (DataStorage.step == 0)
+                DataStorage.step = Convert.ToInt32(comboBox1.Text);
+            if (DataStorage.index >= 0 && DataStorage.index < DataStorage.Data[0].Length)
+            {
+                DataStorage.index += DataStorage.step;
+                if (DataStorage.index >= DataStorage.Data[0].Length)
+                    DataStorage.index = DataStorage.Data[0].Length - 1;
+            }
+
+            radioButton1_CheckedChanged(sender, e);
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DataStorage.index = 0;
+            DataStorage.step = 1;
+            this.Close();
+        }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            radioButton1_CheckedChanged(sender, e);
+        }
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            radioButton1_CheckedChanged(sender, e);
+        }
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            radioButton1_CheckedChanged(sender, e);
+        }
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+        }
+
+
+        private class Comparing
+        {
+            public static double Compare2Averages(List<double[]> x, List<double[]> y, ref bool check)
+            {
+                double V = 0;
+
+                int
+                    N1 = x[0].Length,
+                    N2 = y[0].Length;
+                int n = x.Count;
+
+
+                double[,] S0 = new double[n, n];
+                double[,] S1 = new double[n, n];
+
+                double S0i = 0, S1i = 0;
+                double temp = 0;
+                double buff;
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        temp = 0;
+                        for (int l = 0; l < N2; l++)
+                            temp += y[j][l];
+                        S0i = temp;
+                        temp = 0;
+                        for (int l = 0; l < N1; l++)
+                            temp += x[j][l];
+                        S0i += temp;
+                        temp = 0;
+                        for (int l = 0; l < N2; l++)
+                            temp += y[i][l];
+                        buff = temp;
+                        temp = 0;
+                        for (int l = 0; l < N1; l++)
+                            temp += x[i][l];
+                        temp += buff;
+                        S0i *= temp;
+                        S0i /= -(N1 + N2);
+                        temp = 0;
+                        for (int l = 0; l < N2; l++)
+                            temp += y[i][l] * y[j][l];
+                        S0i += temp;
+                        temp = 0;
+                        for (int l = 0; l < N1; l++)
+                            temp += x[i][l] * x[j][l];
+                        S0i += temp;
+                        temp = 0;
+                        S0i /= (N1 + N2 - 2);
+
+                        S0[i, j] = S0i; //add to matrix
+
+                        for (int l = 0; l < N2; l++)
+                            temp += y[j][l];
+                        S1i = temp;
+                        temp = 0;
+                        for (int l = 0; l < N2; l++)
+                            temp += y[i][l];
+                        S1i *= temp;
+                        S1i /= (-N2);
+                        temp = 0;
+
+                        for (int l = 0; l < N1; l++)
+                            temp += x[j][l];
+                        buff = temp;
+                        temp = 0;
+                        for (int l = 0; l < N1; l++)
+                            temp += x[i][l];
+                        temp *= buff;
+                        temp /= (-N1);
+
+                        S1i += temp;
+                        temp = 0;
+                        for (int l = 0; l < N2; l++)
+                            temp += y[i][l] * y[j][l];
+                        S1i += temp;
+                        temp = 0;
+                        for (int l = 0; l < N1; l++)
+                            temp += x[i][l] * x[j][l];
+                        S1i += temp;
+                        temp = 0;
+                        S1i /= (N1 + N2 - 2);
+
+                        S1[i, j] = S1i; //add to matrix
+                    }
+                }
+                double S0_d = Counts.DET(S0, n);
+                double S1_d = Counts.DET(S1, n);
+
+                V = -(N1 + N2 - 2 - (n / 2)) * Math.Log(Math.Abs(S1_d) / Math.Abs(S0_d));
+                check = false;
+                if (V <= Quantils.XiSquare(0.95, n))
+                    check = true;
+                return (V);
+            }
+
+            public static double CompareKAverages(List<List<double[]>> Data, ref bool check)
+            {
+                double V = 0;
+
+                int k = Data.Count;
+                int n = Data[0].Count;
+
+                double[] xd;
+                double[] Xld;
+                double[,] Sd;
+                double[] x;
+
+                double[] buff;
+                double[,] MBuff;
+
+                double[,] Mbuff_1 = new double[n, n];
+                double[] buff_1 = new double[n];
+                double temp = 0;
+
+                for (int d = 0; d < k; d++)
+                {
+                    xd = new double[n];
+                    Sd = new double[n, n];
+
+                    for (int i = 0; i < n; i++)
+                        xd[i] = Data[d][i].Average();
+                    for (int i = 0; i < Data[d][0].Length; i++)
+                    {
+                        Xld = new double[n];
+                        for (int j = 0; j < n; j++)
+                        {
+                            Xld[j] = Data[d][j][i];
+                        }
+                        buff = Counts.VectorMinusVector(Xld, xd);
+                        MBuff = Counts.VV_Matrix(buff, buff);
+                        Sd = Counts.MatrixPlus(Sd, MBuff, n);
+                    }
+                    Sd = Counts.MatrixMultNumber(Sd, (1.0 / (Data[d][0].Length - 1)), n);
+
+                    double[,] SdSd = Counts.InverseMatrix(Sd);
+                    double[,] aa = Counts.MatrixMultMatrix(SdSd, Sd, n);
+                    Sd = Counts.MatrixMultNumber(Sd, Data[d][0].Length, n); // 1
+
+                    buff = Counts.MatrixMultVector(Sd, xd);                 // 2
+
+                    buff_1 = Counts.VectorPlusVector(buff, buff_1);
+                    Mbuff_1 = Counts.MatrixPlus(Mbuff_1, Sd, n);
+                }
+                Mbuff_1 = Counts.InverseMatrix(Mbuff_1);
+                x = Counts.MatrixMultVector(Mbuff_1, buff_1);
+
+                for (int d = 0; d < k; d++)
+                {
+                    xd = new double[n];
+                    Sd = new double[n, n];
+
+                    for (int i = 0; i < n; i++)
+                        xd[i] = Data[d][i].Average();
+                    for (int i = 0; i < Data[d][0].Length; i++)
+                    {
+                        Xld = new double[n];
+                        for (int j = 0; j < n; j++)
+                        {
+                            Xld[j] = Data[d][j][i];
+                        }
+                        buff = Counts.VectorMinusVector(Xld, xd);
+                        MBuff = Counts.VV_Matrix(buff, buff);
+                        Sd = Counts.MatrixPlus(Sd, MBuff, n);
+                    }
+                    Sd = Counts.MatrixMultNumber(Sd, (1.0 / (double)(Data[d][0].Length - 1)), n);
+
+                    Sd = Counts.InverseMatrix(Sd);
+
+                    buff = Counts.VectorMinusVector(xd, x);
+                    buff = Counts.MatrixMultVector(Sd, buff);   // 2
+
+                    temp = Counts.VectorMultVector(buff, Counts.VectorMinusVector(xd, x));
+                    temp *= Data[d][0].Length;
+                    V += temp;
+                }
+
+                check = false;
+                if (V <= Quantils.XiSquare(0.95, n * (k - 1)))
+                    check = true;
+                return (V);
+            }
+
+            public static double CompareKDC(List<List<double[]>> Data, ref bool check)
+            {
+                double V = 0;
+
+                int k = Data.Count;
+                int n = Data[0].Count;
+
+                double[] xd;
+                double[] Xld;
+                double[,] Sd;
+
+
+                double[] buff;
+                double[,] MBuff;
+
+                double[,] S = new double[n, n];
+                double N = 0;
+
+                for (int d = 0; d < k; d++)
+                {
+                    xd = new double[n];
+                    Sd = new double[n, n];
+
+                    for (int i = 0; i < n; i++)
+                        xd[i] = Data[d][i].Average();
+                    for (int i = 0; i < Data[d][0].Length; i++)
+                    {
+                        Xld = new double[n];
+                        for (int j = 0; j < n; j++)
+                        {
+                            Xld[j] = Data[d][j][i];
+                        }
+                        buff = Counts.VectorMinusVector(Xld, xd);
+                        MBuff = Counts.VV_Matrix(buff, buff);
+                        Sd = Counts.MatrixPlus(Sd, MBuff, n);
+                    }
+
+                    S = Counts.MatrixPlus(S, Sd, n);
+                    N += Data[d][0].Length;
+                }
+                S = Counts.MatrixMultNumber(S, (1.0 / (N - k)), n);
+
+                for (int d = 0; d < k; d++)
+                {
+                    xd = new double[n];
+                    Sd = new double[n, n];
+
+                    for (int i = 0; i < n; i++)
+                        xd[i] = Data[d][i].Average();
+                    for (int i = 0; i < Data[d][0].Length; i++)
+                    {
+                        Xld = new double[n];
+                        for (int j = 0; j < n; j++)
+                        {
+                            Xld[j] = Data[d][j][i];
+                        }
+                        buff = Counts.VectorMinusVector(Xld, xd);
+                        MBuff = Counts.VV_Matrix(buff, buff);
+                        Sd = Counts.MatrixPlus(Sd, MBuff, n);
+                    }
+                    Sd = Counts.MatrixMultNumber(Sd, (1.0 / (double)(Data[d][0].Length - 1)), n);
+
+                    V += Math.Log(Counts.DET(S, n) / Counts.DET(Sd, n)) * ((Data[d][0].Length - 1) / 2);
+                }
+
+                check = false;
+                if (V <= Quantils.XiSquare(0.95, n * (k - 1)))
+                    check = true;
+                return (V);
+            }
+        }
+
+        private class Correlations
+        {
+            public static double Part(int i, int j, int[] del)
+            {
+                if (del.Length == 1)
+                    return (Rijd(i, j, del[0]));
+                else if (del.Length > 1)
+                {
+                    int[] a = new int[del.Length - 1];
+                    for (int q = 1; q < del.Length; q++)
+                        a[q - 1] = del[q];
+                    return ((Part(i, j, a) - Part(i, del[0], a) * Part(j, del[0], a)) / 
+                        Math.Sqrt((1 - Math.Pow(Part(i, del[0], a), 2)) * (1 - Math.Pow(Part(j, del[0], a), 2))));
+                }
+                else
+                    return R(i, j);
+            }
+            private static double Rijd(int i, int j, int d)
+            {
+                double ret = (R(i, j) - R(i, d) * R(j, d)) / Math.Sqrt((1 - Math.Pow(R(i, d), 2)) * (1 - Math.Pow(R(j, d), 2)));
+                return (ret);
+            }
+            private static double R(int i, int j)
+            {
+                double ret = DataStorage.R[i][j];
+                return (ret);
+            }
+
+            public static double Rxk(List<double[]> removed, ref bool check)
+            {
+                double ret = 0;
+                int n = DataStorage.R.Count;
+                int N = DataStorage.Data[0].Length;
+
+                double[,] r = new double[DataStorage.R.Count, DataStorage.R.Count];
+                double[,] rck = new double[removed.Count, removed.Count];
+
+                for (int i = 0; i < DataStorage.R.Count; i++)
+                    for (int j = 0; j < DataStorage.R[i].Count; j++)
+                        r[i, j] = DataStorage.R[i][j];
+                double DCdet = Counts.DET(r, n);
+
+
+                for (int i = 0; i < removed.Count; i++)
+                    for (int j = 0; j < removed.Count; j++)
+                        rck[i, j] = Correlation.Pair(removed[i],
+                            removed[j], removed[i].Average(), removed[j].Average());
+                double DCKdet = Counts.DET(rck, removed.Count);
+
+                ret = Math.Sqrt(1 - DCdet / DCKdet);
+                double f = ((N - n - 1) / n) * (Math.Pow(ret, 2) / (1 - Math.Pow(ret, 2)));
+                check = false;
+                if (f <= Quantils.Fisher(0.95, n, N - n - 1))
+                    check = true;
+                return (ret);
+
+            }
+        }
+        
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ShowCompares(4);
+            ShowData(4);
+            try
+            {
+                string[] a = textBox2.Text.Split(';');
+                if (a.Length > 0)
+                {
+                    int[] arr = new int[a.Length];
+                    for (int q = 0; q < a.Length; q++)
+                        arr[q] = Convert.ToInt32(a[q]) - 1;
+
+                    bool check = false;
+                    List<double[]> temp = new List<double[]>();
+                    for (int i = 0; i < DataStorage.Data.Count; i++)
+                    {
+                        check = false;
+                        for (int j = 0; j < arr.Length; j++)
+                            if (i == arr[j])
+                                check = true;
+                        if (!check)
+                            temp.Add(DataStorage.Data[i]);
+                    }
+                    check = false;
+                    double r = Correlations.Rxk(temp, ref check);
+
+                    radioButton1.Checked = true;
+
+                    dataGridView3.Rows.Add();
+                    dataGridView3[0, dataGridView3.Rows.Count - 1].Value = "Множинна кореляція " + " {" + textBox2.Text + "}";
+                    dataGridView3[1, dataGridView3.Rows.Count - 1].Value = Math.Round(r, 4);
+                    dataGridView3[2, dataGridView3.Rows.Count - 1].Value = check == true ? "true" : "false";
+                }
+            }
+            catch(Exception ex)
+            {
+                ex = null;
+            }
+            try
+            {
+                int i = (int)numericUpDown1.Value - 1;
+                int j = (int)numericUpDown2.Value - 1;
+                string[] a = textBox1.Text.Split(';');
+                int[] arr = new int[a.Length];
+                for (int q = 0; q < a.Length; q++)
+                    arr[q] = Convert.ToInt32(a[q]) - 1;
+                double r = Correlations.Part(i, j, arr);
+                double t = r * Math.Sqrt(DataStorage.Data[0].Length - a.Length - 2) / Math.Sqrt(1 - r * r);
+                
+                radioButton1.Checked = true;
+
+                dataGridView3.Rows.Add();
+                dataGridView3[0, dataGridView3.Rows.Count - 1].Value = "Часткова кореляція " + i.ToString() + "," + j.ToString() + " {" + textBox1.Text + "}";
+                dataGridView3[1, dataGridView3.Rows.Count - 1].Value = Math.Round(r, 4);
+                dataGridView3[2, dataGridView3.Rows.Count - 1].Value = Math.Abs(t) >= Quantils.Student(DataStorage.Data[0].Length - a.Length - 2) ? "true" : "false";
+            }
+            catch(Exception ex)
+            {
+                ex = null;
+            }
+        }
+    }
+
+    static class DataStorage
+    {
+        public static bool                  N_size;
+
+        public static int                   index;
+        public static int                   step;
+
+        public static List<double[]>        Data;
+
+        public static List<List<double>>    Params;
+        public static List<List<double>>    DC;
+        public static List<List<double>>    R;
+        public static List<string>          ParamNames;
+
+        public static List<List<double[]>>          N_Data;
+        public static List<List<double>>            N_Compares;
+        public static List<string>                  N_Names;
     }
 }

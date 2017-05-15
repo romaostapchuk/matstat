@@ -59,6 +59,7 @@
             this.порівнятиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.розглянутиОкремоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.обратиНаступнуВибіркуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.очиститиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.видалитиДаніToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -66,6 +67,8 @@
             this.закритиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.побудоваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.одновимірнуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.багатовимірнуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -203,7 +206,7 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(71, 17);
             this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "2-вимірні";
+            this.checkBox1.Text = "n-вимірні";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // contextMenuStrip1
@@ -214,10 +217,11 @@
             this.порівнятиToolStripMenuItem,
             this.розглянутиОкремоToolStripMenuItem,
             this.toolStripSeparator1,
+            this.обратиНаступнуВибіркуToolStripMenuItem,
             this.очиститиToolStripMenuItem,
             this.видалитиДаніToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(183, 126);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(214, 170);
             // 
             // додатиToolStripMenuItem
             // 
@@ -226,15 +230,17 @@
             this.неЛінійнаToolStripMenuItem,
             this.вибратиToolStripMenuItem});
             this.додатиToolStripMenuItem.Name = "додатиToolStripMenuItem";
-            this.додатиToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.додатиToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.додатиToolStripMenuItem.Text = "Додати вибірку";
             // 
             // згенеруватиToolStripMenuItem
             // 
+            this.згенеруватиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.одновимірнуToolStripMenuItem,
+            this.багатовимірнуToolStripMenuItem});
             this.згенеруватиToolStripMenuItem.Name = "згенеруватиToolStripMenuItem";
             this.згенеруватиToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.згенеруватиToolStripMenuItem.Text = "Згенерувати";
-            this.згенеруватиToolStripMenuItem.Click += new System.EventHandler(this.згенеруватиToolStripMenuItem_Click);
             // 
             // неЛінійнаToolStripMenuItem
             // 
@@ -310,38 +316,45 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(179, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(210, 6);
             // 
             // порівнятиToolStripMenuItem
             // 
             this.порівнятиToolStripMenuItem.Name = "порівнятиToolStripMenuItem";
-            this.порівнятиToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.порівнятиToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.порівнятиToolStripMenuItem.Text = "Розглянути вибірки";
             this.порівнятиToolStripMenuItem.Click += new System.EventHandler(this.порівнятиToolStripMenuItem_Click);
             // 
             // розглянутиОкремоToolStripMenuItem
             // 
             this.розглянутиОкремоToolStripMenuItem.Name = "розглянутиОкремоToolStripMenuItem";
-            this.розглянутиОкремоToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.розглянутиОкремоToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.розглянутиОкремоToolStripMenuItem.Text = "Розглянути окремо";
             this.розглянутиОкремоToolStripMenuItem.Click += new System.EventHandler(this.розглянутиОкремоToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(210, 6);
+            // 
+            // обратиНаступнуВибіркуToolStripMenuItem
+            // 
+            this.обратиНаступнуВибіркуToolStripMenuItem.Name = "обратиНаступнуВибіркуToolStripMenuItem";
+            this.обратиНаступнуВибіркуToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.обратиНаступнуВибіркуToolStripMenuItem.Text = "Обрати наступну вибірку";
+            this.обратиНаступнуВибіркуToolStripMenuItem.Click += new System.EventHandler(this.обратиНаступнуВибіркуToolStripMenuItem_Click);
             // 
             // очиститиToolStripMenuItem
             // 
             this.очиститиToolStripMenuItem.Name = "очиститиToolStripMenuItem";
-            this.очиститиToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.очиститиToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.очиститиToolStripMenuItem.Text = "Очистити дані";
             this.очиститиToolStripMenuItem.Click += new System.EventHandler(this.очиститиToolStripMenuItem_Click);
             // 
             // видалитиДаніToolStripMenuItem
             // 
             this.видалитиДаніToolStripMenuItem.Name = "видалитиДаніToolStripMenuItem";
-            this.видалитиДаніToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.видалитиДаніToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.видалитиДаніToolStripMenuItem.Text = "Видалити дані";
             this.видалитиДаніToolStripMenuItem.Click += new System.EventHandler(this.видалитиДаніToolStripMenuItem_Click);
             // 
@@ -392,6 +405,19 @@
             this.toolStripComboBox1.Name = "toolStripComboBox1";
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
             this.toolStripComboBox1.Text = "Лінійна";
+            // 
+            // одновимірнуToolStripMenuItem
+            // 
+            this.одновимірнуToolStripMenuItem.Name = "одновимірнуToolStripMenuItem";
+            this.одновимірнуToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.одновимірнуToolStripMenuItem.Text = "Одновимірну";
+            this.одновимірнуToolStripMenuItem.Click += new System.EventHandler(this.одновимірнуToolStripMenuItem_Click);
+            // 
+            // багатовимірнуToolStripMenuItem
+            // 
+            this.багатовимірнуToolStripMenuItem.Name = "багатовимірнуToolStripMenuItem";
+            this.багатовимірнуToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.багатовимірнуToolStripMenuItem.Text = "Багатовимірну";
             // 
             // Form_Choose
             // 
@@ -453,5 +479,8 @@
         private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem модельToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem обратиНаступнуВибіркуToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem одновимірнуToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem багатовимірнуToolStripMenuItem;
     }
 }

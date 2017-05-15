@@ -18,7 +18,7 @@ namespace Laba_1_Graph
         public static double FuncNorm(double x, double m, double s)
         {
             double u = (x - m) / s;
-            
+
             if (u < 0)
                 return 1 - FuncNorm(Math.Abs(u), 0, 1);
             double
@@ -43,14 +43,14 @@ namespace Laba_1_Graph
             return (F);
         }
 
-        
+
         public static void Sort(double[] numb)
         {
-            for(int i = 0; i < numb.Length; i++)
+            for (int i = 0; i < numb.Length; i++)
             {
                 for (int j = 0; j < numb.Length; j++)
                 {
-                    if(numb[i] < numb[j])
+                    if (numb[i] < numb[j])
                     {
                         double buf = numb[i];
                         numb[i] = numb[j];
@@ -59,12 +59,12 @@ namespace Laba_1_Graph
                 }
             }
         }
-        
-        public static void Init(TextBox TxtB1, TextBox TxtBx2,TextBox TxtBx5,TextBox TxtBx6, TextBox TxtBx7, int amount, double[] numb, bool normal, bool exponential, bool extreme,ref double Alpha, ref double Bt)
+
+        public static void Init(TextBox TxtB1, TextBox TxtBx2, TextBox TxtBx5, TextBox TxtBx6, TextBox TxtBx7, int amount, double[] numb, bool normal, bool exponential, bool extreme, ref double Alpha, ref double Bt)
         {
             double avarage = 100;
             double averageSimple = 100;
-            if (TxtBx2.TextLength > 0 )
+            if (TxtBx2.TextLength > 0)
             {
                 avarage = 1 / Convert.ToDouble(TxtBx2.Text);
             }
@@ -77,14 +77,14 @@ namespace Laba_1_Graph
             {
                 std = Convert.ToInt32(TxtB1.Text);
             }
-            if(normal)
+            if (normal)
             {
                 for (int i = 0; i < amount; i++)
                 {
                     numb[i] = TestSimpleRNG.SimpleRNG.GetNormal(averageSimple, std);
                 }
             }
-            else if(exponential)
+            else if (exponential)
             {
                 for (int i = 0; i < amount; i++)
                 {
@@ -102,19 +102,19 @@ namespace Laba_1_Graph
                 Alpha = 1;
                 if (TxtBx6.TextLength > 0)  //  A
                     Alpha = Convert.ToDouble(TxtBx6.Text);
-                
-                double B = 1/Alpha;
+
+                double B = 1 / Alpha;
 
                 double X = 0;
-                for(int i =0; i < amount; i++)
+                for (int i = 0; i < amount; i++)
                 {
-                    X = Math.Exp((Math.Log(Math.Log(1 + Math.Log(1/(1 - r.NextDouble())))) - Math.Log(B)) /Bt); //***********
+                    X = Math.Exp((Math.Log(Math.Log(1 + Math.Log(1 / (1 - r.NextDouble())))) - Math.Log(B)) / Bt); //***********
                     //X = A - B * (Math.Log(-Math.Log(r.NextDouble())));
                     numb[i] = X;
                 }
             }
         }
-        
+
         public static double Step(double TxtB, int amount, double min, double max)
         {
             int classes;
@@ -122,7 +122,7 @@ namespace Laba_1_Graph
             if (TxtB > 0)
             {
                 classes = Convert.ToInt32(TxtB);
-                return ((max - min)/(classes-0.5));
+                return ((max - min) / (classes - 0.5));
             }
             else
             {
@@ -159,5 +159,147 @@ namespace Laba_1_Graph
             }
         }
 
+        public static double DET(double[,] arr, int n)
+        {
+            int i, j, k;
+            double[,] a = new double[n, n];
+            for (i = 0; i < n; i++)
+                for (j = 0; j < n; j++)
+                    a[i, j] = arr[i, j];
+
+            double det = 0;
+            for (i = 0; i < n - 1; i++)
+            {
+                for (j = i + 1; j < n; j++)
+                {
+                    det = a[j, i] / a[i, i];
+                    for (k = i; k < n; k++)
+                        a[j, k] = a[j, k] - det * a[i, k]; // Here's exception
+                }
+            }
+            det = 1;
+            for (i = 0; i < n; i++)
+                det = det * a[i, i];
+            return det;
+        }
+
+
+        public static double[] VectorMinusVector(double[] a, double[] b)
+        {
+            double[] c = new double[a.Length];
+            for (int i = 0; i < a.Length; i++)
+                c[i] = a[i] - b[i];
+            return (c);
+        }
+
+        public static double VectorMultVector(double[] a, double[] b)
+        {
+            double c = 0;
+            for (int i = 0; i < a.Length; i++)
+                c += a[i] * b[i];
+            return (c);
+        }
+
+        public static double[] VectorPlusVector(double[] a, double[] b)
+        {
+            double[] c = new double[a.Length];
+            for (int i = 0; i < a.Length; i++)
+                c[i] = a[i] + b[i];
+            return (c);
+        }
+
+        public static double[,] VV_Matrix(double[] a, double[] b)
+        {
+            double[,] c = new double[a.Length, a.Length];
+            for (int i = 0; i < a.Length; i++)
+                for (int j = 0; j < a.Length; j++)
+                    c[i, j] = a[i] * b[j];
+            return (c);
+        }
+
+        public static double[,] MatrixPlus(double[,] a, double[,] b, int dim)
+        {
+            double[,] c = new double[dim, dim];
+            for (int i = 0; i < dim; i++)
+                for (int j = 0; j < dim; j++)
+                    c[i, j] = a[i, j] + b[i, j];
+            return (c);
+        }
+
+        public static double[,] MatrixMultMatrix(double[,] a, double[,] b, int dim)
+        {
+            double[,] c = new double[dim, dim];
+            for (int i = 0; i < dim; i++)
+                for (int j = 0; j < dim; j++)
+                    c[i, j] += a[i, j] * b[j, i];
+            return (c);
+        }
+
+        public static double[,] MatrixMultNumber(double[,] a, double b, int dim)
+        {
+            double[,] c = new double[dim, dim];
+            for (int i = 0; i < dim; i++)
+                for (int j = 0; j < dim; j++)
+                    c[i, j] = a[i, j] * b;
+            return (c);
+        }
+
+        /// <summary>
+        /// Returns vetor
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static double[] MatrixMultVector(double[,] a, double[] b)
+        {
+            double[] c = new double[b.Length];
+            for (int i = 0; i < b.Length; i++)
+                for (int j = 0; j < b.Length; j++)
+                    c[i] += a[i, j] * b[j];
+            return (c);
+        }
+
+        static public double[,] InverseMatrix(double[,] A)
+        {
+            double[,] a;
+            double[,] M = new double[A.GetLength(0), A.GetLength(1)];
+            for (int col = 0; col < A.GetLength(1); col++)
+                for (int row = 0; row < A.GetLength(0); row++)
+                    M[row, col] = Math.Pow(-1, row + col) * DET(a = SubMatrix(A, row, col), a.GetLength(0));
+            M = TranspMatrix(M);
+            double det = DET(A, A.GetLength(1));
+            M = MatrixMultNumber(M, 1 / det, M.GetLength(1));
+            return M;
+        }
+
+        static public double[,] TranspMatrix(double[,] A)
+        {
+            double[,] rez = new double[A.GetLength(1), A.GetLength(0)];
+            for (int i1 = 0; i1 < A.GetLength(1); i1++)
+                for (int i2 = 0; i2 < A.GetLength(0); i2++)
+                    rez[i1, i2] = A[i2, i1];
+            return rez;
+        }
+
+        static public double[,] SubMatrix(double[,] A, int row, int col)
+        {
+            double[,] rez = new double[A.GetLength(0) - 1, A.GetLength(1) - 1];
+            for (int i1 = 0, i2 = 0; i1 < A.GetLength(0); i1++, i2++)
+            {
+                if (i1 == row)
+                {
+                    i2--;
+                    continue;
+                }
+                for (int i3 = 0, i4 = 0; i3 < A.GetLength(1); i3++)
+                {
+                    if (i3 != col)
+                    {
+                        rez[i2, i4++] = A[i1, i3];
+                    }
+                }
+            }
+            return rez;
+        }
     }
 }

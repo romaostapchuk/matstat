@@ -513,6 +513,8 @@ namespace Laba_1_Graph
             }
             catch(Exception ex)
             {
+                Exception e = ex;
+                ex = null;
             }
 
             int q = 0;

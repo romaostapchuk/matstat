@@ -22,7 +22,7 @@ namespace Laba_1_Graph
             }
             catch(Exception e)
             {
-                MessageBox.Show(Convert.ToString(e));
+
             }
         }
     }
