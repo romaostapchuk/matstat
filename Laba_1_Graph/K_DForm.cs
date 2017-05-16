@@ -34,6 +34,13 @@ namespace Laba_1_Graph
         public void Get_N_Values(List<List<double[]>> arr)
         {
             DataStorage.N_Data = new List<List<double[]>>(arr);
+            DataStorage.N_size = true;
+
+            button4.Visible = false;
+            button5.Visible = false;
+            groupBox1.Visible = false;
+            groupBox2.Visible = false;
+            groupBox3.Visible = false;
 
             CountN();
             ShowDataN(0);
@@ -41,7 +48,6 @@ namespace Laba_1_Graph
 
         private void CountN()
         {
-            DataStorage.N_size = true;
             DataStorage.N_Compares = new List<List<double>>();
             DataStorage.N_Names = new List<string>();
             List<double> Temp = new List<double>();
@@ -798,13 +804,122 @@ namespace Laba_1_Graph
                             removed[j], removed[i].Average(), removed[j].Average());
                 double DCKdet = Counts.DET(rck, removed.Count);
 
-                ret = Math.Sqrt(1 - DCdet / DCKdet);
+                ret = Math.Sqrt(Math.Abs(1 - DCdet / DCKdet));
                 double f = ((N - n - 1) / n) * (Math.Pow(ret, 2) / (1 - Math.Pow(ret, 2)));
                 check = false;
-                if (f <= Quantils.Fisher(0.95, n, N - n - 1))
+                if (f > Quantils.Fisher(0.95, n, N - n - 1))
                     check = true;
                 return (ret);
 
+            }
+        }
+
+        private class RegressionK
+        {
+            public static double MNK(bool mult, ref double[] a, ref bool[] a_check)
+            {
+                double S2 = 0;
+                
+                if (mult)
+                {
+
+                }
+                else
+                {
+                    double[,] XT = new double[DataStorage.Data.Count, DataStorage.Data[0].Length];
+                    for (int i = 0; i < DataStorage.Data.Count; i++)
+                        for (int j = 0; j < DataStorage.Data[0].Length; j++)
+                            XT[i, j] = DataStorage.Data[i][j];
+
+                    double[,] X = Counts.TranspMatrix(XT);
+                    double[] Y = new double[DataStorage.Regression[0].Length];
+                    for (int j = 0; j < DataStorage.Regression[0].Length; j++)
+                        Y[j] = DataStorage.Regression[0][j];
+
+                    double[] A = MVT(Counts.InverseMatrix(MM(XT, X)), MVT(XT, Y));
+                    a = new double[A.Length];
+                    for (int i = 0; i < A.Length; i++)
+                        a[i] = A[i];
+
+                    double[] Temp = MVT(X, A);
+                    for (int i = 0; i < Temp.Length; i++)
+                        Temp[i] = Y[i] - Temp[i];
+                    S2 = Counts.VectorMultVector(Temp, Temp);
+                    S2 = S2 / (DataStorage.Data[0].Length - DataStorage.Data.Count);
+
+                    a_check = new bool[a.Length];
+                    double[,] a_temp = Counts.MatrixMultMatrix(XT, X, a.Length);
+                    double t = 0;
+                    for (int i = 0; i < a.Length; i++)
+                    {
+                        t = (a[i] - DataStorage.A[i]) / (Math.Sqrt(S2) * Math.Sqrt(a_temp[i, i]));
+                        if (t <= Quantils.Student(DataStorage.Data[0].Length - DataStorage.Data.Count))
+                            a_check[i] = true;
+                    }
+                }
+                return (S2);
+            }
+
+            public static double R2(List<double[]> Data, List<List<double>> Rl, ref bool check)
+            {
+                double R2 = 0;
+
+                double[,] R = new double[Rl.Count, Rl.Count];
+
+                for (int i = 0; i < Rl.Count; i++)
+                    for (int j = 0; j < Rl.Count; j++)
+                        R[i, j] = Rl[i][j];
+                double Dr = Counts.DET(R, Rl.Count);
+
+                List<double[]> Temp = new List<double[]>();
+                for (int i = 0; i < Data.Count; i++)
+                    Temp.Add(Data[i]);
+                Temp.Add(DataStorage.Regression[0]);
+
+                double[,] Ry = new double[Temp.Count, Temp.Count];
+                for (int i = 0; i < Temp.Count; i++)
+                    for (int j = 0; j < Temp.Count; j++)
+                        Ry[i, j] = (Correlation.Pair(Temp[i], Temp[j], Temp[i].Average(), Temp[j].Average()));
+                double Dry = Counts.DET(Ry, Temp.Count);
+
+                R2 = Math.Sqrt(Math.Abs(1 - Dry / Dr));
+                double f = ((double)(Data[0].Length - Data.Count - 1) / Data.Count) * (1 / (1 - R2) - 1);
+                check = false;
+                if (f >= Quantils.Fisher(0.95, Data.Count, Data[0].Length - Data.Count - 1))
+                    check = true;
+                return (R2);
+            }
+
+            private static double[,] MM(double[,] a, double[,] b)
+            {
+                int n = a.GetLength(0);
+                int N = b.GetLength(1);
+                double[,] c = new double[n, N];
+
+                for (int p = 0; p < n; p++)
+                    for (int i = 0; i < N; i++)
+                    {
+                        for (int j = 0; j < a.GetLength(1); j++)
+                        {
+                            c[p, i] += a[p, j] * b[j, i];
+                        }
+                    }
+                return (c);
+            }
+            private static double[] MVT(double[,] a, double[] b)
+            {
+                int n = a.GetLength(0);
+                int N = a.GetLength(1);
+                double[] c = new double[n];
+                
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < N; j++)
+                    {
+                        c[i] += a[i, j] * b[j];
+                    }
+                }
+                return (c);
             }
         }
         
@@ -869,6 +984,68 @@ namespace Laba_1_Graph
             {
                 ex = null;
             }
+        } // correlation count
+
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            int temp = 0;
+            if (radioButton6.Checked == true)
+                temp = 1;
+            if (radioButton5.Checked == true)
+                temp = 2;
+
+            this.Hide();
+            KRegressionGenerate window = new KRegressionGenerate(this, temp);
+            window.Show();
+            window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+        void Opened_Form_Closed(object sender, FormClosedEventArgs e)
+        {
+            this.Show();
+
+            button6_Click(sender, e);
+        }
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (DataStorage.A != null && DataStorage.A.Count > 0)
+            {
+                double[] A = new double[0];
+                bool check = false;
+                bool[] a_check = new bool[0];
+                double S2 = RegressionK.MNK(DataStorage.multregr, ref A, ref a_check);
+                double R2 = RegressionK.R2(DataStorage.Data, DataStorage.R, ref check);
+
+                button4_Click(sender, e);
+
+                dataGridView3.Rows.Add();
+                dataGridView3[0, dataGridView3.Rows.Count - 1].Value = "S2 залишкове";
+                dataGridView3[1, dataGridView3.Rows.Count - 1].Value = Math.Round(S2, 4);
+
+                dataGridView3.Rows.Add();
+                dataGridView3[0, dataGridView3.Rows.Count - 1].Value = "Коефіцієнти (а)";
+                string n = "";
+                for (int i = 0; i < A.Length; i++)
+                {
+                    n += Math.Round(A[i], 4).ToString();
+                    if (i != A.Length - 1)
+                        n += "; ";
+                }
+                dataGridView3[1, dataGridView3.Rows.Count - 1].Value = "{ " + n + " }";
+                n = "";
+                for (int i = 0; i < A.Length; i++)
+                {
+                    n += a_check[i].ToString();
+                    if (i != A.Length - 1)
+                        n += "; ";
+                }
+                dataGridView3[2, dataGridView3.Rows.Count - 1].Value = "{ " + n + " }";
+
+                dataGridView3.Rows.Add();
+                dataGridView3[0, dataGridView3.Rows.Count - 1].Value = "R2 коеф. детермінації";
+                dataGridView3[1, dataGridView3.Rows.Count - 1].Value = Math.Round(R2, 4);
+                dataGridView3[2, dataGridView3.Rows.Count - 1].Value = check.ToString();
+            } // regression count
         }
     }
 
@@ -889,5 +1066,10 @@ namespace Laba_1_Graph
         public static List<List<double[]>>          N_Data;
         public static List<List<double>>            N_Compares;
         public static List<string>                  N_Names;
+
+        
+        public static List<double[]>        Regression;
+        public static bool                  multregr;
+        public static List<double>          A;
     }
 }

@@ -28,3 +28,4 @@ D:\My files\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Debug\Laba_
 D:\My files\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\bin\Debug\Laba_1_Graph.exe.config
 D:\My files\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\bin\Debug\Laba_1_Graph.exe
 D:\My files\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\bin\Debug\Laba_1_Graph.pdb
+D:\My files\WORK\UNIVER\INFA\pristavka\Laba_1_Graph\Laba_1_Graph\obj\Debug\Laba_1_Graph.KRegressionGenerate.resources

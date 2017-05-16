@@ -81,6 +81,12 @@
     <Compile Include="Functions.cs" />
     <Compile Include="Graphs.cs" />
     <Compile Include="Interval.cs" />
+    <Compile Include="KRegressionGenerate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KRegressionGenerate.Designer.cs">
+      <DependentUpon>KRegressionGenerate.cs</DependentUpon>
+    </Compile>
     <Compile Include="K_DForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Choose.resx">
       <DependentUpon>Form_Choose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KRegressionGenerate.resx">
+      <DependentUpon>KRegressionGenerate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="K_DForm.resx">
       <DependentUpon>K_DForm.cs</DependentUpon>

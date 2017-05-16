@@ -51,19 +51,24 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.button4 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -74,12 +79,13 @@
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
             this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // button3
@@ -259,6 +265,7 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.groupBox3);
             this.tabPage5.Controls.Add(this.groupBox2);
             this.tabPage5.Controls.Add(this.groupBox1);
             this.tabPage5.Controls.Add(this.dataGridView3);
@@ -272,6 +279,103 @@
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Матриця";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.button6);
+            this.groupBox3.Controls.Add(this.button5);
+            this.groupBox3.Controls.Add(this.radioButton5);
+            this.groupBox3.Controls.Add(this.radioButton6);
+            this.groupBox3.Location = new System.Drawing.Point(456, 464);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(181, 64);
+            this.groupBox3.TabIndex = 40;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Регресія";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(92, 14);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(80, 43);
+            this.button5.TabIndex = 30;
+            this.button5.Text = "Згенерувати регресію";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // radioButton5
+            // 
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Location = new System.Drawing.Point(6, 40);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(31, 17);
+            this.radioButton5.TabIndex = 31;
+            this.radioButton5.Text = "2";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            this.radioButton5.Visible = false;
+            // 
+            // radioButton6
+            // 
+            this.radioButton6.AutoSize = true;
+            this.radioButton6.Checked = true;
+            this.radioButton6.Location = new System.Drawing.Point(6, 16);
+            this.radioButton6.Name = "radioButton6";
+            this.radioButton6.Size = new System.Drawing.Size(31, 17);
+            this.radioButton6.TabIndex = 32;
+            this.radioButton6.TabStop = true;
+            this.radioButton6.Text = "1";
+            this.radioButton6.UseVisualStyleBackColor = true;
+            this.radioButton6.Visible = false;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.numericUpDown1);
+            this.groupBox2.Controls.Add(this.numericUpDown2);
+            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Location = new System.Drawing.Point(783, 464);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(134, 64);
+            this.groupBox2.TabIndex = 39;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "частковий";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(6, 16);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(44, 20);
+            this.numericUpDown1.TabIndex = 32;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(62, 16);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(44, 20);
+            this.numericUpDown2.TabIndex = 33;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 37);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 34;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Location = new System.Drawing.Point(643, 464);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(134, 64);
+            this.groupBox1.TabIndex = 38;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "множинний";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(6, 24);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 37;
             // 
             // dataGridView3
             // 
@@ -289,34 +393,13 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(923, 484);
+            this.button4.Location = new System.Drawing.Point(923, 469);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(54, 41);
+            this.button4.Size = new System.Drawing.Size(54, 56);
             this.button4.TabIndex = 35;
             this.button4.Text = "OK";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(6, 37);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 34;
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Location = new System.Drawing.Point(62, 16);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(44, 20);
-            this.numericUpDown2.TabIndex = 33;
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(6, 16);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(44, 20);
-            this.numericUpDown1.TabIndex = 32;
             // 
             // radioButton3
             // 
@@ -379,34 +462,15 @@
             this.radioButton2.Text = "Оцінки";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // textBox2
+            // button6
             // 
-            this.textBox2.Location = new System.Drawing.Point(6, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 37;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Location = new System.Drawing.Point(643, 469);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(134, 56);
-            this.groupBox1.TabIndex = 38;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "множинний";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.numericUpDown1);
-            this.groupBox2.Controls.Add(this.numericUpDown2);
-            this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Location = new System.Drawing.Point(783, 464);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(134, 64);
-            this.groupBox2.TabIndex = 39;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "частковий";
+            this.button6.Location = new System.Drawing.Point(6, 15);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(80, 43);
+            this.button6.TabIndex = 33;
+            this.button6.Text = "Відобразити повторно";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // K_DForm
             // 
@@ -432,14 +496,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -476,5 +542,10 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.RadioButton radioButton5;
+        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.Button button6;
     }
 }
