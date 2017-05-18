@@ -100,6 +100,13 @@ namespace Laba_1_Graph
             DataStorage.ParamNames.Add("Дисперсія");
             Temp = new List<double>();
 
+            // Dispersions [0]
+            for (int i = 0; i < DataStorage.Data.Count; i++)
+                Temp.Add(DataStorage.Data[i].Average());
+            DataStorage.Params.Add(Temp);
+            DataStorage.ParamNames.Add("Мат. Сподівання");
+            Temp = new List<double>();
+
             for (int i = 0; i < DataStorage.Data.Count; i++)
             {
                 Temp = new List<double>();
@@ -170,7 +177,7 @@ namespace Laba_1_Graph
                     chart1.ChartAreas[i.ToString()].AxisY.Interval = 1;
                     chart1.ChartAreas[i.ToString()].AxisY.Maximum = 1;
                     chart1.ChartAreas[i.ToString()].AxisY.MajorTickMark.Enabled = false;
-                    chart1.Series[i.ToString()].Color = Color.Orange;
+                    chart1.Series[i.ToString()].Color = Color.DarkBlue;
                     ind = i+1;
                 }
 
@@ -196,6 +203,7 @@ namespace Laba_1_Graph
                 {
                     chart2.Series.Add(i.ToString());
                     chart2.Series[i.ToString()].ChartType = SeriesChartType.Line;
+                    chart2.Series[i.ToString()].Color = Color.DarkBlue;
                 }
 
                 for (int i = 0; i < DataStorage.Data[0].Length; i++)
@@ -378,9 +386,9 @@ namespace Laba_1_Graph
                 dataGridView1.Columns.Clear();
                 dataGridView1.ColumnCount = DataStorage.N_Compares[0].Count + 1;
 
-                for (int i = 0; i < DataStorage.N_Compares.Count; i++)
+                for (int i = 0; i < dataGridView1.ColumnCount; i++)
                     dataGridView1.Columns[i].Width = (dataGridView1.Width - dataGridView1.RowHeadersWidth) /
-                        DataStorage.N_Compares.Count - DataStorage.N_Compares.Count;
+                        dataGridView1.ColumnCount - dataGridView1.ColumnCount;
                 dataGridView1.Columns[1].HeaderText = "значення";
 
                 for (int i = 0; i < DataStorage.N_Compares.Count; i++)
