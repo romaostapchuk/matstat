@@ -52,6 +52,7 @@
             this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
@@ -68,7 +69,10 @@
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.button6 = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.відновленняToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.стандартизаціяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -86,11 +90,12 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(855, 563);
+            this.button3.Location = new System.Drawing.Point(855, 583);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(121, 24);
             this.button3.TabIndex = 24;
@@ -112,7 +117,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 577);
+            this.label1.Location = new System.Drawing.Point(10, 589);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 13);
             this.label1.TabIndex = 26;
@@ -126,7 +131,7 @@
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(988, 557);
@@ -293,6 +298,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Регресія";
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(6, 15);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(80, 43);
+            this.button6.TabIndex = 33;
+            this.button6.Text = "Відобразити повторно";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(92, 14);
@@ -443,7 +458,7 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(77, 575);
+            this.radioButton1.Location = new System.Drawing.Point(75, 587);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(54, 17);
             this.radioButton1.TabIndex = 28;
@@ -455,34 +470,59 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(137, 575);
+            this.radioButton2.Location = new System.Drawing.Point(135, 587);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(59, 17);
             this.radioButton2.TabIndex = 29;
             this.radioButton2.Text = "Оцінки";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // button6
+            // menuStrip1
             // 
-            this.button6.Location = new System.Drawing.Point(6, 15);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(80, 43);
-            this.button6.TabIndex = 33;
-            this.button6.Text = "Відобразити повторно";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(988, 24);
+            this.menuStrip1.TabIndex = 30;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.відновленняToolStripMenuItem,
+            this.стандартизаціяToolStripMenuItem});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // відновленняToolStripMenuItem
+            // 
+            this.відновленняToolStripMenuItem.Name = "відновленняToolStripMenuItem";
+            this.відновленняToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.відновленняToolStripMenuItem.Text = "Відновлення";
+            this.відновленняToolStripMenuItem.Click += new System.EventHandler(this.відновленняToolStripMenuItem_Click);
+            // 
+            // стандартизаціяToolStripMenuItem
+            // 
+            this.стандартизаціяToolStripMenuItem.Name = "стандартизаціяToolStripMenuItem";
+            this.стандартизаціяToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.стандартизаціяToolStripMenuItem.Text = "Стандартизація";
+            this.стандартизаціяToolStripMenuItem.Click += new System.EventHandler(this.стандартизаціяToolStripMenuItem_Click);
             // 
             // K_DForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(988, 599);
+            this.ClientSize = new System.Drawing.Size(988, 613);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "K_DForm";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabControl1.ResumeLayout(false);
@@ -506,6 +546,8 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -547,5 +589,9 @@
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.RadioButton radioButton6;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem відновленняToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem стандартизаціяToolStripMenuItem;
     }
 }

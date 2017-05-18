@@ -28,6 +28,30 @@ namespace Laba_1_Graph
             DataStorage.DC = new List<List<double>>();
             DataStorage.R = new List<List<double>>();
 
+
+            DataStorage.RestoreData = new List<List<double[]>>();
+            List<double[]> a = new List<double[]>();
+            double[] tmp_arr = new double[arr[0].Length];
+            foreach (double[] ar in arr)
+            {
+                tmp_arr = new double[arr[0].Length];
+                for (int i = 0; i < tmp_arr.Length; i++)
+                    tmp_arr[i] = ar[i];
+                a.Add(tmp_arr);
+            }
+            DataStorage.RestoreData.Add(a);
+
+            string ch = "Критерій колмагорова = ";
+            foreach (double[] allnum in arr)
+            {
+                int N = allnum.Length;
+                double AverageX = Functions.Average(N, allnum);
+
+                double Kolmah = Criteria.Kolmahorov(N, allnum, AverageX, true, false, false, 0, 0);
+                ch += Kolmah > 0 ? "true " : "false ";
+            }
+            MessageBox.Show(ch);
+
             CountAll();
             ShowData(0);
         }
@@ -41,6 +65,38 @@ namespace Laba_1_Graph
             groupBox1.Visible = false;
             groupBox2.Visible = false;
             groupBox3.Visible = false;
+
+
+            DataStorage.RestoreData = new List<List<double[]>>();
+            List<double[]> tmp = new List<double[]>();
+            foreach (List<double[]> lst in arr)
+            {
+                tmp = new List<double[]>();
+                double[] tmp_arr = new double[lst[0].Length];
+                foreach (double[] ar in lst)
+                {
+                    tmp_arr = new double[lst[0].Length];
+                    for (int i = 0; i < tmp_arr.Length; i++)
+                        tmp_arr[i] = ar[i];
+                    tmp.Add(tmp_arr);
+                }
+                DataStorage.RestoreData.Add(tmp);
+            }
+
+            string ch = "Критерій колмагорова = ";
+            foreach (List<double[]> a in arr)
+            {
+                foreach (double[] allnum in a)
+                {
+                    int N = allnum.Length;
+                    double AverageX = Functions.Average(N, allnum);
+
+                    double Kolmah = Criteria.Kolmahorov(N, allnum, AverageX, true, false, false, 0, 0);
+                    ch += Kolmah > 0 ? "true " : "false ";
+                }
+                ch += ";";
+            }
+            MessageBox.Show(ch);
 
             CountN();
             ShowDataN(0);
@@ -248,8 +304,8 @@ namespace Laba_1_Graph
                         chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisY.LabelStyle.Enabled = false;
                         if (i != j)
                         {
-                            chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisX.Minimum = DataStorage.Data[i].Min();
-                            chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisX.Maximum = DataStorage.Data[i].Max();
+                            //chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisX.Minimum = DataStorage.Data[i].Min();
+                            //chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisX.Maximum = DataStorage.Data[i].Max();
                             chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisY.Minimum = DataStorage.Data[j].Min();
                             chart3.ChartAreas[i.ToString() + "_" + j.ToString()].AxisY.Maximum = DataStorage.Data[j].Max();
 
@@ -762,7 +818,6 @@ namespace Laba_1_Graph
                 return (V);
             }
         }
-
         private class Correlations
         {
             public static double Part(int i, int j, int[] del)
@@ -821,7 +876,6 @@ namespace Laba_1_Graph
 
             }
         }
-
         private class RegressionK
         {
             public static double MNK(bool mult, ref double[] a, ref bool[] a_check)
@@ -930,6 +984,7 @@ namespace Laba_1_Graph
                 return (c);
             }
         }
+
         
         private void button4_Click(object sender, EventArgs e)
         {
@@ -994,7 +1049,6 @@ namespace Laba_1_Graph
             }
         } // correlation count
 
-
         private void button5_Click(object sender, EventArgs e)
         {
             int temp = 0;
@@ -1055,6 +1109,52 @@ namespace Laba_1_Graph
                 dataGridView3[2, dataGridView3.Rows.Count - 1].Value = check.ToString();
             } // regression count
         }
+
+        private void стандартизаціяToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (DataStorage.N_size)
+            {
+                foreach (List<double[]> lst in DataStorage.N_Data)
+                    foreach (double[] allnum in lst)
+                    {
+                        int N = allnum.Length;
+                        double delt = Functions.Sigm(N, allnum.Average(), allnum);
+                        for (int i = 0; i < N; i++)
+                        {
+                            allnum[i] = (allnum[i] - allnum.Average()) / delt;
+                        }
+                    }
+                DataStorage.N_size = true;
+
+                CountN();
+                radioButton1_CheckedChanged(sender, e);
+            }
+            else
+            {
+                foreach (double[] allnum in DataStorage.Data)
+                {
+                    int N = allnum.Length;
+                    double delt = Functions.Sigm(N, allnum.Average(), allnum);
+                    for (int i = 0; i < N; i++)
+                    {
+                        allnum[i] = (allnum[i] - allnum.Average()) / delt;
+                    }
+                }
+                DataStorage.N_size = false;
+                DataStorage.DC = new List<List<double>>();
+                DataStorage.R = new List<List<double>>();
+
+                CountAll();
+                radioButton1_CheckedChanged(sender, e);
+            }
+        }
+        private void відновленняToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (DataStorage.RestoreData.Count == 1)
+                GetValues(DataStorage.RestoreData[0]);
+            else if (DataStorage.RestoreData.Count > 1)
+                Get_N_Values(DataStorage.RestoreData);
+        }
     }
 
     static class DataStorage
@@ -1079,5 +1179,7 @@ namespace Laba_1_Graph
         public static List<double[]>        Regression;
         public static bool                  multregr;
         public static List<double>          A;
+
+        public static List<List<double[]>>      RestoreData;
     }
 }

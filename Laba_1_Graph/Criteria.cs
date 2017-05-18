@@ -59,9 +59,13 @@ namespace Laba_1_Graph
             return Math.Round(X, 4);
         }
 
-        public static double Kolmahorov(int amount, double[] numb, double average,bool normal, bool exponential, bool extreme, double A, double B)
+        public static double Kolmahorov(int amount, double[] data, double average,bool normal, bool exponential, bool extreme, double A, double B)
         {
+            double[] numb = new double[data.Length];
+            for (int i = 0; i < data.Length; i++)
+                numb[i] = data[i];
             Counts.Sort(numb);
+
             double D_Plus = 0;
             double D_Minus = 0;
             if(normal)
@@ -640,5 +644,6 @@ namespace Laba_1_Graph
             }
             return (false);
         }
+
     }
 }
