@@ -73,6 +73,7 @@
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.відновленняToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.стандартизаціяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.логарифмуватиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -491,7 +492,8 @@
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.відновленняToolStripMenuItem,
-            this.стандартизаціяToolStripMenuItem});
+            this.стандартизаціяToolStripMenuItem,
+            this.логарифмуватиToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
@@ -499,16 +501,23 @@
             // відновленняToolStripMenuItem
             // 
             this.відновленняToolStripMenuItem.Name = "відновленняToolStripMenuItem";
-            this.відновленняToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.відновленняToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.відновленняToolStripMenuItem.Text = "Відновлення";
             this.відновленняToolStripMenuItem.Click += new System.EventHandler(this.відновленняToolStripMenuItem_Click);
             // 
             // стандартизаціяToolStripMenuItem
             // 
             this.стандартизаціяToolStripMenuItem.Name = "стандартизаціяToolStripMenuItem";
-            this.стандартизаціяToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.стандартизаціяToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.стандартизаціяToolStripMenuItem.Text = "Стандартизація";
             this.стандартизаціяToolStripMenuItem.Click += new System.EventHandler(this.стандартизаціяToolStripMenuItem_Click);
+            // 
+            // логарифмуватиToolStripMenuItem
+            // 
+            this.логарифмуватиToolStripMenuItem.Name = "логарифмуватиToolStripMenuItem";
+            this.логарифмуватиToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.логарифмуватиToolStripMenuItem.Text = "Логарифмувати";
+            this.логарифмуватиToolStripMenuItem.Click += new System.EventHandler(this.логарифмуватиToolStripMenuItem_Click);
             // 
             // K_DForm
             // 
@@ -593,5 +602,6 @@
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem відновленняToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem стандартизаціяToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem логарифмуватиToolStripMenuItem;
     }
 }

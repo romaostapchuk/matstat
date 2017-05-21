@@ -48,12 +48,12 @@ namespace Laba_1_Graph
                 double AverageX = Functions.Average(N, allnum);
 
                 double Kolmah = Criteria.Kolmahorov(N, allnum, AverageX, true, false, false, 0, 0);
-                ch += Kolmah > 0 ? "true " : "false ";
+                ch += Kolmah > 0.5 ? "true " : "false ";
             }
             MessageBox.Show(ch);
 
             CountAll();
-            ShowData(0);
+            ShowData(tabControl1.SelectedIndex);
         }
         public void Get_N_Values(List<List<double[]>> arr)
         {
@@ -99,7 +99,7 @@ namespace Laba_1_Graph
             MessageBox.Show(ch);
 
             CountN();
-            ShowDataN(0);
+            ShowDataN(tabControl1.SelectedIndex);
         }
 
         private void CountN()
@@ -212,7 +212,7 @@ namespace Laba_1_Graph
                             dataGridView1[j, i].Value = Math.Round(DataStorage.Data[j][i], 4);
                             dataGridView1[j, i].Style.BackColor = DG_Color(DataStorage.Data[j][i], j);
                         }
-                        dataGridView1.Rows[i].HeaderCell.Value = (i + 1);
+                        dataGridView1.Rows[i].HeaderCell.Value = (i + 1).ToString();
                     }
             }
             else if (tab == 1)
@@ -325,9 +325,9 @@ namespace Laba_1_Graph
 
                             chart3.Series[i.ToString() + "_" + j.ToString()].ChartType = SeriesChartType.Column;
                             chart3.Series[i.ToString() + "_" + j.ToString()]["PointWidth"] = "1";
-                            chart3.ChartAreas[0].AxisX.Minimum = Math.Round(min - step, 4);
-                            chart3.ChartAreas[0].AxisX.Maximum = (max + 2 * step);
-                            chart3.ChartAreas[0].AxisX.Interval = Math.Round(step, 4);
+                            //chart3.ChartAreas[0].AxisX.Minimum = Math.Round(min - step, 4);
+                            //chart3.ChartAreas[0].AxisX.Maximum = (max + 2 * step);
+                            //chart3.ChartAreas[0].AxisX.Interval = Math.Round(step, 4);
                             double check1 = 0;
                             if (step == 0)
                                 step = 1;
@@ -377,7 +377,13 @@ namespace Laba_1_Graph
                         if (radioButton4.Checked == true)
                             dataGridView2[j, i].Value = Math.Round(DataStorage.DC[i][j], 4);
                         else if (radioButton3.Checked == true)
+                        {
                             dataGridView2[j, i].Value = Math.Round(DataStorage.R[i][j], 4);
+                            if (DataStorage.R[i][j] >= 0)
+                                dataGridView2[j, i].Style.BackColor = Color.FromArgb(255 - (int)(DataStorage.R[i][j] * 255), 255 - (int)(DataStorage.R[i][j] * 255), 255);
+                            if (DataStorage.R[i][j] < 0)
+                                dataGridView2[j, i].Style.BackColor = Color.FromArgb(255, 255 - (int)(-DataStorage.R[i][j] * 255), 255 - (int)(-DataStorage.R[i][j] * 255));
+                        }
                     }
                 }
             }
@@ -1039,7 +1045,7 @@ namespace Laba_1_Graph
                 radioButton1.Checked = true;
 
                 dataGridView3.Rows.Add();
-                dataGridView3[0, dataGridView3.Rows.Count - 1].Value = "Часткова кореляція " + i.ToString() + "," + j.ToString() + " {" + textBox1.Text + "}";
+                dataGridView3[0, dataGridView3.Rows.Count - 1].Value = "Часткова кореляція " + (i + 1).ToString() + "," + (j + 1).ToString() + " {" + textBox1.Text + "}";
                 dataGridView3[1, dataGridView3.Rows.Count - 1].Value = Math.Round(r, 4);
                 dataGridView3[2, dataGridView3.Rows.Count - 1].Value = Math.Abs(t) >= Quantils.Student(DataStorage.Data[0].Length - a.Length - 2) ? "true" : "false";
             }
@@ -1112,10 +1118,43 @@ namespace Laba_1_Graph
 
         private void стандартизаціяToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (DataStorage.N_size)
+            try
             {
-                foreach (List<double[]> lst in DataStorage.N_Data)
-                    foreach (double[] allnum in lst)
+                if (DataStorage.N_size)
+                {
+                    foreach (List<double[]> lst in DataStorage.N_Data)
+                        foreach (double[] allnum in lst)
+                        {
+                            int N = allnum.Length;
+                            double delt = Functions.Sigm(N, allnum.Average(), allnum);
+                            for (int i = 0; i < N; i++)
+                            {
+                                allnum[i] = (allnum[i] - allnum.Average()) / delt;
+                            }
+                        }
+                    DataStorage.N_size = true;
+
+                    CountN();
+                    radioButton1_CheckedChanged(sender, e);
+
+                    string ch = "Критерій колмагорова = ";
+                    foreach (List<double[]> a in DataStorage.N_Data)
+                    {
+                        foreach (double[] allnum in a)
+                        {
+                            int N = allnum.Length;
+                            double AverageX = Functions.Average(N, allnum);
+
+                            double Kolmah = Criteria.Kolmahorov(N, allnum, AverageX, true, false, false, 0, 0);
+                            ch += Kolmah > 0 ? "true " : "false ";
+                        }
+                        ch += ";";
+                    }
+                    MessageBox.Show(ch);
+                }
+                else
+                {
+                    foreach (double[] allnum in DataStorage.Data)
                     {
                         int N = allnum.Length;
                         double delt = Functions.Sigm(N, allnum.Average(), allnum);
@@ -1124,28 +1163,28 @@ namespace Laba_1_Graph
                             allnum[i] = (allnum[i] - allnum.Average()) / delt;
                         }
                     }
-                DataStorage.N_size = true;
+                    DataStorage.N_size = false;
+                    DataStorage.DC = new List<List<double>>();
+                    DataStorage.R = new List<List<double>>();
 
-                CountN();
-                radioButton1_CheckedChanged(sender, e);
-            }
-            else
-            {
-                foreach (double[] allnum in DataStorage.Data)
-                {
-                    int N = allnum.Length;
-                    double delt = Functions.Sigm(N, allnum.Average(), allnum);
-                    for (int i = 0; i < N; i++)
+                    CountAll();
+                    radioButton1_CheckedChanged(sender, e);
+
+                    string ch = "Критерій колмагорова = ";
+                    foreach (double[] allnum in DataStorage.Data)
                     {
-                        allnum[i] = (allnum[i] - allnum.Average()) / delt;
-                    }
-                }
-                DataStorage.N_size = false;
-                DataStorage.DC = new List<List<double>>();
-                DataStorage.R = new List<List<double>>();
+                        int N = allnum.Length;
+                        double AverageX = Functions.Average(N, allnum);
 
-                CountAll();
-                radioButton1_CheckedChanged(sender, e);
+                        double Kolmah = Criteria.Kolmahorov(N, allnum, AverageX, true, false, false, 0, 0);
+                        ch += Kolmah > 0.4 ? "true " : "false ";
+                    }
+                    MessageBox.Show(ch);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Одна з вибірок не доволяє провести стандартизацію");
             }
         }
         private void відновленняToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1154,6 +1193,80 @@ namespace Laba_1_Graph
                 GetValues(DataStorage.RestoreData[0]);
             else if (DataStorage.RestoreData.Count > 1)
                 Get_N_Values(DataStorage.RestoreData);
+        }
+        private void логарифмуватиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (DataStorage.N_size)
+            {
+                foreach (List<double[]> lst in DataStorage.N_Data)
+                    foreach (double[] allnum in lst)
+                    {
+                        int N = allnum.Length;
+                        double min = allnum.Min();
+                        if (min <= 0)
+                            for (int i = 0; i < N; i++)
+                                allnum[i] = (Math.Log(allnum[i] + Math.Abs(min + 0.001)));
+                        else
+                            for (int i = 0; i < N; i++)
+                                allnum[i] = (Math.Log(allnum[i]));
+                    }
+                DataStorage.N_size = true;
+
+                CountN();
+                radioButton1_CheckedChanged(sender, e);
+
+                string ch = "Критерій колмагорова = ";
+                foreach (List<double[]> a in DataStorage.N_Data)
+                {
+                    foreach (double[] allnum in a)
+                    {
+                        int N = allnum.Length;
+                        double AverageX = Functions.Average(N, allnum);
+
+                        double Kolmah = Criteria.Kolmahorov(N, allnum, AverageX, true, false, false, 0, 0);
+                        ch += Kolmah > 0 ? "true " : "false ";
+                    }
+                    ch += ";";
+                }
+                MessageBox.Show(ch);
+            }
+            else
+            {
+                int k = 0;
+                foreach (double[] allnum in DataStorage.Data)
+                {
+                    //if (k != 0)         // finish this or comment
+                    {
+                        int N = allnum.Length;
+                        double delt = Functions.Sigm(N, allnum.Average(), allnum);
+                        double min = allnum.Min();
+                        if (min <= 0)
+                            for (int i = 0; i < N; i++)
+                                allnum[i] = (Math.Log(allnum[i] + Math.Abs(min) + 0.001));
+                        else
+                            for (int i = 0; i < N; i++)
+                                allnum[i] = (Math.Log(allnum[i]));
+                    }
+                    k++;
+                }
+                DataStorage.N_size = false;
+                DataStorage.DC = new List<List<double>>();
+                DataStorage.R = new List<List<double>>();
+
+                CountAll();
+                radioButton1_CheckedChanged(sender, e);
+
+                string ch = "Критерій колмагорова = ";
+                foreach (double[] allnum in DataStorage.Data)
+                {
+                    int N = allnum.Length;
+                    double AverageX = Functions.Average(N, allnum);
+
+                    double Kolmah = Criteria.Kolmahorov(N, allnum, AverageX, true, false, false, 0, 0);
+                    ch += Kolmah > 0.5 ? "true " : "false ";
+                }
+                MessageBox.Show(ch);
+            }
         }
     }
 

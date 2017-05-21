@@ -46,6 +46,8 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.додатиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.згенеруватиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.одновимірнуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.багатовимірнуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.неЛінійнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.параболічнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.квазілінійнаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,8 +69,6 @@
             this.закритиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.побудоваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-            this.одновимірнуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.багатовимірнуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -90,7 +90,7 @@
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 60;
-            this.dataGridView1.Size = new System.Drawing.Size(164, 290);
+            this.dataGridView1.Size = new System.Drawing.Size(164, 353);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellDoubleClick);
             // 
@@ -127,25 +127,24 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chart2.Series.Add(series1);
-            this.chart2.Size = new System.Drawing.Size(392, 349);
+            this.chart2.Size = new System.Drawing.Size(392, 403);
             this.chart2.TabIndex = 4;
             this.chart2.Text = "chart2";
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.chart1);
             this.groupBox2.Controls.Add(this.chart2);
             this.groupBox2.Location = new System.Drawing.Point(189, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(826, 369);
+            this.groupBox2.Size = new System.Drawing.Size(826, 428);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 353);
+            this.label1.Location = new System.Drawing.Point(192, 409);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 13);
             this.label1.TabIndex = 7;
@@ -184,7 +183,7 @@
             series2.Legend = "Legend1";
             series2.Name = "Series1";
             this.chart1.Series.Add(series2);
-            this.chart1.Size = new System.Drawing.Size(392, 349);
+            this.chart1.Size = new System.Drawing.Size(392, 403);
             this.chart1.TabIndex = 5;
             this.chart1.Text = "chart1";
             // 
@@ -193,7 +192,7 @@
             this.groupBox3.Controls.Add(this.checkBox1);
             this.groupBox3.Location = new System.Drawing.Point(3, 27);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(180, 344);
+            this.groupBox3.Size = new System.Drawing.Size(180, 403);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             // 
@@ -202,7 +201,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(10, 317);
+            this.checkBox1.Location = new System.Drawing.Point(15, 380);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(71, 17);
             this.checkBox1.TabIndex = 0;
@@ -241,6 +240,19 @@
             this.згенеруватиToolStripMenuItem.Name = "згенеруватиToolStripMenuItem";
             this.згенеруватиToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.згенеруватиToolStripMenuItem.Text = "Згенерувати";
+            // 
+            // одновимірнуToolStripMenuItem
+            // 
+            this.одновимірнуToolStripMenuItem.Name = "одновимірнуToolStripMenuItem";
+            this.одновимірнуToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.одновимірнуToolStripMenuItem.Text = "Одновимірну";
+            this.одновимірнуToolStripMenuItem.Click += new System.EventHandler(this.одновимірнуToolStripMenuItem_Click);
+            // 
+            // багатовимірнуToolStripMenuItem
+            // 
+            this.багатовимірнуToolStripMenuItem.Name = "багатовимірнуToolStripMenuItem";
+            this.багатовимірнуToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.багатовимірнуToolStripMenuItem.Text = "Багатовимірну";
             // 
             // неЛінійнаToolStripMenuItem
             // 
@@ -376,11 +388,12 @@
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
+            this.файлToolStripMenuItem.Click += new System.EventHandler(this.файлToolStripMenuItem_Click);
             // 
             // закритиToolStripMenuItem
             // 
             this.закритиToolStripMenuItem.Name = "закритиToolStripMenuItem";
-            this.закритиToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.закритиToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.закритиToolStripMenuItem.Text = "Закрити";
             this.закритиToolStripMenuItem.Click += new System.EventHandler(this.закритиToolStripMenuItem_Click);
             // 
@@ -406,25 +419,13 @@
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
             this.toolStripComboBox1.Text = "Лінійна";
             // 
-            // одновимірнуToolStripMenuItem
-            // 
-            this.одновимірнуToolStripMenuItem.Name = "одновимірнуToolStripMenuItem";
-            this.одновимірнуToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.одновимірнуToolStripMenuItem.Text = "Одновимірну";
-            this.одновимірнуToolStripMenuItem.Click += new System.EventHandler(this.одновимірнуToolStripMenuItem_Click);
-            // 
-            // багатовимірнуToolStripMenuItem
-            // 
-            this.багатовимірнуToolStripMenuItem.Name = "багатовимірнуToolStripMenuItem";
-            this.багатовимірнуToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.багатовимірнуToolStripMenuItem.Text = "Багатовимірну";
-            // 
             // Form_Choose
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(1015, 375);
+            this.ClientSize = new System.Drawing.Size(1015, 431);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.groupBox2);
@@ -435,7 +436,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();

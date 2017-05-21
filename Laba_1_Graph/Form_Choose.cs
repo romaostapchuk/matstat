@@ -160,72 +160,83 @@ namespace Laba_1_Graph
         {
             this.Show();
         }
-        
+
         private void вибратиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dataGridView1.ColumnCount = 1;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.ColumnHeadersVisible = false;
+            { 
+                dataGridView1.ColumnCount = 1;
+                dataGridView1.RowHeadersVisible = false;
+                dataGridView1.ColumnHeadersVisible = false;
 
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = "All files (*.*)|*.*|txt files (*.txt)|*.txt";
-            openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;
-            string filename;
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                FileStream fs = new FileStream(openFileDialog1.FileName, FileMode.Open);
-                StreamReader streamReader = new StreamReader(fs, Encoding.ASCII);
-                filename = openFileDialog1.SafeFileName;
-                int i = -1;
-                string[] s = null;
-                try
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                openFileDialog1.Filter = "All files (*.*)|*.*|txt files (*.txt)|*.txt";
+                openFileDialog1.FilterIndex = 1;
+                openFileDialog1.RestoreDirectory = true;
+                string filename;
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    String str = streamReader.ReadToEnd();
-                    str = Regex.Replace(str.Replace("\t", " ").Trim(' '), " +", " ");
-                    str = str.Replace("\r", " ");
-                    str = str.Replace(" \n", "\n");
-                    str = str.Replace("\n ", "\n");
-                    str = str.Replace(",", ".");
-                    s = Regex.Split(str, "\n");
-                    string[] strN = Regex.Split(s[0], " ");
-                    List<double>[] A = new List<double>[strN.Length];
-                    for (int k = 0; k < strN.Length; k++)
-                        A[k] = new List<double>();
-                    for (; i < s.Length - 1;)
+                    FileStream fs = new FileStream(openFileDialog1.FileName, FileMode.Open);
+                    StreamReader streamReader = new StreamReader(fs, Encoding.ASCII);
+                    filename = openFileDialog1.SafeFileName;
+                    if (filename.Contains(".txt"))
                     {
-                        i++;
-                        strN = Regex.Split(s[i], " ");
-                        for (int j = 0; j < strN.Length; j++)
-                            A[j].Add(Math.Round(Convert.ToDouble(strN[j]), 2));
-                    }
-                    for (int j = 0; j < A.Length; j++)
-                    {
-
-                        double[] temparray = new double[A[j].Count];
-                        int k = 0;
-                        foreach (double element in A[j])
+                        int i = -1;
+                        string[] s = null;
+                        try
                         {
-                            temparray[k] = element;
-                            k++;
-                        }
+                            String str = streamReader.ReadToEnd();
+                            str = Regex.Replace(str.Replace("\t", " ").Trim(' '), " +", " ");
+                            str = str.Replace("\r", " ");
+                            str = str.Replace(" \n", "\n");
+                            str = str.Replace("\n ", "\n");
+                            str = str.Replace(",", ".");
+                            s = Regex.Split(str, "\n");
+                            string[] strN = Regex.Split(s[0], " ");
+                            List<double>[] A = new List<double>[strN.Length];
+                            for (int k = 0; k < strN.Length; k++)
+                                A[k] = new List<double>();
+                            for (; i < s.Length - 1;)
+                            {
+                                i++;
+                                strN = Regex.Split(s[i], " ");
+                                for (int j = 0; j < strN.Length; j++)
+                                    A[j].Add(Math.Round(Convert.ToDouble(strN[j]), 2));
+                            }
+                            for (int j = 0; j < A.Length; j++)
+                            {
 
-                        Samples.Add(temparray);
-                        for (i = Convert.ToInt32(dataGridView1.RowCount.ToString()); i < Samples.Count + 1; i++)
-                            dataGridView1.Rows.Add(filename.Replace(".txt", "_" + Samples[i - 1].Length + "_" + (j + 1)));
+                                double[] temparray = new double[A[j].Count];
+                                int k = 0;
+                                foreach (double element in A[j])
+                                {
+                                    temparray[k] = element;
+                                    k++;
+                                }
+
+                                Samples.Add(temparray);
+                                for (i = Convert.ToInt32(dataGridView1.RowCount.ToString()); i < Samples.Count + 1; i++)
+                                    dataGridView1.Rows.Add(filename.Replace(".txt", "_" + Samples[i - 1].Length + "_" + (j + 1)));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Ошибка при чтении файла!:\n" + ex.Message + "\n" + s[i]);
+                        }
+                        finally
+                        {
+                            streamReader.Close();
+                            fs.Close();
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при чтении файла!:\n" + ex.Message + "\n" + s[i]);
-                }
-                finally
-                {
-                    streamReader.Close();
-                    fs.Close();
+                    else if (filename.Contains(".csv"))
+                    {
+                        
+                    }
                 }
             }
         }
+
+
 
         private void порівнятиToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -450,6 +461,11 @@ namespace Laba_1_Graph
             ExpNorm window = new ExpNorm(this);
             window.Show();
             window.FormClosed += new FormClosedEventHandler(Opened_Form_Closed);
+        }
+
+        private void файлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
